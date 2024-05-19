@@ -4,10 +4,12 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const authToken = (username) => {
-    jwt.sign({username}, process.env.SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({username}, process.env.SECRET, { expiresIn: '7d' });
+    return token;
 }
 
 const createAccount = async (username, password) => {
+    console.log(username + " " + password);
     const existing_account = await mongo_client.getAccountData(username);
     if(existing_account) {
         console.log(JSON.stringify(existing_account));
@@ -23,6 +25,20 @@ const createAccount = async (username, password) => {
     }
 }
 
+const userDetails = async (token) => {
+    try {
+        const decoded = jwt.verify(token, process.env.SECRET);
+        const username = decoded.username;
+        const acc = await mongo_client.getAccountData(username);
+        if(!acc) {
+            throw Error("Account doesn't exist.");
+        }
+        return acc;
+    } catch (error) {
+        console.error('Error decoding token: ', error);
+    }
+}
+
 const login = async (username, password) => {
     const existing_account = await mongo_client.getAccountData(username);
     const match = await bcrypt.compare(password, existing_account.password);
@@ -34,3 +50,4 @@ const login = async (username, password) => {
 exports.createAccount = createAccount;
 exports.login = login;
 exports.authToken = authToken;
+exports.userDetails = userDetails;
