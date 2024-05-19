@@ -37,7 +37,7 @@ const getAccountData = async (username) => {
         await client.connect();
         const db = client.db("uclax");
         const login_collection = db.collection("login");
-        const account = login_collection.findOne({ username: username });
+        const account = await login_collection.findOne({ username: username });
         return account;
     } catch(error) {
         console.log("Error: ", error);
