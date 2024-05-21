@@ -1,0 +1,20 @@
+Documents for Users and Ride Requests
+
+User {
+    - name
+    - gender
+    - user preferences for rides
+        - Uber/Lyft
+        - preferred payment
+    - current rating
+    - travel buddies
+    - contact info (keep private)
+}
+
+Ride Requests {
+    - initiator
+    - pickup point (where on the hill)
+    - dropoff point (terminal)
+    - time
+    - number of people they're looking for
+}
