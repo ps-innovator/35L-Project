@@ -7,6 +7,11 @@ const HomePage = () => {
   const { auth, setAuth } = useContext(AuthContext);
   const { tab, setTab } = useContext(TabContext);
 
+const handleCreatePost = () => {
+  // Add your logic for creating a post, such as navigating to a create post page
+  console.log("Create Post button clicked");
+};
+
   if (!auth) {
     return (
       <>
@@ -21,15 +26,14 @@ const HomePage = () => {
             }}
           >
             Welcome to UCLAX!
-          </h1>
+            </h1>
           <CardView
-            header="Feature 1"
-            shortDescr="Short description 1"
-            longDescr="Much longer description for feature 1.
-            Change image on the left too to mean something lol."
-            imgsrc={viteLogo}
-            imgalt="Image alt"
-            />
+            header="No Posts Yet"
+            shortDescr="Your post Title will appear here"
+            longDescr="Your post description will appear here."
+            imgsrc="https://www.clker.com/cliparts/2/4/7/1/151619186894840905cute-airplane-clipart.med.png"
+            imgalt="Cute airplane clipart"
+          />
         </div>
       </>
     );
