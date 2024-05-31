@@ -29,12 +29,20 @@ const AppNavBar = () => {
   const { tab, setTab } = useContext(TabContext);
 
   const handleTabSwitch = (tabNo, title) => {
-    return () => {
+    return async () => {
       if (title == "Logout") {
+        const res = await fetch('http://localhost:3000/auth/logout', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({})
+        });
+        setAuth(null);
+        setTab(0);
         //TODO: Log out
+      } else {
+        setTab(tabNo);
       }
-
-      setTab(tabNo);
     };
   };
 
