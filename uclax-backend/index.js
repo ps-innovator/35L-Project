@@ -22,7 +22,10 @@ app.post('/riderequests', async (req, res) => {
 	console.log(req.body);
 	const {initiator, pickup, dropoff, time, numRiders} = req.body;
 	rideRequest = ride_request.populateRideRequest(initiator, pickup, dropoff, time, numRiders);
-	// rideRequest = ride_request.populateRideRequest("lindsay", "hedrick", "terminal 1", "3 PM", 5);
-	mongo_client.createRideRequest(rideRequest);
+	try {
+		await mongo_client.createRideRequest(rideRequest);
+	} catch (error) {
+        res.status(400).json({ errorMessage: error.message });
+    }
 });
 

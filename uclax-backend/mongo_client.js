@@ -13,9 +13,15 @@ const testMongoClientFetch = async () => {
 };
 
 const createRideRequest = async (ride_request) => {
-    await client.connect();
-    const db = client.db("uclax");
-    await db.collection("rideshare_requests").insertOne(ride_request);
+    try {
+        await client.connect();
+        const db = client.db("uclax");
+        const riderequest_collection = db.collection("rideshare_requests");
+        await riderequest_collection.insertOne(ride_request);
+        console.log("Success!");
+    } catch {
+        console.log("Error connecting to mongodb.");
+    }
     db.close();
 };
 
