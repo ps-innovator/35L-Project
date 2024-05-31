@@ -7,7 +7,7 @@ const SignUp = () => {
     const [uname, setUname] = useState('');
     const [pwd, setPwd] = useState('');
     const attemptSignUp = async () => {
-        const res = await fetch('http://localhost:3000/createaccount', {
+        const res = await fetch('http://localhost:3000/auth/createaccount', {
             method: 'POST',
             credentials: 'include',
             headers: {'content-type': 'application/json'},
