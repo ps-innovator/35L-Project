@@ -55,6 +55,16 @@ router.post('/username', authTokenVerify, async (req, res) => {
     res.status(200).json({ username: acc.username, token });
 });
 
+router.get('/riderequests', async (req, res) => {
+    try {
+        const requests = await getRideRequests(); // Call getRideRequests function
+        res.json(requests);
+    } catch (error) {
+        console.error('Error fetching ride requests:', error);
+        res.status(500).send('Error fetching ride requests');
+    }
+});
+
 router.post('/riderequests', async (req, res) => {
 	const {initiator_name, pickup_point, dropoff_point, pickup_time, num_riders_needed} = req.body;
 	
