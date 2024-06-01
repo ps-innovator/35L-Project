@@ -12,12 +12,11 @@ const CardView = ({ header, shortDescr, longDescr, imgsrc, imgalt }) => {
         <div className="uppercase tracking-wide text-sm text-indigo-500 dark:text-white font-semibold">
           {header}
         </div>
-        <a
-          href="#"
-          className="block mt-1 text-lg leading-tight font-medium text-black dark:text-zinc-400 hover:underline"
+        <p
+          className="block mt-1 text-lg leading-tight font-medium text-black dark:text-zinc-400"
         >
           {shortDescr}
-        </a>
+        </p>
         <p className="mt-2 text-slate-500">
           {longDescr}
         </p>
