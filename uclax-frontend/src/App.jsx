@@ -5,6 +5,7 @@ import AppNavBar from "./components/AppNavBar.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import Login from "./pages/Login.jsx";
+import AccountInfo from "./pages/AccountInfo.jsx";
 
 export const AuthContext = createContext(null);
 export const TabContext = createContext(0);
@@ -26,8 +27,8 @@ function App() {
         });
         if (res.ok) {
           const json = await res.json();
-          setAuth(json.username); // Assuming the response has a username field
-          setTab(2);
+          setAuth(json); // Assuming the response has a username field
+          setTab(0);
           console.log("Authenticated successfully");
         } else {
           console.log("Not authenticated");
@@ -65,6 +66,8 @@ function TabManager() {
     }
   } else {
     switch (tab) {
+      case 3:
+        return <AccountInfo />;
       default:
         return <HomePage />;
     }

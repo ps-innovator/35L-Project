@@ -17,7 +17,8 @@ const Login = () => {
         if(res.ok) {
             const json = await res.json();
             setAuth(json);
-            setTab(2);
+            setTab(0);
+            console.log(json);
             console.log("works");
         } else {
             console.log("login failed");

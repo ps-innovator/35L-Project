@@ -16,6 +16,7 @@ app.get('/', (req, res) => {
 	res.send({"res": "Test response from UCLAX Server!"});
 });
 
+
 app.use('/auth', auth_routes);
 
 const port = process.env.PORT || 3000;
