@@ -46,7 +46,7 @@ const AboutUs = () => {
               <StaticCardView
                 header="Splitting a ____ has never been easier."
                 shortDescr="Customize your profile and post to allow for easy matches."
-                longDescr="Select your preferred ridesharing service, "
+                longDescr="Select your preferred ridesharing service, your preferred pickup location, and what LAX Terminal you're going to."
                 imgsrc={carAsset}
                 imgalt="Image of a white car driving."
                 />
