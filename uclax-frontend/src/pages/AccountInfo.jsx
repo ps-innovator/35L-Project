@@ -9,7 +9,7 @@ const AccountInfo = () => {
   
   const updateUserInfo = async (put_body) => {
     const token = auth.token;
-    return await fetch('http://localhost:3000/edit_user', {
+    return await fetch('http://localhost:3000/auth/edit_user', {
         method: 'PUT',
         credentials: 'include',
         headers: {'content-type': 'application/json'},
@@ -51,7 +51,7 @@ const AccountInfo = () => {
 
   const getUserInfo = async () => {
     const token = auth.token;
-    const res = await fetch('http://localhost:3000/user', {
+    const res = await fetch('http://localhost:3000/auth/user', {
         method: 'POST',
         credentials: 'include',
         headers: {'content-type': 'application/json'},
