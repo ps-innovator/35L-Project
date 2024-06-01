@@ -4,6 +4,7 @@ import AppNavBar from "./components/AppNavBar.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import Login from "./pages/Login.jsx";
+import RideRequests from "./pages/RideRequests.jsx"
 
 export const AuthContext = createContext(null);
 export const TabContext = createContext(0);
@@ -33,6 +34,8 @@ function TabManager() {
         return <Login />;
       case 2:
         return <SignUp />;
+      case 4: //testing purposes remove later(?)
+        return <RideRequests />;
       default:
         return <></>;
     }

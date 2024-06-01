@@ -18,11 +18,11 @@ const createRideRequest = async (ride_request) => {
         const db = client.db("uclax");
         const riderequest_collection = db.collection("rideshare_requests");
         await riderequest_collection.insertOne(ride_request);
+        await client.close();
         console.log("Success!");
     } catch {
         console.log("Error connecting to mongodb.");
     }
-    db.close();
 };
 
 const getRideRequests = async () => {
