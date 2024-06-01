@@ -1,11 +1,11 @@
 import { useState, useContext, createContext, useEffect } from "react";
 import Cookies from 'universal-cookie';
 import "./App.css";
+import AboutUs from "./pages/AboutUs.jsx";
 import AppNavBar from "./components/AppNavBar.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import Login from "./pages/Login.jsx";
-import RideRequests from "./pages/RideRequests.jsx"
 import AccountInfo from "./pages/AccountInfo.jsx";
 
 export const AuthContext = createContext(null);
@@ -62,8 +62,8 @@ function TabManager() {
         return <Login />;
       case 2:
         return <SignUp />;
-      case 4: //testing purposes remove later(?)
-        return <RideRequests />;
+      case 3:
+        return <AboutUs />;
       default:
         return <></>;
     }
