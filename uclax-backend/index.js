@@ -22,7 +22,17 @@ app.get('/', (req, res) => {
 app.post('/user', authTokenVerify, async (req, res) => {
     const token = req.cookies.token;
     const acc = await account.userDetails(token);
+	delete acc.password;
+	delete acc._id;
     res.status(200).json({ acc });
+})
+
+app.put('/edit_user', authTokenVerify, async (req, res) => {
+	const token = req.body.token;
+	const acc = await account.userDetails(token);
+	const acc_id = { '_id': acc._id };
+	await account.updateProfile(acc_id, req.body.put_body);
+	res.status(200).json({"msg": "Successfully updated."});
 })
 
 app.post('/login', async (req, res) => {
@@ -63,7 +73,11 @@ app.post('/logout', async (req, res) => {
 app.post('/username', authTokenVerify, async (req, res) => {
     const token = req.cookies.token;
     const acc = await account.userDetails(token);
-    res.status(200).json({ username: acc.username, token });
+	try {
+    	res.status(200).json({ username: acc.username, token });
+	} catch {
+		res.status(401).json({'error': 'unable to get user'})
+	}
 })
 
 const port = process.env.PORT || 3000;

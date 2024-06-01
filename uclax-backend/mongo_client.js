@@ -55,10 +55,25 @@ const createAccount = async (account) => {
     }
 }
 
+
+const updateProfile = async (filter_obj, update_obj) => {
+    console.log(filter_obj)
+    console.log(update_obj)
+    try {
+        await client.connect();
+        const db = client.db("uclax");
+        const login_collection = db.collection("login");
+        await login_collection.updateOne(filter_obj, update_obj);
+    } catch {
+        console.log("Error updating")
+    }
+};
+
 exports.createRideRequest = createRideRequest;
 exports.getRideRequests = getRideRequests;
 exports.testMongoClientFetch = testMongoClientFetch;
 exports.getAccountData = getAccountData;
 exports.createAccount = createAccount;
+exports.updateProfile = updateProfile;
 
 client.close();

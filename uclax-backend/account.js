@@ -19,11 +19,19 @@ const createAccount = async (username, password) => {
         const hashedPassword = await bcrypt.hash(password, salt);
         account = {
             username: username,
-            password: hashedPassword
+            password: hashedPassword,
+            preferences: {
+                ride_pref: "Lyft",
+                payment_form: ""
+            }
         };
         await mongo_client.createAccount(account);
     }
 }
+
+const updateProfile = async (filter_obj, update_obj) => {
+    mongo_client.updateProfile(filter_obj, update_obj);
+};
 
 const userDetails = async (token) => {
     try {
@@ -51,3 +59,4 @@ exports.createAccount = createAccount;
 exports.login = login;
 exports.authToken = authToken;
 exports.userDetails = userDetails;
+exports.updateProfile = updateProfile;
