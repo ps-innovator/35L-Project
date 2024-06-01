@@ -69,6 +69,8 @@ function TabManager() {
     }
   } else {
     switch (tab) {
+      case 2:
+        return <RideRequests />;
       case 3:
         return <AccountInfo />;
       default:
