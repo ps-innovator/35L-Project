@@ -8,7 +8,7 @@ const Login = () => {
     const [uname, setUname] = useState('');
     const [pwd, setPwd] = useState('');
     const attemptLogin = async () => {
-        const res = await fetch('http://localhost:3000/login', {
+        const res = await fetch('http://localhost:3000/auth/login', {
             method: 'POST',
             credentials: 'include',
             headers: {'content-type': 'application/json'},

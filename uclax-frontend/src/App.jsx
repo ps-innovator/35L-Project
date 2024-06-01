@@ -19,7 +19,7 @@ function App() {
     const authenticateUser = async () => {
       const token = cookies.get('token');
       if (token) {
-        const res = await fetch('http://localhost:3000/username', {
+        const res = await fetch('http://localhost:3000/auth/username', {
           method: 'POST',
           credentials: 'include',
           headers: {'content-type': 'application/json'},
