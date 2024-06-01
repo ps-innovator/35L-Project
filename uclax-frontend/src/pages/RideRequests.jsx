@@ -21,7 +21,7 @@ const RideRequests = () => {
 
     const attemptRideRequest = async () => {
         console.log({initiator_name: initiatorName, pickup_point: pickup, dropoff_point: dropoff, pickup_time: pickupTime, num_riders_needed: numRiders})
-        const res = await fetch('http://localhost:3000/riderequests', {
+        const res = await fetch('http://localhost:3000/auth/riderequests', {
             method: 'POST',
             credentials: 'include',
             headers: {'content-type': 'application/json'},
@@ -57,8 +57,8 @@ const RideRequests = () => {
                 className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
             />
             </div>
-            <div>
-            <select value={pickup} onChange={handlePickup}>
+            <div className="flex mb-6 items-center justify-center">
+            <select value={pickup} onChange={handlePickup} className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="Dykstra Turnaround">Dykstra</option>
                 <option value="Sproul Turnaround">Sproul</option>
                 <option value="Rieber Turnaround">Rieber</option>
@@ -66,26 +66,20 @@ const RideRequests = () => {
             </select>
             </div>
             <div className="flex mb-6 items-center justify-center">
-            <select value={dropoff} onChange={handleDropoff}>
-                <option value="Terminal 1">T1</option>
-                <option value="Terminal 2">T2</option>
-                <option value="Terminal 3">T3</option>
-                <option value="Terminal 4">T4</option>
-                <option value="Terminal 5">T5</option>
-                <option value="Terminal 6">T6</option>
-                <option value="Terminal 7">T7</option>
-                <option value="Terminal 8">T8</option>
-                <option value="Terminal 9">T9</option>
+            <select value={dropoff} onChange={handleDropoff} className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value="Terminal 1">Terminal 1</option>
+                <option value="Terminal 2">Terminal 2</option>
+                <option value="Terminal 3">Terminal 3</option>
+                <option value="Terminal 4">Terminal 4</option>
+                <option value="Terminal 5">Terminal 5</option>
+                <option value="Terminal 6">Terminal 6</option>
+                <option value="Terminal 7">Terminal 7</option>
+                <option value="Terminal 8">Terminal 8</option>
+                <option value="Terminal 9">Terminal 9</option>
             </select>
             </div>
             <div className="flex mb-6 items-center justify-center">
-            <input
-                name="Pickup Time"
-                placeholder="3 PM"
-                value={pickupTime}
-                onChange={(e) => setTime(e.target.value)}  
-                className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-            />
+            <input type="datetime-local" className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  />
             </div>
             <div className="flex mb-6 items-center justify-center">
             <input
