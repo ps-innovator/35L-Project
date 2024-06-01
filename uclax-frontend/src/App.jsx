@@ -62,13 +62,13 @@ function TabManager() {
         return <Login />;
       case 2:
         return <SignUp />;
-      case 4: //testing purposes remove later(?)
-        return <RideRequests />;
       default:
         return <></>;
     }
   } else {
     switch (tab) {
+      case 2:
+        return <RideRequests />;
       case 3:
         return <AccountInfo />;
       default:
