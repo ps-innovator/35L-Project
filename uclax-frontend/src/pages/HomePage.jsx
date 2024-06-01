@@ -28,10 +28,10 @@ const handleCreatePost = () => {
             Welcome to UCLAX!
             </h1>
           <CardView
-            header="No Posts Yet"
-            shortDescr="Your post Title will appear here"
-            longDescr="Your post description will appear here."
-            imgsrc="https://www.clker.com/cliparts/2/4/7/1/151619186894840905cute-airplane-clipart.med.png"
+            header=""
+            shortDescr="Log in to view Posts"
+            longDescr=""
+            imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
             imgalt="Cute airplane clipart"
           />
         </div>
