@@ -3,6 +3,14 @@ import CardView from '../components/CardView.jsx';
 
 const Split = () => {
   const [requests, setRequests] = useState([]);
+  const [filters, setFilters] = useState({
+    pickup: '',
+    dropoff: '',
+    name: '',
+    riders: '',
+    time: '',
+    period: 'AM'
+  });
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -18,13 +26,108 @@ const Split = () => {
     fetchRequests();
   }, []);
 
+  const handleFilterChange = (event) => {
+    setFilters({
+      ...filters,
+      [event.target.name]: event.target.value
+    });
+  };
+
+  const handlePeriodChange = (event) => {
+    setFilters({
+      ...filters,
+      period: event.target.value
+    });
+  };
+
+  // Filter requests based on selected criteria
+  const filteredRequests = requests.filter(request => 
+    (filters.pickup === '' || request.pickup_point.toLowerCase().includes(filters.pickup.toLowerCase())) &&
+    (filters.dropoff === '' || request.dropoff_point.toLowerCase().includes(filters.dropoff.toLowerCase())) &&
+    (filters.name === '' || request.initiator_name.toLowerCase().includes(filters.name.toLowerCase())) &&
+    (filters.riders === '' || request.num_riders_needed.toString() === filters.riders) &&
+    (filters.time === '' || request.pickup_time.toLowerCase().includes((filters.time + ' ' + filters.period).toLowerCase()))
+  );
+
   return (
-    <div>
-      <h1 className="text-2xl text-black dark:text-white" style={{ marginTop: "5%", marginBottom: "5%", fontWeight: "500", fontSize: 45 }}>
-        Ride Share Posts
-      </h1>
+    <div className="min-h-screen bg-gray-900 text-white">
+      <h1 className="text-center text-4xl font-bold my-8">Ride Share Posts</h1>
+      
+      {/* Filter options */}
+      <div className="text-center mb-4">
+        <h2 className="text-2xl mb-4">Filters</h2>
+        <div className="flex justify-center flex-wrap space-x-4">
+          <label className="flex flex-col">
+            <span className="mb-2 font-medium text-gray-300">Pickup Point:</span>
+            <input
+              type="text"
+              name="pickup"
+              value={filters.pickup}
+              onChange={handleFilterChange}
+              placeholder="Ex: Dykstra Turnaround"
+              className="p-2 border border-gray-300 rounded text-black"
+            />
+          </label>
+          <label className="flex flex-col">
+            <span className="mb-2 font-medium text-gray-300">Dropoff Point:</span>
+            <input
+              type="text"
+              name="dropoff"
+              value={filters.dropoff}
+              onChange={handleFilterChange}
+              placeholder="Ex: Terminal 1"
+              className="p-2 border border-gray-300 rounded text-black"
+            />
+          </label>
+          <label className="flex flex-col">
+            <span className="mb-2 font-medium text-gray-300">Person's Name:</span>
+            <input
+              type="text"
+              name="name"
+              value={filters.name}
+              onChange={handleFilterChange}
+              placeholder="Ex: Pranav"
+              className="p-2 border border-gray-300 rounded text-black"
+            />
+          </label>
+          <label className="flex flex-col">
+            <span className="mb-2 font-medium text-gray-300">Number of Riders:</span>
+            <input
+              type="text"
+              name="riders"
+              value={filters.riders}
+              onChange={handleFilterChange}
+              placeholder="Ex: 3"
+              className="p-2 border border-gray-300 rounded text-black"
+            />
+          </label>
+          <label className="flex flex-col">
+            <span className="mb-2 font-medium text-gray-300">Pickup Time:</span>
+            <div className="flex space-x-2">
+              <input
+                type="text"
+                name="time"
+                value={filters.time}
+                onChange={handleFilterChange}
+                placeholder="Ex: 3:20"
+                className="p-2 border border-gray-300 rounded text-black"
+              />
+              <select
+                name="period"
+                value={filters.period}
+                onChange={handlePeriodChange}
+                className="p-2 border border-gray-300 rounded text-black"
+              >
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </div>
+          </label>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 gap-4">
-        {requests.map((request, index) => (
+        {filteredRequests.map((request, index) => (
           <CardView
             key={index}
             header={request.initiator_name}
