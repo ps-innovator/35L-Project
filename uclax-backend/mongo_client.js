@@ -1,4 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config()
 
 //**this is a basic test of Mongo DB client functionality - need to add more requirements for data passed in later */
@@ -69,11 +70,31 @@ const updateProfile = async (filter_obj, update_obj) => {
     }
 };
 
+const sendFriendRequest = async (requestedFriendId, requesterId) => {
+	const updateObj = { '$push': { friendRequests: { '$each': [requesterId['_id']] } } };
+	const filterObj = { '_id': new ObjectId(requestedFriendId) } ;
+	updateProfile(filterObj, updateObj);
+};
+
+const addFriend = async (curFriendId, friendToAddId) => {
+	//add friend_to_add to current friend's list
+	const filterObj1 = { '_id': curFriendId } ;
+	const updateObj1 = { '$push': { friends: { '$each': [new ObjectId(friendToAddId)] } } , '$pull': { friendRequests: { '$in': [new ObjectId(friendToAddId)]  } } };
+	updateProfile(filterObj1, updateObj1);
+
+	//add cur friend to friend_to_add's list
+	const filterObj2 = { '_id': friendToAddId } ;
+	const updateObj2 = { '$push': { friends: curFriendId } };
+	updateProfile(filterObj2, updateObj2);
+};
+
 exports.createRideRequest = createRideRequest;
 exports.getRideRequests = getRideRequests;
 exports.testMongoClientFetch = testMongoClientFetch;
 exports.getAccountData = getAccountData;
 exports.createAccount = createAccount;
 exports.updateProfile = updateProfile;
+exports.sendFriendRequest = sendFriendRequest;
+exports.addFriend = addFriend;
 
 client.close();

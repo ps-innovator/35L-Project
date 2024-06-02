@@ -23,7 +23,9 @@ const createAccount = async (username, password) => {
             preferences: {
                 ride_pref: "Lyft",
                 payment_form: ""
-            }
+            },
+			friends: [],
+			friendRequests: []
         };
         await mongo_client.createAccount(account);
     }
@@ -31,6 +33,15 @@ const createAccount = async (username, password) => {
 
 const updateProfile = async (filter_obj, update_obj) => {
     mongo_client.updateProfile(filter_obj, update_obj);
+};
+
+const sendFriendRequest = async (curFriendId, requestedFriendId) => {
+	mongo_client.sendFriendRequest(requestedFriendId, curFriendId);
+};
+
+const acceptFriendRequest = async (curFriendId, requesterFriendId) => {
+	mongo_client.addFriend(curFriendId, requesterFriendId);
+
 };
 
 const userDetails = async (token) => {
@@ -60,3 +71,4 @@ exports.login = login;
 exports.authToken = authToken;
 exports.userDetails = userDetails;
 exports.updateProfile = updateProfile;
+exports.sendFriendRequest = sendFriendRequest;

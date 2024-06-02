@@ -55,4 +55,31 @@ router.post('/username', authTokenVerify, async (req, res) => {
     res.status(200).json({ username: acc.username, token });
 });
 
+
+router.put('/edit_user', authTokenVerify, async (req, res) => {
+	const token = req.body.token;
+	const acc = await account.userDetails(token);
+	const acc_id = { '_id': acc._id };
+	await account.updateProfile(acc_id, req.body.put_body);
+	res.status(200).json({"msg": "Successfully updated."});
+});
+
+router.put('/send_friend_request', authTokenVerify, async (req, res) => {
+	const token = req.body.token;
+	const requestedFriend = req.body.friendId;
+	const acc_info = await account.userDetails(token);
+	const curFriendId = { '_id': acc_info._id } ;
+	await account.sendFriendRequest(curFriendId, requestedFriend);
+	res.status(200).json({"msg": "Successfully updated."});
+});
+
+router.put('/accept_friend_request', authTokenVerify, async (req, res) => {
+	const token = req.body.token;
+	const acceptedFriend = req.body.friendId;
+	const acc_info = await account.userDetails(token);
+	const curFriendId = { '_id': acc_info._id } ;
+	await account.addFriend(curFriendId, acceptedFriend);
+	res.status(200).json({"msg": "Successfully updated."});
+});
+
 module.exports = router;
