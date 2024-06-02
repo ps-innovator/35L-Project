@@ -7,6 +7,7 @@ import HomePage from "./pages/HomePage.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import Login from "./pages/Login.jsx";
 import AccountInfo from "./pages/AccountInfo.jsx";
+import Split from "./pages/Split.jsx";
 
 export const AuthContext = createContext(null);
 export const TabContext = createContext(0);
@@ -69,6 +70,8 @@ function TabManager() {
     }
   } else {
     switch (tab) {
+      case 1:
+        return <Split />
       case 2:
         return <RideRequests />;
       case 3:
