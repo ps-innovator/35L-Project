@@ -5,7 +5,8 @@ const Split = () => {
   const [requests, setRequests] = useState([]);
   const [filters, setFilters] = useState({
     pickup: '',
-    dropoff: ''
+    dropoff: '',
+    name: ''
   });
 
   useEffect(() => {
@@ -32,7 +33,8 @@ const Split = () => {
   // Filter requests based on selected criteria
   const filteredRequests = requests.filter(request => 
     (filters.pickup === '' || request.pickup_point.toLowerCase().includes(filters.pickup.toLowerCase())) &&
-    (filters.dropoff === '' || request.dropoff_point.toLowerCase().includes(filters.dropoff.toLowerCase()))
+    (filters.dropoff === '' || request.dropoff_point.toLowerCase().includes(filters.dropoff.toLowerCase())) &&
+    (filters.name === '' || request.initiator_name.toLowerCase().includes(filters.name.toLowerCase()))
   );
 
   return (
@@ -41,6 +43,7 @@ const Split = () => {
         Ride Share Posts
       </h1>
 
+      <h2 className="text-xl text-black dark:text-white mb-4">Filters</h2>
       
       {/* Filter options */}
       <div className="flex flex-wrap mb-4 space-x-4">
@@ -60,6 +63,16 @@ const Split = () => {
             type="text"
             name="dropoff"
             value={filters.dropoff}
+            onChange={handleFilterChange}
+            className="p-2 border border-gray-300 rounded"
+          />
+        </label>
+        <label className="flex flex-col">
+          <span className="mb-2 font-medium text-gray-700 dark:text-gray-300">Person's Name:</span>
+          <input
+            type="text"
+            name="name"
+            value={filters.name}
             onChange={handleFilterChange}
             className="p-2 border border-gray-300 rounded"
           />
