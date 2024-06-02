@@ -6,7 +6,9 @@ const Split = () => {
   const [filters, setFilters] = useState({
     pickup: '',
     dropoff: '',
-    name: ''
+    name: '',
+    riders: '',
+    time: ''
   });
 
   useEffect(() => {
@@ -34,7 +36,9 @@ const Split = () => {
   const filteredRequests = requests.filter(request => 
     (filters.pickup === '' || request.pickup_point.toLowerCase().includes(filters.pickup.toLowerCase())) &&
     (filters.dropoff === '' || request.dropoff_point.toLowerCase().includes(filters.dropoff.toLowerCase())) &&
-    (filters.name === '' || request.initiator_name.toLowerCase().includes(filters.name.toLowerCase()))
+    (filters.name === '' || request.initiator_name.toLowerCase().includes(filters.name.toLowerCase())) &&
+    (filters.riders === '' || request.num_riders_needed === parseInt(filters.riders)) &&
+    (filters.time === '' || request.pickup_time === filters.time)
   );
 
   return (
@@ -73,6 +77,26 @@ const Split = () => {
             type="text"
             name="name"
             value={filters.name}
+            onChange={handleFilterChange}
+            className="p-2 border border-gray-300 rounded"
+          />
+        </label>
+        <label className="flex flex-col">
+          <span className="mb-2 font-medium text-gray-700 dark:text-gray-300">Number of Riders:</span>
+          <input
+            type="number"
+            name="riders"
+            value={filters.riders}
+            onChange={handleFilterChange}
+            className="p-2 border border-gray-300 rounded"
+          />
+        </label>
+        <label className="flex flex-col">
+          <span className="mb-2 font-medium text-gray-700 dark:text-gray-300">Pickup Time:</span>
+          <input
+            type="time"
+            name="time"
+            value={filters.time}
             onChange={handleFilterChange}
             className="p-2 border border-gray-300 rounded"
           />
