@@ -7,11 +7,6 @@ const HomePage = () => {
   const { auth, setAuth } = useContext(AuthContext);
   const { tab, setTab } = useContext(TabContext);
 
-const handleCreatePost = () => {
-  // Add your logic for creating a post, such as navigating to a create post page
-  console.log("Create Post button clicked");
-};
-
   if (!auth) {
     return (
       <>
