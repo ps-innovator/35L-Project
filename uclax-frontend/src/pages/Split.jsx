@@ -3,6 +3,10 @@ import CardView from '../components/CardView.jsx';
 
 const Split = () => {
   const [requests, setRequests] = useState([]);
+  const [filters, setFilters] = useState({
+    pickup: '',
+    dropoff: ''
+  });
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -18,13 +22,51 @@ const Split = () => {
     fetchRequests();
   }, []);
 
+  const handleFilterChange = (event) => {
+    setFilters({
+      ...filters,
+      [event.target.name]: event.target.value
+    });
+  };
+
+  // Filter requests based on selected criteria
+  const filteredRequests = requests.filter(request => 
+    (filters.pickup === '' || request.pickup_point.toLowerCase().includes(filters.pickup.toLowerCase())) &&
+    (filters.dropoff === '' || request.dropoff_point.toLowerCase().includes(filters.dropoff.toLowerCase()))
+  );
+
   return (
     <div>
       <h1 className="text-2xl text-black dark:text-white" style={{ marginTop: "5%", marginBottom: "5%", fontWeight: "500", fontSize: 45 }}>
         Ride Share Posts
       </h1>
+
+      {/* Filter options */}
+      <div className="mb-4 p-2">
+        <label>
+          Pickup Point:
+          <input
+            type="text"
+            name="pickup"
+            value={filters.pickup}
+            onChange={handleFilterChange}
+            className="ml-2 p-2 border border-gray-300"
+          />
+        </label>
+        <label className="ml-4">
+          Dropoff Point:
+          <input
+            type="text"
+            name="dropoff"
+            value={filters.dropoff}
+            onChange={handleFilterChange}
+            className="ml-2 p-2 border border-gray-300"
+          />
+        </label>
+      </div>
+
       <div className="grid grid-cols-1 gap-4">
-        {requests.map((request, index) => (
+        {filteredRequests.map((request, index) => (
           <CardView
             key={index}
             header={request.initiator_name}
