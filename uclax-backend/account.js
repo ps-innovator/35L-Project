@@ -61,6 +61,9 @@ const userDetails = async (token) => {
 const login = async (username, password) => {
     const existing_account = await mongo_client.getAccountData(username);
     const match = await bcrypt.compare(password, existing_account.password);
+    console.log(password)
+    console.log(existing_account.password)
+    console.log(match)
     if(!match) {
         throw Error("incorrect password.");
     }
@@ -72,3 +75,4 @@ exports.authToken = authToken;
 exports.userDetails = userDetails;
 exports.updateProfile = updateProfile;
 exports.sendFriendRequest = sendFriendRequest;
+exports.addFriend = acceptFriendRequest;

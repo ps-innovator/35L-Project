@@ -77,7 +77,7 @@ router.put('/accept_friend_request', authTokenVerify, async (req, res) => {
 	const token = req.body.token;
 	const acceptedFriend = req.body.friendId;
 	const acc_info = await account.userDetails(token);
-	const curFriendId = { '_id': acc_info._id } ;
+	const curFriendId = acc_info._id ;
 	await account.addFriend(curFriendId, acceptedFriend);
 	res.status(200).json({"msg": "Successfully updated."});
 });

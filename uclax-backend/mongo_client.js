@@ -79,13 +79,15 @@ const sendFriendRequest = async (requestedFriendId, requesterId) => {
 const addFriend = async (curFriendId, friendToAddId) => {
 	//add friend_to_add to current friend's list
 	const filterObj1 = { '_id': curFriendId } ;
-	const updateObj1 = { '$push': { friends: { '$each': [new ObjectId(friendToAddId)] } } , '$pull': { friendRequests: { '$in': [new ObjectId(friendToAddId)]  } } };
+	const updateObj1 = { '$push': { friends: { '$each': [(new ObjectId(friendToAddId))] } } , '$pull': { friendRequests: { '$in': [(new ObjectId(friendToAddId))]  } } };
 	updateProfile(filterObj1, updateObj1);
 
 	//add cur friend to friend_to_add's list
-	const filterObj2 = { '_id': friendToAddId } ;
-	const updateObj2 = { '$push': { friends: curFriendId } };
+	const filterObj2 = { '_id': new ObjectId(friendToAddId) } ;
+	const updateObj2 = { '$push': { friends: { '$each': [curFriendId] } }, '$pull': { friendRequests: { '$in': [curFriendId] } } };
 	updateProfile(filterObj2, updateObj2);
+
+
 };
 
 exports.createRideRequest = createRideRequest;
