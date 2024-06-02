@@ -40,14 +40,28 @@ const Split = () => {
     });
   };
 
+  const toMinutes = (time) => {
+    const i = time.indexOf(':');
+    const hour = parseInt(time.substring(0, i));
+    const min = parseInt(time.substring(i+1));
+    return hour * 60 + min;
+  }
+
+  
+
   // Filter requests based on selected criteria
   const filteredRequests = requests.filter(request => 
     (filters.pickup === '' || request.pickup_point.toLowerCase().includes(filters.pickup.toLowerCase())) &&
     (filters.dropoff === '' || request.dropoff_point.toLowerCase().includes(filters.dropoff.toLowerCase())) &&
     (filters.name === '' || request.initiator_name.toLowerCase().includes(filters.name.toLowerCase())) &&
     (filters.riders === '' || request.num_riders_needed.toString() === filters.riders) &&
-    (filters.time === '' || request.pickup_time.toLowerCase().includes((filters.time + ' ' + filters.period).toLowerCase()))
+    // (filters.time === '' || request.pickup_time.toLowerCase().includes((filters.time + ' ' + filters.period).toLowerCase()))
+    (filters.time == '' || (toMinutes(request.pickup_time) - 30 < toMinutes(filters.time) < toMinutes(request.pickup_time) + 30))
+    
   );
+
+  // console.log("addition testing");
+  // console.log(toMinutes(filters.time));
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -131,7 +145,9 @@ const Split = () => {
           <CardView
             key={index}
             header={request.initiator_name}
-            shortDescr={`Pickup: ${request.pickup_point}, Dropoff: ${request.dropoff_point}, Time: ${request.pickup_time}`}
+            shortDescr1={`Pickup: ${request.pickup_point}`}
+            shortDescr2={`Dropoff: ${request.dropoff_point}`}
+            shortDescr3={`Time: ${request.pickup_time}`}
             longDescr={`Number of people: ${request.num_riders_needed}`}
             imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
             imgalt="Cute airplane clipart"
