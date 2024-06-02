@@ -31,9 +31,7 @@ const HomePage = () => {
             Welcome to UCLAX!
             </h1>
           <CardView
-            header=""
-            shortDescr="Log in to view posts"
-            longDescr=""
+            shortDescr1="Log in to view posts"
             imgsrc={uclaxLogo}
             imgalt="Image of a plane whose trail is a spiral road. Caption is UCLAX."
           />
