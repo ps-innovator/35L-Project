@@ -8,7 +8,8 @@ const Split = () => {
     dropoff: '',
     name: '',
     riders: '',
-    time: ''
+    time: '',
+    period: 'AM'
   });
 
   useEffect(() => {
@@ -32,13 +33,20 @@ const Split = () => {
     });
   };
 
+  const handlePeriodChange = (event) => {
+    setFilters({
+      ...filters,
+      period: event.target.value
+    });
+  };
+
   // Filter requests based on selected criteria
   const filteredRequests = requests.filter(request => 
     (filters.pickup === '' || request.pickup_point.toLowerCase().includes(filters.pickup.toLowerCase())) &&
     (filters.dropoff === '' || request.dropoff_point.toLowerCase().includes(filters.dropoff.toLowerCase())) &&
     (filters.name === '' || request.initiator_name.toLowerCase().includes(filters.name.toLowerCase())) &&
     (filters.riders === '' || request.num_riders_needed.toString() === filters.riders) &&
-    (filters.time === '' || request.pickup_time.includes(filters.time))
+    (filters.time === '' || request.pickup_time.toLowerCase().includes((filters.time + ' ' + filters.period).toLowerCase()))
   );
 
   return (
@@ -56,6 +64,7 @@ const Split = () => {
               name="pickup"
               value={filters.pickup}
               onChange={handleFilterChange}
+              placeholder="Ex: Dykstra Turnaround"
               className="p-2 border border-gray-300 rounded text-black"
             />
           </label>
@@ -66,6 +75,7 @@ const Split = () => {
               name="dropoff"
               value={filters.dropoff}
               onChange={handleFilterChange}
+              placeholder="Ex: Terminal 1"
               className="p-2 border border-gray-300 rounded text-black"
             />
           </label>
@@ -76,6 +86,7 @@ const Split = () => {
               name="name"
               value={filters.name}
               onChange={handleFilterChange}
+              placeholder="Ex: Pranav"
               className="p-2 border border-gray-300 rounded text-black"
             />
           </label>
@@ -86,18 +97,31 @@ const Split = () => {
               name="riders"
               value={filters.riders}
               onChange={handleFilterChange}
+              placeholder="Ex: 3"
               className="p-2 border border-gray-300 rounded text-black"
             />
           </label>
           <label className="flex flex-col">
             <span className="mb-2 font-medium text-gray-300">Pickup Time:</span>
-            <input
-              type="time"
-              name="time"
-              value={filters.time}
-              onChange={handleFilterChange}
-              className="p-2 border border-gray-300 rounded text-black"
-            />
+            <div className="flex space-x-2">
+              <input
+                type="text"
+                name="time"
+                value={filters.time}
+                onChange={handleFilterChange}
+                placeholder="Ex: 3:20"
+                className="p-2 border border-gray-300 rounded text-black"
+              />
+              <select
+                name="period"
+                value={filters.period}
+                onChange={handlePeriodChange}
+                className="p-2 border border-gray-300 rounded text-black"
+              >
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </div>
           </label>
         </div>
       </div>
