@@ -8,9 +8,6 @@ const Split = () => {
     const fetchRequests = async () => {
       try {
         const response = await fetch('http://localhost:3000/auth/riderequests');
-        if (!response.ok) {
-          throw new Error('Network response was not ok ' + response.statusText);
-        }
         const data = await response.json();
         console.log('Fetched data:', data); // Log the data fetched from the server
         setRequests(data);

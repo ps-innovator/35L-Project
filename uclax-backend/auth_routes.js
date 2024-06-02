@@ -57,7 +57,7 @@ router.post('/username', authTokenVerify, async (req, res) => {
 
 router.get('/riderequests', async (req, res) => {
     try {
-        const requests = await getRideRequests(); // Call getRideRequests function
+        const requests = await mongo_client.getRideRequests();
         res.json(requests);
     } catch (error) {
         console.error('Error fetching ride requests:', error);
