@@ -41,26 +41,27 @@ const Split = () => {
         Ride Share Posts
       </h1>
 
+      
       {/* Filter options */}
-      <div className="mb-4 p-2">
-        <label>
-          Pickup Point:
+      <div className="flex flex-wrap mb-4 space-x-4">
+        <label className="flex flex-col">
+          <span className="mb-2 font-medium text-gray-700 dark:text-gray-300">Pickup Point:</span>
           <input
             type="text"
             name="pickup"
             value={filters.pickup}
             onChange={handleFilterChange}
-            className="ml-2 p-2 border border-gray-300"
+            className="p-2 border border-gray-300 rounded"
           />
         </label>
-        <label className="ml-4">
-          Dropoff Point:
+        <label className="flex flex-col">
+          <span className="mb-2 font-medium text-gray-700 dark:text-gray-300">Dropoff Point:</span>
           <input
             type="text"
             name="dropoff"
             value={filters.dropoff}
             onChange={handleFilterChange}
-            className="ml-2 p-2 border border-gray-300"
+            className="p-2 border border-gray-300 rounded"
           />
         </label>
       </div>
