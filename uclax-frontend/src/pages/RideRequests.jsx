@@ -4,8 +4,8 @@ import { useState } from 'react';
 
 const RideRequests = () => {
     const [initiatorName, setName] = useState('');
-    const [pickup, setPickup] = useState('');
-    const [dropoff, setDropoff] = useState('');
+    const [pickup, setPickup] = useState('Dykstra Turnaround');
+    const [dropoff, setDropoff] = useState('Terminal 1');
     const [pickupTime, setTime] = useState('');
     const [numRiders, setRiders] = useState('');
 
@@ -29,6 +29,7 @@ const RideRequests = () => {
         });
         if(res.ok) {
             const json = await res.json();
+            console.log(json);
             console.log("success ride request");
         } else {
             const json = await res.json();
@@ -79,7 +80,7 @@ const RideRequests = () => {
             </select>
             </div>
             <div className="flex mb-6 items-center justify-center">
-            <input type="datetime-local" className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  />
+            <input type="datetime-local" value={pickupTime} onChange={(e) => setTime(e.target.value)} className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  />
             </div>
             <div className="flex mb-6 items-center justify-center">
             <input

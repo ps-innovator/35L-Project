@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp.jsx";
 import Login from "./pages/Login.jsx";
 import AccountInfo from "./pages/AccountInfo.jsx";
 import Split from "./pages/Split.jsx";
+import RideRequests from "./pages/RideRequests.jsx";
 
 export const AuthContext = createContext(null);
 export const TabContext = createContext(0);
