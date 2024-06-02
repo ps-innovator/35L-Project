@@ -2,8 +2,6 @@ import { useState, useContext, useEffect } from "react";
 import { AuthContext, TabContext } from "../App.jsx";
 import uclaxLogo from "/uclaxLogo.png";
 import CardView from "../components/CardView.jsx";
-import SignUp from "../pages/SignUp.jsx";
-import Login from "../pages/Login.jsx";
 
 const HomePage = () => {
   const { auth, setAuth } = useContext(AuthContext);
@@ -13,9 +11,9 @@ const HomePage = () => {
   if (!auth) {
 
     if (view === "login") {
-      setTab(2);
+      setTab(1);
     } else if (view === "signup") {
-      setTab(3);
+      setTab(2);
     }
 
     return (
@@ -34,23 +32,26 @@ const HomePage = () => {
             </h1>
           <CardView
             header=""
-            shortDescr="Log In to View Posts"
+            shortDescr="Log in to view posts"
             longDescr=""
             imgsrc={uclaxLogo}
             imgalt="Image of a plane whose trail is a spiral road. Caption is UCLAX."
           />
-          <button
+           <div style={{ marginTop: "20px", display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <button
               onClick={() => setView("login")}
-              className="text-lg leading-tight font-medium text-black dark:text-zinc-400 hover:underline block"
+              className="text-lg leading-tight font-medium text-black dark:text-zinc-400 hover:underline"
+              style={{ marginBottom: "10px" }}
             >
               Returning User? Log In
             </button>
             <button
               onClick={() => setView("signup")}
-              className="text-lg leading-tight font-medium text-black dark:text-zinc-400 hover:underline block"
+              className="text-lg leading-tight font-medium text-black dark:text-zinc-400 hover:underline"
             >
               New User? Sign Up
             </button>
+          </div>
         </div>
       </>
     );
