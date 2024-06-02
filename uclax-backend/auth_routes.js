@@ -55,7 +55,6 @@ router.post('/username', authTokenVerify, async (req, res) => {
     res.status(200).json({ username: acc.username, token });
 });
 
-
 router.put('/edit_user', authTokenVerify, async (req, res) => {
 	const token = req.body.token;
 	const acc = await account.userDetails(token);
@@ -81,5 +80,35 @@ router.put('/accept_friend_request', authTokenVerify, async (req, res) => {
 	await account.addFriend(curFriendId, acceptedFriend);
 	res.status(200).json({"msg": "Successfully updated."});
 });
+
+router.get('/riderequests', async (req, res) => {
+    try {
+        const requests = await mongo_client.getRideRequests();
+        res.json(requests);
+    } catch (error) {
+        console.error('Error fetching ride requests:', error);
+        res.status(500).send('Error fetching ride requests');
+    }
+});
+
+router.post('/riderequests', async (req, res) => {
+	const {initiator_name, pickup_point, dropoff_point, pickup_time, num_riders_needed} = req.body;
+	
+	rideRequest = {
+		initiator_name,
+        pickup_point,
+        dropoff_point,
+        pickup_time,
+        num_riders_needed
+	};
+
+	try {
+		await mongo_client.createRideRequest(rideRequest);
+		res.status(200).json({ initiator_name, pickup_point, dropoff_point, pickup_time, num_riders_needed });
+	} catch (error) {
+        res.status(400).json({ errorMessage: error.message });
+    }
+});
+
 
 module.exports = router;
