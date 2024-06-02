@@ -23,7 +23,9 @@ const createAccount = async (username, password) => {
             preferences: {
                 ride_pref: "Lyft",
                 payment_form: ""
-            }
+            },
+			friends: [],
+			friendRequests: []
         };
         await mongo_client.createAccount(account);
     }
@@ -31,6 +33,15 @@ const createAccount = async (username, password) => {
 
 const updateProfile = async (filter_obj, update_obj) => {
     mongo_client.updateProfile(filter_obj, update_obj);
+};
+
+const sendFriendRequest = async (curFriendId, requestedFriendId) => {
+	mongo_client.sendFriendRequest(requestedFriendId, curFriendId);
+};
+
+const acceptFriendRequest = async (curFriendId, requesterFriendId) => {
+	mongo_client.addFriend(curFriendId, requesterFriendId);
+
 };
 
 const userDetails = async (token) => {
@@ -50,6 +61,9 @@ const userDetails = async (token) => {
 const login = async (username, password) => {
     const existing_account = await mongo_client.getAccountData(username);
     const match = await bcrypt.compare(password, existing_account.password);
+    console.log(password)
+    console.log(existing_account.password)
+    console.log(match)
     if(!match) {
         throw Error("incorrect password.");
     }
@@ -60,3 +74,5 @@ exports.login = login;
 exports.authToken = authToken;
 exports.userDetails = userDetails;
 exports.updateProfile = updateProfile;
+exports.sendFriendRequest = sendFriendRequest;
+exports.addFriend = acceptFriendRequest;
