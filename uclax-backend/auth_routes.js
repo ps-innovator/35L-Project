@@ -114,7 +114,7 @@ router.get('/riderequests', async (req, res) => {
 });
 
 router.post('/riderequests', async (req, res) => {
-	const {initiator_name, pickup_point, dropoff_point, pickup_time, num_riders_needed, token} = req.body;
+	const {initiator_name, pickup_point, dropoff_point, pickup_date, pickup_time, num_riders_needed, token} = req.body;
 	const acc_info = await account.userDetails(token);
 	const initiator_id = acc_info._id;
 	const members = [];
@@ -124,6 +124,7 @@ router.post('/riderequests', async (req, res) => {
 		initiator_name,
         pickup_point,
         dropoff_point,
+        pickup_date,
         pickup_time,
         num_riders_needed,
 	initiator_id,
@@ -133,7 +134,7 @@ router.post('/riderequests', async (req, res) => {
 
 	try {
 		await mongo_client.createRideRequest(rideRequest);
-		res.status(200).json({ initiator_name, pickup_point, dropoff_point, pickup_time, num_riders_needed });
+		res.status(200).json({ initiator_name, pickup_point, dropoff_point, pickup_date, pickup_time, num_riders_needed });
 	} catch (error) {
         res.status(400).json({ errorMessage: error.message });
     }

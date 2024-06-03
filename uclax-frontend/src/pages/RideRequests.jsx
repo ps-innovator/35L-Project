@@ -8,6 +8,7 @@ const RideRequests = () => {
     const [pickup, setPickup] = useState('Dykstra Turnaround');
     const [dropoff, setDropoff] = useState('Terminal 1');
     const [pickupTime, setTime] = useState('');
+    const [pickupDate, setDate] = useState('');
     const [numRiders, setRiders] = useState('');
     const { auth, setAuth } = useContext(AuthContext);
 
@@ -26,7 +27,7 @@ const RideRequests = () => {
             method: 'POST',
             credentials: 'include',
             headers: {'content-type': 'application/json'},
-            body: JSON.stringify({initiator_name: initiatorName, pickup_point: pickup, dropoff_point: dropoff, pickup_time: pickupTime, num_riders_needed: numRiders, token: auth.token})
+            body: JSON.stringify({initiator_name: initiatorName, pickup_point: pickup, dropoff_point: dropoff, pickup_date: pickupDate, pickup_time: pickupTime, num_riders_needed: numRiders, token: auth.token})
         });
         if(res.ok) {
             const json = await res.json();
@@ -81,7 +82,10 @@ const RideRequests = () => {
             </select>
             </div>
             <div className="flex mb-6 items-center justify-center">
-            <input type="datetime-local" value={pickupTime} onChange={(e) => setTime(e.target.value)} className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  />
+            <input type="date" value={pickupDate} onChange={(e) => setDate(e.target.value)} className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  />
+            </div>
+            <div className="flex mb-6 items-center justify-center">
+            <input type="time" value={pickupTime} onChange={(e) => setTime(e.target.value)} className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  />
             </div>
             <div className="flex mb-6 items-center justify-center">
             <input

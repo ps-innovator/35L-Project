@@ -21,7 +21,8 @@ const CardView = ({ header, onClick, shortDescr1, shortDescr2, shortDescr3, long
           <>
             {shortDescr1} <br />
             {shortDescr2} <br />
-            {shortDescr3}
+            {shortDescr3} <br />
+            {shortDescr4}
           </>
         </p>
         }
