@@ -66,19 +66,20 @@ router.get('/riderequests', async (req, res) => {
 });
 
 router.post('/riderequests', async (req, res) => {
-	const {initiator_name, pickup_point, dropoff_point, pickup_time, num_riders_needed} = req.body;
+	const {initiator_name, pickup_point, dropoff_point, pickup_date, pickup_time, num_riders_needed} = req.body;
 	
 	rideRequest = {
 		initiator_name,
         pickup_point,
         dropoff_point,
+        pickup_date,
         pickup_time,
         num_riders_needed
 	};
 
 	try {
 		await mongo_client.createRideRequest(rideRequest);
-		res.status(200).json({ initiator_name, pickup_point, dropoff_point, pickup_time, num_riders_needed });
+		res.status(200).json({ initiator_name, pickup_point, dropoff_point, pickup_date, pickup_time, num_riders_needed });
 	} catch (error) {
         res.status(400).json({ errorMessage: error.message });
     }
