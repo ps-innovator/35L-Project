@@ -63,17 +63,25 @@ const createAccount = async (account) => {
 }
 
 
-const updateProfile = async (filter_obj, update_obj) => {
+const updateCollection = async (filter_obj, update_obj, collection) => {
     console.log(filter_obj)
     console.log(update_obj)
     try {
         await client.connect();
         const db = client.db("uclax");
-        const login_collection = db.collection("login");
+        const login_collection = db.collection(collection);
         await login_collection.updateOne(filter_obj, update_obj);
     } catch {
         console.log("Error updating")
     }
+};
+
+const updateProfile = async (filter_obj, update_obj) => {
+	updateCollection(filter_obj, update_obj, "login");
+};
+
+const updateRideRequest = async (filter_obj, update_obj) => {
+	updateCollection(filter_obj, update_obj, "rideshare_requests");
 };
 
 const sendFriendRequest = async (requestedFriendId, requesterId) => {
@@ -96,6 +104,18 @@ const addFriend = async (curFriendId, friendToAddId) => {
 
 };
 
+const requestJoinRide = async (rideId, requesterId) => {
+	const updateObj = { '$push': { memberRequests: { '$each': [requesterId] } } };
+	const filterObj = { '_id': new ObjectId(rideId) } ;
+	updateRideRequest(filterObj, updateObj);
+};
+
+const acceptRideRequest = async (rideId, acceptedRiderId) => {
+	const updateObj = { '$push': { members: { '$each': [new ObjectId(acceptedRiderId)] } }, '$pull': { memberRequests: { '$in': [new ObjectId(acceptedRiderId)] }  } };
+	const filterObj = { '_id': new ObjectId(rideId) } ;
+	updateRideRequest(filterObj, updateObj);
+};
+
 exports.createRideRequest = createRideRequest;
 exports.getRideRequests = getRideRequests;
 exports.testMongoClientFetch = testMongoClientFetch;
@@ -104,5 +124,7 @@ exports.createAccount = createAccount;
 exports.updateProfile = updateProfile;
 exports.sendFriendRequest = sendFriendRequest;
 exports.addFriend = addFriend;
+exports.requestJoinRide = requestJoinRide;
+exports.acceptRideRequest = acceptRideRequest;
 
 client.close();
