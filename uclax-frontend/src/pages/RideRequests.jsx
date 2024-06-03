@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../App.jsx';
 
 //need to check if user is logged in
 
@@ -8,7 +9,7 @@ const RideRequests = () => {
     const [dropoff, setDropoff] = useState('Terminal 1');
     const [pickupTime, setTime] = useState('');
     const [numRiders, setRiders] = useState('');
-
+    const { auth, setAuth } = useContext(AuthContext);
 
 
     const handlePickup = (event) => {
@@ -25,7 +26,7 @@ const RideRequests = () => {
             method: 'POST',
             credentials: 'include',
             headers: {'content-type': 'application/json'},
-            body: JSON.stringify({initiator_name: initiatorName, pickup_point: pickup, dropoff_point: dropoff, pickup_time: pickupTime, num_riders_needed: numRiders})
+            body: JSON.stringify({initiator_name: initiatorName, pickup_point: pickup, dropoff_point: dropoff, pickup_time: pickupTime, num_riders_needed: numRiders, token: auth.token})
         });
         if(res.ok) {
             const json = await res.json();
