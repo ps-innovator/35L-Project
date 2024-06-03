@@ -24,8 +24,9 @@ const createAccount = async (username, password) => {
                 ride_pref: "Lyft",
                 payment_form: ""
             },
-			friends: [],
-			friendRequests: []
+	    friends: [],
+	    friendRequests: [],
+	    rides: []
         };
         await mongo_client.createAccount(account);
     }

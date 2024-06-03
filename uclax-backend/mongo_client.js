@@ -114,6 +114,10 @@ const acceptRideRequest = async (rideId, acceptedRiderId) => {
 	const updateObj = { '$push': { members: { '$each': [new ObjectId(acceptedRiderId)] } }, '$pull': { memberRequests: { '$in': [new ObjectId(acceptedRiderId)] }  } };
 	const filterObj = { '_id': new ObjectId(rideId) } ;
 	updateRideRequest(filterObj, updateObj);
+
+	const memberUpdateObj = { '$push': { rides: { '$each': [new ObjectId(rideId)] } } };
+	const filterObj = { '_id': new ObjectId(acceptedRiderId) } ;
+	updateProfile(filterObj, memberUpdateObj);
 };
 
 exports.createRideRequest = createRideRequest;
