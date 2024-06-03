@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import CardView from '../components/CardView.jsx';
 
 const Split = () => {
@@ -8,6 +8,7 @@ const Split = () => {
     dropoff: '',
     name: '',
     riders: '',
+    date: '',
     time: '',
     period: 'AM'
   });
@@ -47,21 +48,32 @@ const Split = () => {
     return hour * 60 + min;
   }
 
-  
-
   // Filter requests based on selected criteria
-  const filteredRequests = requests.filter(request => 
+  var filteredRequests = requests.filter(request => 
     (filters.pickup === '' || request.pickup_point.toLowerCase().includes(filters.pickup.toLowerCase())) &&
     (filters.dropoff === '' || request.dropoff_point.toLowerCase().includes(filters.dropoff.toLowerCase())) &&
     (filters.name === '' || request.initiator_name.toLowerCase().includes(filters.name.toLowerCase())) &&
     (filters.riders === '' || request.num_riders_needed.toString() === filters.riders) &&
-    // (filters.time === '' || request.pickup_time.toLowerCase().includes((filters.time + ' ' + filters.period).toLowerCase()))
-    (filters.time == '' || (toMinutes(request.pickup_time) - 30 < toMinutes(filters.time) < toMinutes(request.pickup_time) + 30))
-    
+    (filters.date === '' || request.pickup_date.includes(filters.date))
   );
+  console.log(filteredRequests);
 
-  // console.log("addition testing");
-  // console.log(toMinutes(filters.time));
+  const filteredRequestsTimes = requests.filter(request => {
+    if (filters.time === '') return true;
+    console.log(filters.time);
+    console.log(toMinutes(filters.time));
+    console.log(toMinutes(request.pickup_time));
+    if (toMinutes(filters.time) >= toMinutes(request.pickup_time) - 30 && 
+    toMinutes(filters.time) <= toMinutes(request.pickup_time) + 30) 
+      return true;
+  });
+
+
+  console.log(filteredRequestsTimes);
+
+  const filteredArray = filteredRequests.filter(value => filteredRequestsTimes.includes(value));
+  console.log("filtered array");
+  console.log(filteredArray);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -100,7 +112,7 @@ const Split = () => {
               name="name"
               value={filters.name}
               onChange={handleFilterChange}
-              placeholder="Ex: Pranav"
+              placeholder="Ex: Joe Bruin"
               className="p-2 border border-gray-300 rounded text-black"
             />
           </label>
@@ -112,6 +124,17 @@ const Split = () => {
               value={filters.riders}
               onChange={handleFilterChange}
               placeholder="Ex: 3"
+              className="p-2 border border-gray-300 rounded text-black"
+            />
+          </label>
+          <label className="flex flex-col">
+            <span className="mb-2 font-medium text-gray-300">Date:</span>
+            <input
+              type="text"
+              name="date"
+              value={filters.date}
+              onChange={handleFilterChange}
+              placeholder="Ex: 2024-06-05"
               className="p-2 border border-gray-300 rounded text-black"
             />
           </label>
@@ -141,13 +164,15 @@ const Split = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-4">
-        {filteredRequests.map((request, index) => (
+        {/* {filteredRequests.map((request, index) => ( */}
+        {filteredArray.map((request, index) => (
           <CardView
             key={index}
             header={request.initiator_name}
             shortDescr1={`Pickup: ${request.pickup_point}`}
             shortDescr2={`Dropoff: ${request.dropoff_point}`}
-            shortDescr3={`Time: ${request.pickup_time}`}
+            shortDescr3={`Date: ${request.pickup_date}`}
+            shortDescr4={`Time: ${request.pickup_time}`}
             longDescr={`Number of people: ${request.num_riders_needed}`}
             imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
             imgalt="Cute airplane clipart"

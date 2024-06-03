@@ -1,4 +1,4 @@
-const CardView = ({ header, shortDescr1, shortDescr2, shortDescr3, longDescr, imgsrc, imgalt }) => {
+const CardView = ({ header, shortDescr1, shortDescr2, shortDescr3, shortDescr4, longDescr, imgsrc, imgalt }) => {
   return (<div className="max-w-md mx-auto bg-white dark:bg-slate-800 rounded-xl shadow-md overflow-hidden md:max-w-2xl m-8">
     <div className="md:flex">
       <div className="shrink md:shrink-0">
@@ -17,7 +17,8 @@ const CardView = ({ header, shortDescr1, shortDescr2, shortDescr3, longDescr, im
           <>
             {shortDescr1} <br />
             {shortDescr2} <br />
-            {shortDescr3}
+            {shortDescr3} <br />
+            {shortDescr4}
           </>
         </p>
         }
