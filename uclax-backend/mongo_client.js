@@ -26,12 +26,13 @@ const createRideRequest = async (ride_request) => {
     }
 };
 
-const getRideRequests = async () => {
+
+const getRideRequests = async (query) => {
     try {
         await client.connect();
         const db = client.db("uclax");
         const rr_collection = db.collection("rideshare_requests");
-        const rr_response = await rr_collection.find().toArray();
+        const rr_response = await rr_collection.find(query).toArray();
         return rr_response;
     } catch (error) {
         console.log("Error: ", error);
@@ -108,6 +109,10 @@ const requestJoinRide = async (rideId, requesterId) => {
 	const updateObj = { '$push': { memberRequests: { '$each': [requesterId] } } };
 	const filterObj = { '_id': new ObjectId(rideId) } ;
 	updateRideRequest(filterObj, updateObj);
+
+	const updateUserObj = { '$push': { requestedRides: { '$each': [new ObjectId(rideId)] } } };
+	const filterUserObj = { '_id': requesterId } ;
+	updateProfile(filterUserObj, updateUserObj);
 };
 
 const acceptRideRequest = async (rideId, acceptedRiderId) => {
@@ -115,9 +120,9 @@ const acceptRideRequest = async (rideId, acceptedRiderId) => {
 	const filterObj = { '_id': new ObjectId(rideId) } ;
 	updateRideRequest(filterObj, updateObj);
 
-	const memberUpdateObj = { '$push': { rides: { '$each': [new ObjectId(rideId)] } } };
-	const filterObj = { '_id': new ObjectId(acceptedRiderId) } ;
-	updateProfile(filterObj, memberUpdateObj);
+	const memberUpdateObj = { '$push': { rides: { '$each': [new ObjectId(rideId)] } }, '$pull': {requestedRides: {'$in': [new ObjectId(rideId)]}} };
+	const filterMemberObj = { '_id': new ObjectId(acceptedRiderId) } ;
+	updateProfile(filterMemberObj, memberUpdateObj);
 };
 
 exports.createRideRequest = createRideRequest;

@@ -5,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const mongo_client = require('./mongo_client.js');
 const account = require('./account.js');
 const { authTokenVerify } = require('./authmiddleware.js');
+const ObjectId = require('mongodb').ObjectId;
+
 
 router.use(cookieParser());
 
@@ -99,7 +101,11 @@ router.put('/accept_ride_request', authTokenVerify, async (req, res) => {
 
 router.get('/riderequests', async (req, res) => {
     try {
-        const requests = await mongo_client.getRideRequests();
+	let filter = {}
+	if (req.query.userId)
+	    filter = { initiator_id: { $eq: new ObjectId(req.query.userId) } };
+	console.log(filter)
+        const requests = await mongo_client.getRideRequests(filter);
         res.json(requests);
     } catch (error) {
         console.error('Error fetching ride requests:', error);

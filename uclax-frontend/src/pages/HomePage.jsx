@@ -7,8 +7,30 @@ const HomePage = () => {
   const { auth, setAuth } = useContext(AuthContext);
   const { tab, setTab } = useContext(TabContext);
   const [view, setView] = useState("home");
+  const [ userInfo, setUserInfo ] = useState({});
+	const [ myRides, setMyRides ] = useState([]);
+	const [ requestsToMe, setRequestsToMe ] = useState([]);
+	const [ requestsByMe, setRequestsByMe ] = useState([]);
+	
+				const fetchUserInfo = async () => {
+					if (!auth.token) return;
+					await fetch("http://localhost:3000/auth/user", {
+						method: "POST",
+						credentials: "include",
+						header: { "content-type": "application/json"},
+						body: JSON.stringify({ token: auth.token })
+					}).then(data => data.json())
+					.then(data => setUserInfo(data.acc))
+					await fetch(`http://localhost:3000/auth/riderequests?userId=${userInfo._id ? userInfo._id : ''}`)
+								.then(data => data.json())
+								.then(data => { setMyRides(data); console.log(data); } );
+				};
 
-  if (!auth) {
+    useEffect(() => {
+			fetchUserInfo();
+    }, [auth]);
+
+  if (!auth || !auth.token) {
 
     if (view === "login") {
       setTab(1);
@@ -54,7 +76,18 @@ const HomePage = () => {
       </>
     );
   } else {
-    return <></>
+    return (<>
+      <div className="min-h-screen bg-white dark:bg-gray-900 text-white">
+	    <h1 className="text-center text-4xl font-bold my-8">My Rides</h1>
+	    { userInfo.rides ?
+	    <div className="grid grid-cols-1 gap-4">
+	    	{userInfo.rides.map((ride) => {
+
+		})} 
+
+	    </div> : <h5 className="dark:text-white text-black">Loading...</h5> }
+      </div>
+    </>);
   }
 };
 
