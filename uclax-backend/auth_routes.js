@@ -55,6 +55,48 @@ router.post('/username', authTokenVerify, async (req, res) => {
     res.status(200).json({ username: acc.username, token });
 });
 
+router.put('/edit_user', authTokenVerify, async (req, res) => {
+	const token = req.body.token;
+	const acc = await account.userDetails(token);
+	const acc_id = { '_id': acc._id };
+	await account.updateProfile(acc_id, req.body.put_body);
+	res.status(200).json({"msg": "Successfully updated."});
+});
+
+router.put('/send_friend_request', authTokenVerify, async (req, res) => {
+	const token = req.body.token;
+	const requestedFriend = req.body.friendId;
+	const acc_info = await account.userDetails(token);
+	const curFriendId = { '_id': acc_info._id } ;
+	await account.sendFriendRequest(curFriendId, requestedFriend);
+	res.status(200).json({"msg": "Successfully updated."});
+});
+
+router.put('/accept_friend_request', authTokenVerify, async (req, res) => {
+	const token = req.body.token;
+	const acceptedFriend = req.body.friendId;
+	const acc_info = await account.userDetails(token);
+	const curFriendId = acc_info._id ;
+	await account.addFriend(curFriendId, acceptedFriend);
+	res.status(200).json({"msg": "Successfully updated."});
+});
+
+router.put('/join_ride', authTokenVerify, async (req, res) => {
+	const token = req.body.token;
+	const acc_info = await account.userDetails(token);
+	const curUserId = acc_info._id;
+	await mongo_client.requestJoinRide(req.body.rideId, curUserId);
+	res.status(200).json({"msg": "Successfully updated."});
+});
+
+router.put('/accept_ride_request', authTokenVerify, async (req, res) => {
+	const token = req.body.token;
+	const acc_info = await account.userDetails(token);
+	const curUserId = acc_info._id;
+	await mongo_client.acceptRideRequest(req.body.rideId, req.body.newRiderId);
+	res.status(200).json({"msg": "Successfully updated."});
+});
+
 router.get('/riderequests', async (req, res) => {
     try {
         const requests = await mongo_client.getRideRequests();
@@ -66,15 +108,22 @@ router.get('/riderequests', async (req, res) => {
 });
 
 router.post('/riderequests', async (req, res) => {
-	const {initiator_name, pickup_point, dropoff_point, pickup_date, pickup_time, num_riders_needed} = req.body;
-	
+	const {initiator_name, pickup_point, dropoff_point, pickup_date, pickup_time, num_riders_needed, token} = req.body;
+	const acc_info = await account.userDetails(token);
+	const initiator_id = acc_info._id;
+	const members = [];
+	const memberRequests = [];
+
 	rideRequest = {
 		initiator_name,
         pickup_point,
         dropoff_point,
         pickup_date,
         pickup_time,
-        num_riders_needed
+        num_riders_needed,
+	initiator_id,
+	members,
+	memberRequests
 	};
 
 	try {
