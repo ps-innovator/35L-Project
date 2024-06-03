@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import CardView from '../components/CardView.jsx';
 
 const Split = () => {
@@ -76,7 +76,7 @@ const Split = () => {
   console.log(filteredArray);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div>
       <h1 className="text-center text-4xl font-bold my-8">Ride Share Posts</h1>
       
       {/* Filter options */}
