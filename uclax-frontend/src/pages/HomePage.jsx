@@ -31,7 +31,7 @@ const HomePage = () => {
             Welcome to UCLAX!
             </h1>
           <CardView
-            shortDescr1="Log in to view posts"
+            shortDescr1="Login to view posts"
             imgsrc={uclaxLogo}
             imgalt="Image of a plane whose trail is a spiral road. Caption is UCLAX."
           />
@@ -41,7 +41,7 @@ const HomePage = () => {
               className="text-lg leading-tight font-medium text-black dark:text-zinc-400 hover:underline"
               style={{ marginBottom: "10px" }}
             >
-              Returning User? Log In
+              Returning User? Login
             </button>
             <button
               onClick={() => setView("signup")}

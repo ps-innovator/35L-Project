@@ -97,7 +97,7 @@ const RideRequests = () => {
             />
             </div>
             <div className="flex mb-6 items-center justify-center">
-            <button onClick={attemptRideRequest} className="block text-white p-4 rounded-lg bg-indigo-500 dark:bg-slate-500 hover:bg-indigo-600 dark:hover:bg-slate-600 active:bg-indigo-900 dark:active:bg-slate-900" style={{fontSize: 25, fontWeight: 200}}>Sign Up</button>
+            <button onClick={attemptRideRequest} className="block text-white p-4 rounded-lg bg-indigo-500 dark:bg-slate-500 hover:bg-indigo-600 dark:hover:bg-slate-600 active:bg-indigo-900 dark:active:bg-slate-900" style={{fontSize: 25, fontWeight: 200}}>Post</button>
           </div>
         </div>
     )
