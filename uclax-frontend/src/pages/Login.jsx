@@ -35,7 +35,7 @@ const Login = () => {
             placeholder="Username" 
             value={uname}
             onChange={(e) => setUname(e.target.value)}   
-            className="block w-[30%] p-4 text-gray-900 border-b border-gray-300 bg-white focus:outline-none dark:bg-slate-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="block opacity-50 focus:opacity-100 transition-opacity duration-150 focus:appearance-none w-[30%] p-4 text-gray-900 placeholder-gray-600 border-b border-gray-800 bg-white focus:outline-none dark:bg-slate-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div>
           <div className="flex mb-6 items-center justify-center">
@@ -44,11 +44,11 @@ const Login = () => {
             value={pwd}
             onChange={(e) => setPwd(e.target.value)}
             type="password"
-            className="block w-[30%] p-4 text-gray-900 border-b border-gray-300 bg-white focus:outline-none dark:bg-slate-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="block opacity-50 focus:opacity-100 transition-opacity duration-150 focus:appearance-none w-[30%] p-4 text-gray-900 placeholder-gray-600 border-b border-gray-800 bg-white focus:outline-none dark:bg-slate-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div>
           <div className="flex mb-6 items-center justify-center">
-            <button onClick={attemptLogin} className=" text-white p-4 h-12 flex items-center justify-center rounded-lg bg-indigo-500 dark:bg-slate-500 hover:bg-indigo-600 dark:hover:bg-slate-600 active:bg-indigo-900 dark:active:bg-slate-900 text-xl font-extralight">Log in</button>
+            <button onClick={attemptLogin} className=" text-white p-4 h-12 flex items-center justify-center rounded-lg bg-indigo-500 dark:bg-slate-500 hover:bg-indigo-600 dark:hover:bg-slate-600 transition-colors duration-150 active:bg-indigo-900 dark:active:bg-slate-900 text-xl font-extralight">Log in</button>
           </div>
         </div>
     )
