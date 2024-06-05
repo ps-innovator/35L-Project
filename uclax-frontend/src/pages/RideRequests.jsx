@@ -5,8 +5,8 @@ import { AuthContext } from '../App.jsx';
 
 const RideRequests = () => {
     const [initiatorName, setName] = useState('');
-    const [pickup, setPickup] = useState('Dykstra Turnaround');
-    const [dropoff, setDropoff] = useState('Terminal 1');
+    const [pickup, setPickup] = useState('Select a Pickup Point');
+    const [dropoff, setDropoff] = useState('Select a Terminal');
     const [pickupTime, setTime] = useState('');
     const [pickupDate, setDate] = useState('');
     const [numRiders, setRiders] = useState('');
@@ -23,6 +23,7 @@ const RideRequests = () => {
 
     const attemptRideRequest = async () => {
         console.log({initiator_name: initiatorName, pickup_point: pickup, dropoff_point: dropoff, pickup_time: pickupTime, num_riders_needed: numRiders})
+        if (!initiatorName || pickup === 'Select a Pickup Point' || dropoff === 'Select a Terminal' || !pickupTime || !numRiders) return;
         const res = await fetch('http://localhost:3000/auth/riderequests', {
             method: 'POST',
             credentials: 'include',
@@ -62,6 +63,7 @@ const RideRequests = () => {
             </div>
             <div className="flex mb-6 items-center justify-center">
             <select value={pickup} onChange={handlePickup} className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option disabled value="Select a Pickup Point">Select a Pickup Point</option>
                 <option value="Dykstra Turnaround">Dykstra</option>
                 <option value="Sproul Turnaround">Sproul</option>
                 <option value="Rieber Turnaround">Rieber</option>
@@ -70,6 +72,7 @@ const RideRequests = () => {
             </div>
             <div className="flex mb-6 items-center justify-center">
             <select value={dropoff} onChange={handleDropoff} className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option disabled value="Select a Terminal">Select a Terminal</option>
                 <option value="Terminal 1">Terminal 1</option>
                 <option value="Terminal 2">Terminal 2</option>
                 <option value="Terminal 3">Terminal 3</option>
