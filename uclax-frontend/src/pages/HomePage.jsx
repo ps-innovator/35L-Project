@@ -13,7 +13,7 @@ const HomePage = () => {
   const [rideRequestsByMe, setRideRequestsByMe] = useState([]);
 
   const fetchUserInfo = async () => {
-    if (!auth.token) return;
+    if (!auth || !auth.token) return;
     await fetch("http://localhost:3000/auth/user", {
       method: "POST",
       credentials: "include",
