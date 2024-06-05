@@ -41,6 +41,28 @@ const Split = () => {
     });
   };
 
+  const toTwelveHour = (time) => {
+    const i = time.indexOf(':');
+    var period = "AM";
+    var hour = parseInt(time.substring(0, i));
+    if (hour >= 13) {
+      hour -= 12;
+      period = "PM"
+    }
+    const min = parseInt(time.substring(i+1)); 
+    console.log(`${hour}:${min} ${period}`);
+    return `${hour}:${min} ${period}`;
+  }
+
+  const toTwentyFourHour = (time) => {
+    if (filters.period == 'AM') return time;
+     
+    const i = time.indexOf(':');
+    const hour = parseInt(time.substring(0, i)) + 12;
+    const min = parseInt(time.substring(i+1));
+    return `${hour}:${min}`;
+  }
+
   const toMinutes = (time) => {
     const i = time.indexOf(':');
     const hour = parseInt(time.substring(0, i));
@@ -54,17 +76,18 @@ const Split = () => {
     (filters.dropoff === '' || request.dropoff_point.toLowerCase().includes(filters.dropoff.toLowerCase())) &&
     (filters.name === '' || request.initiator_name.toLowerCase().includes(filters.name.toLowerCase())) &&
     (filters.riders === '' || request.num_riders_needed.toString() === filters.riders) &&
-    (filters.date === '' || request.pickup_date.includes(filters.date))
+    (filters.date === '' || (request.pickup_date && request.pickup_date.includes(filters.date)))
   );
   console.log(filteredRequests);
 
   const filteredRequestsTimes = requests.filter(request => {
     if (filters.time === '') return true;
     console.log(filters.time);
-    console.log(toMinutes(filters.time));
+    const filtTime = toMinutes(toTwentyFourHour(filters.time));
+    console.log(filtTime);
     console.log(toMinutes(request.pickup_time));
-    if (toMinutes(filters.time) >= toMinutes(request.pickup_time) - 30 && 
-    toMinutes(filters.time) <= toMinutes(request.pickup_time) + 30) 
+    if (filtTime >= toMinutes(request.pickup_time) - 30 && 
+    filtTime <= toMinutes(request.pickup_time) + 30) 
       return true;
   });
 
@@ -172,7 +195,7 @@ const Split = () => {
             shortDescr1={`Pickup: ${request.pickup_point}`}
             shortDescr2={`Dropoff: ${request.dropoff_point}`}
             shortDescr3={`Date: ${request.pickup_date}`}
-            shortDescr4={`Time: ${request.pickup_time}`}
+            shortDescr4={`Time: ${toTwelveHour(request.pickup_time)}`}
             longDescr={`Number of people: ${request.num_riders_needed}`}
             imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
             imgalt="Cute airplane clipart"
