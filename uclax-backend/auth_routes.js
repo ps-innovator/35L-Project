@@ -182,4 +182,18 @@ router.post('/getjoinrequests', authTokenVerify, async (req, res) => {
     }
 });
 
+router.delete("/deleteRideRequest", authTokenVerify, async (req, res) => {
+  try {
+    const requestId = req.body;
+    console.log("we get here") //never prints, get 404 (Not Found)
+    const result = await mongo_client.deleteRideRequest(requestId);
+    if (result.deletedCount === 0) {
+      return res.status(400).json({ errorMessage: 'Ride request not found' });
+    }
+  } catch (error) {
+    console.error("Error deleting ride request:", error);
+    res.status(400).json({ errorMessage: error.message });
+  }
+});
+
 module.exports = router;

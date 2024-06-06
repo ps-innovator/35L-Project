@@ -25,6 +25,19 @@ const createRideRequest = async (ride_request) => {
     }
 };
 
+const deleteRideRequest = async (requestId) => {
+    try {
+        await client.connect();
+        const db = client.db("uclax");
+        const riderequest_collection = db.collection("rideshare_requests");
+        const result = await riderequest_collection.deleteOne({ _id: ObjectId(requestId) });
+        await client.close();
+        console.log("Success!");
+        return result;
+    } catch {
+        console.log("Error deleting the ride request.");
+    }
+};
 
 const getRideRequests = async (query) => {
     try {
@@ -138,6 +151,7 @@ const acceptRideRequest = async (rideId, acceptedRiderId) => {
 
 exports.createRideRequest = createRideRequest;
 exports.getRideRequests = getRideRequests;
+exports.deleteRideRequest = deleteRideRequest;
 exports.testMongoClientFetch = testMongoClientFetch;
 exports.getAccountData = getAccountData;
 exports.createAccount = createAccount;

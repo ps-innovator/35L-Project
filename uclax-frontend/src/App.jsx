@@ -69,6 +69,8 @@ function TabManager() {
     }
   } else {
     switch (tab) {
+      case 0:
+        return <HomePage />;
       case 1:
         return <Split />
       case 2:

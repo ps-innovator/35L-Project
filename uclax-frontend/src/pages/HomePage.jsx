@@ -6,6 +6,7 @@ import carAsset from "/car.png";
 import uclaxLogo from "/uclaxLogo.png";
 import comm from "/peopleCommunicating.png";
 import CardView from "../components/CardView.jsx";
+import DeleteCardView from "../components/DeleteCardView.jsx";
 import StaticCardView from "../components/StaticCardView.jsx";
 
 
@@ -154,11 +155,12 @@ const HomePage = () => {
           <h1 className="text-center text-4xl font-bold my-8">My Initiated Rides</h1>
           <div className="grid grid-cols-1 gap-4">
             {myInitiatedRides.map((ride, index) => (
-                <CardView
+                <DeleteCardView
                 key={index}
                 header={
                   ride.initiator_name
                 }
+                requestId={ride._id}
                 shortDescr1={`Pickup: ${ride.pickup_point}`}
                 shortDescr2={`Dropoff: ${ride.dropoff_point}`}
                 shortDescr3={`Date: ${ride.pickup_date}`}
@@ -167,7 +169,8 @@ const HomePage = () => {
                 imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
                 imgalt="Cute airplane clipart"
               />
-              ))}
+              ))
+            }
           </div>
           </div>
           <div>
