@@ -100,24 +100,15 @@ router.put("/accept_ride_request", authTokenVerify, async (req, res) => {
 
 router.get("/riderequests", async (req, res) => {
   try {
+    
     let filter = {};
     if (req.query.userId)
-      filter = { initiator_id: { $eq: new ObjectId(req.query.userId) } };
-    console.log(filter);
-    const requests = await mongo_client.getRideRequests(filter);
+        filter = { members: new ObjectId(req.query.userId) }
+      //filter = { initiator_id: { $eq: new ObjectId(req.query.userId) } };
+      const requests = await mongo_client.getRideRequests(filter);
     res.json(requests);
   } catch (error) {
     console.error("Error fetching ride requests:", error);
-    res.status(500).send("Error fetching ride requests");
-  }
-});
-
-router.get("/riderequestinfo", async (req, res) => {
-  try {
-    let filter = { _id: req.body.reqIds };
-    const requests = await mongo_client.getRideRequests(filter);
-    res.json(requests);
-  } catch (error) {
     res.status(500).send("Error fetching ride requests");
   }
 });
@@ -134,7 +125,7 @@ router.post("/riderequests", async (req, res) => {
   } = req.body;
   const acc_info = await account.userDetails(token);
   const initiator_id = acc_info._id;
-  const members = [];
+  const members = [initiator_id];
   const memberRequests = [];
 
   rideRequest = {
@@ -164,6 +155,31 @@ router.post("/riderequests", async (req, res) => {
   } catch (error) {
     res.status(400).json({ errorMessage: error.message });
   }
+});
+
+router.post('/getjoinrequests', authTokenVerify, async (req, res) => {
+    try {
+  const token = req.body.token;
+  const acc_info = await account.userDetails(token);
+  const cur_id = acc_info._id;
+  const filter = { initiator_id: cur_id };
+  const rides = await mongo_client.getRideRequests(filter);
+  const join_reqs = [];
+  const acc_infos = [];
+  rides.forEach(ride => {
+    ride.memberRequests.forEach(member =>  {
+        acc_infos.push(mongo_client.getAccountById(member));
+        //TODO: update # spots left
+        join_reqs.push({id: member, rideId: ride._id, descr: ride.pickup_point + " to " + ride.dropoff_point + " on " + ride.pickup_date + " at " + ride.pickup_time + " (" + 0 + " riders left)", name: "Test"});
+    });
+  });
+
+  await Promise.all(acc_infos);
+
+  res.json(join_reqs.map(ride => { return { ...ride, name: "test" } } ));
+    } catch (error) {
+        res.status(400).json({ errorMessage: error.message });
+    }
 });
 
 module.exports = router;

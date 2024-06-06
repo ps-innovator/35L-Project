@@ -10,7 +10,6 @@ const client = new MongoClient(uri);
 
 const testMongoClientFetch = async () => {
     const reqs = await getRideRequests();
-    console.log(reqs);
 };
 
 const createRideRequest = async (ride_request) => {
@@ -36,6 +35,18 @@ const getRideRequests = async (query) => {
         return rr_response;
     } catch (error) {
         console.log("Error: ", error);
+    }
+};
+
+const getAccountById = async (userId) => {
+    try {
+        await client.connect();
+        const db = client.db("uclax");
+        const login_collection = db.collection("login");
+        const account = await login_collection.findOne({ _id: userId });
+        return account;
+    } catch (error) {
+        console.error(error);
     }
 };
 
@@ -135,5 +146,5 @@ exports.sendFriendRequest = sendFriendRequest;
 exports.addFriend = addFriend;
 exports.requestJoinRide = requestJoinRide;
 exports.acceptRideRequest = acceptRideRequest;
-
+exports.getAccountById = getAccountById;
 client.close();

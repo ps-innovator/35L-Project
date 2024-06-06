@@ -3,6 +3,7 @@ import CardView from "../components/CardView.jsx";
 import { AuthContext } from "../App.jsx";
 
 const Split = () => {
+  const [userInfo, setUserInfo] = useState({});
   const [requests, setRequests] = useState([]);
   const [joinReqs, setJoinReqs] = useState([]);
   const [joinedRides, setJoinedRides] = useState([]);
@@ -15,29 +16,31 @@ const Split = () => {
     period: "AM",
   });
   const { auth, setAuth } = useContext(AuthContext);
+  const fetchRequests = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/auth/riderequests");
+      const userInfo = await fetch("http://localhost:3000/auth/user", {
+        method: "POST",
+        credentials: "include",
+        header: { "content-type": "application/json" },
+        body: JSON.stringify({ token: auth.token }),
+      })
+        .then((data) => data.json())
+        .then((data) => {
+          setUserInfo(data.acc)
+          setJoinReqs(data.acc.requestedRides);
+          setJoinedRides(data.acc.rides);
+        });
+      const data = await response.json();
+      console.log("Fetched data:", data); // Log the data fetched from the server
+      setRequests(data);
+    } catch (error) {
+      console.error("Error fetching ride requests:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchRequests = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/auth/riderequests");
-        const userInfo = await fetch("http://localhost:3000/auth/user", {
-          method: "POST",
-          credentials: "include",
-          header: { "content-type": "application/json" },
-          body: JSON.stringify({ token: auth.token }),
-        })
-          .then((data) => data.json())
-          .then((data) => {
-            setJoinReqs(data.acc.requestedRides);
-            setJoinedRides(data.acc.rides);
-          });
-        const data = await response.json();
-        console.log("Fetched data:", data); // Log the data fetched from the server
-        setRequests(data);
-      } catch (error) {
-        console.error("Error fetching ride requests:", error);
-      }
-    };
+    
     fetchRequests();
   }, []);
 
@@ -62,6 +65,8 @@ const Split = () => {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ token: auth.token, rideId }),
       });
+      await fetchRequests();
+
     };
   };
 
@@ -106,7 +111,7 @@ const Split = () => {
     toMinutes(filters.time) <= toMinutes(request.pickup_time) + 30) 
       return true;
   });
-
+  console.log("JOINED:")
   console.log(joinedRides);
   console.log(joinReqs);
   // console.log("addition testing");
@@ -114,7 +119,7 @@ const Split = () => {
 
   console.log(filteredRequestsTimes);
 
-  const filteredArray = filteredRequests.filter(value => filteredRequestsTimes.includes(value));
+  const filteredArray = filteredRequests.filter(value => filteredRequestsTimes.includes(value) && value.initiator_id != userInfo._id);
   console.log("filtered array");
   console.log(filteredArray);
 
@@ -222,11 +227,11 @@ const Split = () => {
             header={
               request.initiator_name +
               `${
-                joinedRides.includes(request._id)
+                joinedRides && joinedRides.includes(request._id)
                   ? " [JOINED]"
-                  : joinReqs.includes(request._id)
+                  : (joinReqs && joinReqs.includes(request._id)
                   ? " [REQUESTED]"
-                  : ""
+                  : "")
               }`
             }
             shortDescr1={`Pickup: ${request.pickup_point}`}
@@ -237,8 +242,8 @@ const Split = () => {
             imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
             imgalt="Cute airplane clipart"
             onClick={createJoinRideHandler(request._id)}
-            highlight={joinReqs.includes(request._id)}
-            emphasize={joinedRides.includes(request._id)}
+            highlight={joinReqs && joinReqs.includes(request._id)}
+            emphasize={joinedRides && joinedRides.includes(request._id)}
           />
         ))}
       </div>
