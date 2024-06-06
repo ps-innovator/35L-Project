@@ -100,13 +100,36 @@ const Split = () => {
   };
 
   // Filter requests based on selected criteria
-
-  var filteredRequests = requests.filter(request => 
+/*
+var filteredRequests = requests.filter(request => 
     (filters.pickup === '' || request.pickup_point.toLowerCase().includes(filters.pickup.toLowerCase())) &&
     (filters.dropoff === '' || request.dropoff_point.toLowerCase().includes(filters.dropoff.toLowerCase())) &&
     (filters.name === '' || request.initiator_name.toLowerCase().includes(filters.name.toLowerCase())) &&
     (filters.riders === '' || request.num_riders_needed.toString() === filters.riders) &&
     (filters.date === '' || (request.pickup_date && request.pickup_date.includes(filters.date)))
+  );
+*/
+  const filteredRequests = requests.filter(
+    (request) =>
+      (filters.pickup === "" ||
+        request.pickup_point
+          .toLowerCase()
+          .includes(filters.pickup.toLowerCase())) &&
+      (filters.dropoff === "" ||
+        request.dropoff_point
+          .toLowerCase()
+          .includes(filters.dropoff.toLowerCase())) &&
+      (filters.name === "" ||
+        request.initiator_name
+          .toLowerCase()
+          .includes(filters.name.toLowerCase())) &&
+      (filters.riders === "" ||
+        request.num_riders_needed.toString() === filters.riders) &&
+      // (filters.time === '' || request.pickup_time.toLowerCase().includes((filters.time + ' ' + filters.period).toLowerCase()))
+      (filters.time == "" ||
+        toMinutes(request.pickup_time) - 30 <
+          toMinutes(filters.time) <
+          toMinutes(request.pickup_time) + 30)
   );
   console.log(filteredRequests);
 

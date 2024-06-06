@@ -79,7 +79,7 @@ function TabManager() {
       case 3:
         return <AccountInfo />;
       default:
-        return <Split />;
+        return <HomePage />;
     }
   }
 }
