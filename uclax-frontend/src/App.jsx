@@ -56,6 +56,7 @@ function TabManager() {
   const { tab, setTab } = useContext(TabContext);
   const { auth, setAuth } = useContext(AuthContext);
   console.log(tab);
+  console.log(auth);
   if (!auth) {
     switch (tab) {
       case 0:

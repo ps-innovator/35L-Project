@@ -10,7 +10,6 @@ const client = new MongoClient(uri);
 
 const testMongoClientFetch = async () => {
     const reqs = await getRideRequests();
-    console.log(reqs);
 };
 
 const createRideRequest = async (ride_request) => {
@@ -26,15 +25,28 @@ const createRideRequest = async (ride_request) => {
     }
 };
 
-const getRideRequests = async () => {
+
+const getRideRequests = async (query) => {
     try {
         await client.connect();
         const db = client.db("uclax");
         const rr_collection = db.collection("rideshare_requests");
-        const rr_response = await rr_collection.find().toArray();
+        const rr_response = await rr_collection.find(query).toArray();
         return rr_response;
     } catch (error) {
         console.log("Error: ", error);
+    }
+};
+
+const getAccountById = async (userId) => {
+    try {
+        await client.connect();
+        const db = client.db("uclax");
+        const login_collection = db.collection("login");
+        const account = await login_collection.findOne({ _id: userId });
+        return account;
+    } catch (error) {
+        console.error(error);
     }
 };
 
@@ -108,12 +120,20 @@ const requestJoinRide = async (rideId, requesterId) => {
 	const updateObj = { '$push': { memberRequests: { '$each': [requesterId] } } };
 	const filterObj = { '_id': new ObjectId(rideId) } ;
 	updateRideRequest(filterObj, updateObj);
+
+	const updateUserObj = { '$push': { requestedRides: { '$each': [new ObjectId(rideId)] } } };
+	const filterUserObj = { '_id': requesterId } ;
+	updateProfile(filterUserObj, updateUserObj);
 };
 
 const acceptRideRequest = async (rideId, acceptedRiderId) => {
 	const updateObj = { '$push': { members: { '$each': [new ObjectId(acceptedRiderId)] } }, '$pull': { memberRequests: { '$in': [new ObjectId(acceptedRiderId)] }  } };
 	const filterObj = { '_id': new ObjectId(rideId) } ;
 	updateRideRequest(filterObj, updateObj);
+
+	const memberUpdateObj = { '$push': { rides: { '$each': [new ObjectId(rideId)] } }, '$pull': {requestedRides: {'$in': [new ObjectId(rideId)]}} };
+	const filterMemberObj = { '_id': new ObjectId(acceptedRiderId) } ;
+	updateProfile(filterMemberObj, memberUpdateObj);
 };
 
 exports.createRideRequest = createRideRequest;
@@ -126,5 +146,5 @@ exports.sendFriendRequest = sendFriendRequest;
 exports.addFriend = addFriend;
 exports.requestJoinRide = requestJoinRide;
 exports.acceptRideRequest = acceptRideRequest;
-
+exports.getAccountById = getAccountById;
 client.close();

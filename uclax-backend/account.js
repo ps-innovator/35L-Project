@@ -24,8 +24,9 @@ const createAccount = async (username, password) => {
                 ride_pref: "Lyft",
                 payment_form: ""
             },
-			friends: [],
-			friendRequests: []
+	    friends: [],
+	    friendRequests: [],
+	    rides: []
         };
         await mongo_client.createAccount(account);
     }
@@ -49,11 +50,12 @@ const userDetails = async (token) => {
         const decoded = jwt.verify(token, process.env.SECRET);
         const username = decoded.username;
         const acc = await mongo_client.getAccountData(username);
-        if(!acc) {
-            throw Error("Account doesn't exist.");
-        }
+        
         return acc;
     } catch (error) {
+        if(!acc) {
+            console.error("Account doesn't exist.");
+        }
         console.error('Error decoding token: ', error);
     }
 }

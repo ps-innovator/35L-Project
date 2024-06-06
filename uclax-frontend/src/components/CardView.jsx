@@ -1,5 +1,9 @@
-const CardView = ({ header, shortDescr1, shortDescr2, shortDescr3, shortDescr4, longDescr, imgsrc, imgalt }) => {
-  return (<div className="max-w-md mx-auto bg-white dark:bg-slate-800 rounded-xl shadow-md overflow-hidden md:max-w-2xl m-8">
+const CardView = ({ header, onClick, shortDescr1, shortDescr2, shortDescr3, shortDescr4, longDescr, imgsrc, imgalt, highlight, emphasize }) => {
+  const hoverColor = `${onClick ? 'hover:bg-slate-300 active:bg-slate-500' : '' }`;
+  const highlightColor = highlight ? 'bg-slate-200 dark:bg-slate-600' : 'bg-white dark:bg-slate-800';
+  const emphasizeColor = emphasize ? 'bg-slate-300 dark:bg-slate-500' : 'bg-white dark:bg-slate-800';
+  const finalBg = emphasize ? emphasizeColor : highlightColor;
+  return (<div className={`max-w-md mx-auto ${finalBg} rounded-xl shadow-md overflow-hidden md:max-w-2xl m-8 ${hoverColor}`} onClick={onClick}>
     <div className="md:flex">
       <div className="shrink md:shrink-0">
         <img

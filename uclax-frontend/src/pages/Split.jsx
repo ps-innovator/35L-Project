@@ -1,44 +1,73 @@
-import React, { useState, useEffect } from 'react';
-import CardView from '../components/CardView.jsx';
+import React, { useState, useEffect, useContext } from "react";
+import CardView from "../components/CardView.jsx";
+import { AuthContext } from "../App.jsx";
 
 const Split = () => {
+  const [userInfo, setUserInfo] = useState({});
   const [requests, setRequests] = useState([]);
+  const [joinReqs, setJoinReqs] = useState([]);
+  const [joinedRides, setJoinedRides] = useState([]);
   const [filters, setFilters] = useState({
-    pickup: '',
-    dropoff: '',
-    name: '',
-    riders: '',
-    date: '',
-    time: '',
-    period: 'AM'
+    pickup: "",
+    dropoff: "",
+    name: "",
+    riders: "",
+    time: "",
+    period: "AM",
   });
+  const { auth, setAuth } = useContext(AuthContext);
+  const fetchRequests = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/auth/riderequests");
+      const userInfo = await fetch("http://localhost:3000/auth/user", {
+        method: "POST",
+        credentials: "include",
+        header: { "content-type": "application/json" },
+        body: JSON.stringify({ token: auth.token }),
+      })
+        .then((data) => data.json())
+        .then((data) => {
+          setUserInfo(data.acc)
+          setJoinReqs(data.acc.requestedRides);
+          setJoinedRides(data.acc.rides);
+        });
+      const data = await response.json();
+      console.log("Fetched data:", data); // Log the data fetched from the server
+      setRequests(data);
+    } catch (error) {
+      console.error("Error fetching ride requests:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchRequests = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/auth/riderequests');
-        const data = await response.json();
-        console.log('Fetched data:', data); // Log the data fetched from the server
-        setRequests(data);
-      } catch (error) {
-        console.error('Error fetching ride requests:', error);
-      }
-    };
+    
     fetchRequests();
   }, []);
 
   const handleFilterChange = (event) => {
     setFilters({
       ...filters,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
-
   const handlePeriodChange = (event) => {
     setFilters({
       ...filters,
-      period: event.target.value
+      period: event.target.value,
     });
+  };
+
+  const createJoinRideHandler = (rideId) => {
+    return async () => {
+      await fetch("http://localhost:3000/auth/join_ride", {
+        method: "PUT",
+        credentials: "include",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ token: auth.token, rideId }),
+      });
+      await fetchRequests();
+
+    };
   };
 
   const toTwelveHour = (time) => {
@@ -64,13 +93,14 @@ const Split = () => {
   }
 
   const toMinutes = (time) => {
-    const i = time.indexOf(':');
+    const i = time.indexOf(":");
     const hour = parseInt(time.substring(0, i));
-    const min = parseInt(time.substring(i+1));
+    const min = parseInt(time.substring(i + 1));
     return hour * 60 + min;
-  }
+  };
 
   // Filter requests based on selected criteria
+
   var filteredRequests = requests.filter(request => 
     (filters.pickup === '' || request.pickup_point.toLowerCase().includes(filters.pickup.toLowerCase())) &&
     (filters.dropoff === '' || request.dropoff_point.toLowerCase().includes(filters.dropoff.toLowerCase())) &&
@@ -90,18 +120,21 @@ const Split = () => {
     filtTime <= toMinutes(request.pickup_time) + 30) 
       return true;
   });
-
+  console.log("JOINED:")
+  console.log(joinedRides);
+  console.log(joinReqs);
+  // console.log("addition testing");
+  // console.log(toMinutes(filters.time));
 
   console.log(filteredRequestsTimes);
 
-  const filteredArray = filteredRequests.filter(value => filteredRequestsTimes.includes(value));
+  const filteredArray = filteredRequests.filter(value => filteredRequestsTimes.includes(value) && value.initiator_id != userInfo._id);
   console.log("filtered array");
   console.log(filteredArray);
 
   return (
-    <div>
+    <div className="min-h-screen bg-white dark:bg-gray-900 text-white">
       <h1 className="text-center text-4xl font-bold my-8 text-black dark:text-white">Ride Share Posts</h1>
-      
       {/* Filter options */}
       <div className="text-center mb-4">
         <h2 className="text-2xl mb-4 text-black dark:text-white">Filters</h2>
@@ -191,7 +224,16 @@ const Split = () => {
         {filteredArray.map((request, index) => (
           <CardView
             key={index}
-            header={request.initiator_name}
+            header={
+              request.initiator_name +
+              `${
+                joinedRides && joinedRides.includes(request._id)
+                  ? " [JOINED]"
+                  : (joinReqs && joinReqs.includes(request._id)
+                  ? " [REQUESTED]"
+                  : "")
+              }`
+            }
             shortDescr1={`Pickup: ${request.pickup_point}`}
             shortDescr2={`Dropoff: ${request.dropoff_point}`}
             shortDescr3={`Date: ${request.pickup_date}`}
@@ -199,6 +241,9 @@ const Split = () => {
             longDescr={`Number of people: ${request.num_riders_needed}`}
             imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
             imgalt="Cute airplane clipart"
+            onClick={createJoinRideHandler(request._id)}
+            highlight={joinReqs && joinReqs.includes(request._id)}
+            emphasize={joinedRides && joinedRides.includes(request._id)}
           />
         ))}
       </div>
