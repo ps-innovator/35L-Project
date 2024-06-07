@@ -21,8 +21,8 @@ const createAccount = async (username, password) => {
             username: username,
             password: hashedPassword,
             preferences: {
-                ride_pref: "Lyft",
-                payment_form: ""
+                display_name: username,
+                contact_info: ""
             },
 	    friends: [],
 	    friendRequests: [],
