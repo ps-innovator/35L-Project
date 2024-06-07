@@ -4,9 +4,10 @@ import { AuthContext, TabContext } from "../App.jsx";
 //Cosmetic Imports
 import carAsset from "/car.png";
 import uclaxLogo from "/uclaxLogo.png";
+import airplane from "/airplane.png"
 import comm from "/peopleCommunicating.png";
 import CardView from "../components/CardView.jsx";
-import DeleteCardView from "../components/DeleteCardView.jsx";
+import TrashButton from "../components/trash.jsx";
 import StaticCardView from "../components/StaticCardView.jsx";
 import CommentSection from '../components/CommentSection.jsx';
 
@@ -167,7 +168,8 @@ const HomePage = () => {
     return (
       <>
         <div>
-          <h1 className="text-center text-2xl font-medium my-8 text-white">Ride Split Requests</h1>
+          <h1 className="text-center text-2xl font-medium mt-8 text-white">Ride Split Requests</h1>
+          <h2 className="text-center text-md mt-2 mb-8 text-white">Accept other users into your ride pool.</h2>
           <div className="flex justify-center">
             <div className="grid grid-cols-1 gap-4">
               {rideRequesters.map(requester => (
@@ -177,9 +179,9 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-        <div className="min-h-screen bg-white dark:bg-gray-900 text-white grid grid-cols-2">
+        <div className="mt-8 rounded-xl min-h-screen bg-white dark:bg-gray-900 text-white grid grid-cols-2">
           <div>
-          <h1 className="text-center text-4xl font-bold my-8">My Initiated Rides</h1>
+          <h1 className="text-center text-4xl font-bold mt-8 mb-4">My Initiated Rides</h1>
           <div className="grid grid-cols-1 gap-4">
             {myInitiatedRides.map((ride, index) => {
               return (
@@ -188,13 +190,12 @@ const HomePage = () => {
                 header={
                   ride.initiator_name
                 }
-                requestId={ride._id}
                 shortDescr1={`Pickup: ${ride.pickup_point}`}
                 shortDescr2={`Dropoff: ${ride.dropoff_point}`}
                 shortDescr3={`Date: ${ride.pickup_date}`}
                 shortDescr4={`Time: ${ride.pickup_time}`}
-                longDescr={`People: ${ride.num_riders_needed}`}
-                imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
+                longDescr={`People Needed: ${ride.num_riders_needed}`}
+                imgsrc={airplane}
                 imgalt="Cute airplane clipart">
                   <br />
                   <span className="font-bold">Other riders:</span> <br />
@@ -204,13 +205,14 @@ const HomePage = () => {
 
 <br />
                   <span className="font-bold">Comments:</span> <br />
+                  <TrashButton deleteConfirmation="Are you sure you want to delete this ride request?" requestId={ride._id} onDelete={fetchUserInfo} />
                   <CommentSection comments={ride.comments ? ride.comments : []} rideId={ride._id} reloadData={fetchUserInfo} name={userInfo.fullname ? userInfo.fullname : "Anonymous"} />
                 </CardView>
               ) })}
           </div>
           </div>
           <div>
-          <h1 className="text-center text-4xl font-bold my-8">Rides I Joined</h1>
+          <h1 className="text-center text-4xl font-bold mt-8 mb-4">Rides I Joined</h1>
           {ridesIJoined ? (
             <div className="grid grid-cols-1 gap-4">
               {ridesIJoined.map((ride, index) => (
@@ -223,8 +225,8 @@ const HomePage = () => {
                 shortDescr2={`Dropoff: ${ride.dropoff_point}`}
                 shortDescr3={`Date: ${ride.pickup_date}`}
                 shortDescr4={`Time: ${ride.pickup_time}`}
-                longDescr={`People: ${ride.num_riders_needed}`}
-                imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
+                longDescr={`People Needed: ${ride.num_riders_needed}`}
+                imgsrc={airplane}
                 imgalt="Cute airplane clipart">
                   <br />
                   <span className="font-bold">Other riders:</span> <br />

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import CardView from "../components/CardView.jsx";
 import { AuthContext } from "../App.jsx";
 import CommentSection from '../components/CommentSection.jsx';
+import airplane from "/airplane.png"
 
 const Split = () => {
   const [userInfo, setUserInfo] = useState({});
@@ -16,21 +17,24 @@ const Split = () => {
     time: "",
     period: "AM",
     payment: "",
-    preference: ""
+    preference: "",
+    date: "",
+    showFriendsOnly: "No", // Change to "Yes" or "No" dropdown
   });
   const { auth, setAuth } = useContext(AuthContext);
+
   const fetchRequests = async () => {
     try {
       const response = await fetch("http://localhost:3000/auth/riderequests");
       const userInfo = await fetch("http://localhost:3000/auth/user", {
         method: "POST",
         credentials: "include",
-        header: { "content-type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: auth.token }),
       })
         .then((data) => data.json())
         .then((data) => {
-          setUserInfo(data.acc)
+          setUserInfo(data.acc);
           setJoinReqs(data.acc.requestedRides);
           setJoinedRides(data.acc.rides);
         });
@@ -43,16 +47,17 @@ const Split = () => {
   };
 
   useEffect(() => {
-    
     fetchRequests();
   }, []);
 
   const handleFilterChange = (event) => {
+    const { name, value } = event.target;
     setFilters({
       ...filters,
-      [event.target.name]: event.target.value,
+      [name]: value,
     });
   };
+
   const handlePeriodChange = (event) => {
     setFilters({
       ...filters,
@@ -65,34 +70,32 @@ const Split = () => {
       await fetch("http://localhost:3000/auth/join_ride", {
         method: "PUT",
         credentials: "include",
-        headers: { "content-type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: auth.token, rideId }),
       });
       await fetchRequests();
-
     };
   };
 
   const toTwelveHour = (time) => {
     const i = time.indexOf(':');
-    var period = "AM";
-    var hour = parseInt(time.substring(0, i));
+    let period = "AM";
+    let hour = parseInt(time.substring(0, i));
     if (hour >= 13) {
       hour -= 12;
-      period = "PM"
+      period = "PM";
     }
-    const min = parseInt(time.substring(i+1)); 
+    const min = parseInt(time.substring(i + 1));
     return `${hour}:${min} ${period}`;
-  }
+  };
 
   const toTwentyFourHour = (time) => {
-    if (filters.period == 'AM') return time;
-     
+    if (filters.period === 'AM') return time;
     const i = time.indexOf(':');
     const hour = parseInt(time.substring(0, i)) + 12;
-    const min = parseInt(time.substring(i+1));
+    const min = parseInt(time.substring(i + 1));
     return `${hour}:${min}`;
-  }
+  };
 
   const toMinutes = (time) => {
     const i = time.indexOf(":");
@@ -101,68 +104,45 @@ const Split = () => {
     return hour * 60 + min;
   };
 
-  // Filter requests based on selected criteria
-/*
-var filteredRequests = requests.filter(request => 
-    (filters.pickup === '' || request.pickup_point.toLowerCase().includes(filters.pickup.toLowerCase())) &&
-    (filters.dropoff === '' || request.dropoff_point.toLowerCase().includes(filters.dropoff.toLowerCase())) &&
-    (filters.name === '' || request.initiator_name.toLowerCase().includes(filters.name.toLowerCase())) &&
-    (filters.riders === '' || request.num_riders_needed.toString() === filters.riders) &&
-    (filters.date === '' || (request.pickup_date && request.pickup_date.includes(filters.date)))
-  );
-*/
   const filteredRequests = requests.filter(
     (request) =>
       (filters.pickup === "" ||
-        request.pickup_point
-          .toLowerCase()
-          .includes(filters.pickup.toLowerCase())) &&
+        request.pickup_point.toLowerCase().includes(filters.pickup.toLowerCase())) &&
       (filters.dropoff === "" ||
-        request.dropoff_point
-          .toLowerCase()
-          .includes(filters.dropoff.toLowerCase())) &&
+        request.dropoff_point.toLowerCase().includes(filters.dropoff.toLowerCase())) &&
       (filters.name === "" ||
-        request.initiator_name
-          .toLowerCase()
-          .includes(filters.name.toLowerCase())) &&
+        request.initiator_name.toLowerCase().includes(filters.name.toLowerCase())) &&
       (filters.riders === "" ||
         request.num_riders_needed.toString() === filters.riders) &&
-      (filters.time == "" ||
-        toMinutes(request.pickup_time) - 30 <
-          toMinutes(filters.time) <
-          toMinutes(request.pickup_time) + 30) &&
-      (filters.payment === "" || request.payment_method
-        .toLowerCase()
-        .includes(filters.payment.toLowerCase())) &&
-      (filters.preference === "" || request.uber_or_lyft
-        .toLowerCase()
-        .includes(filters.preference.toLowerCase()))
+      (filters.time === "" ||
+        (toMinutes(request.pickup_time) - 30 < toMinutes(filters.time) &&
+         toMinutes(filters.time) < toMinutes(request.pickup_time) + 30)) &&
+      (filters.payment === "" || request.payment_method.toLowerCase().includes(filters.payment.toLowerCase())) &&
+      (filters.preference === "" || request.uber_or_lyft.toLowerCase().includes(filters.preference.toLowerCase())) &&
+      (filters.date === "" || request.pickup_date.includes(filters.date)) &&
+      (filters.showFriendsOnly === "No" || (userInfo.friends && userInfo.friends.includes(request.initiator_id))) // Filter by friends
   );
-  console.log(filteredRequests);
 
   const filteredRequestsTimes = requests.filter(request => {
     if (filters.time === '') return true;
     const filtTime = toMinutes(toTwentyFourHour(filters.time));
-    if (filtTime >= toMinutes(request.pickup_time) - 30 && 
-    filtTime <= toMinutes(request.pickup_time) + 30) 
+    if (filtTime >= toMinutes(request.pickup_time) - 30 &&
+      filtTime <= toMinutes(request.pickup_time) + 30)
       return true;
+    return false;
   });
-  console.log("JOINED:")
-  console.log(joinedRides);
-  console.log(joinReqs);
 
-
-  const filteredArray = filteredRequests.filter(value => filteredRequestsTimes.includes(value) && value.initiator_id != userInfo._id);
+  const filteredArray = filteredRequests.filter(value => filteredRequestsTimes.includes(value) && value.initiator_id !== userInfo._id);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-white">
       <h1 className="text-center text-4xl font-bold my-8 text-black dark:text-white">Ride Share Posts</h1>
       {/* Filter options */}
-      <div className="text-center mb-4">
-        <h2 className="text-2xl mb-4 text-black dark:text-white">Filters</h2>
+      <div className="text-center mt-2 mb-4">
+        <h2 className="text-2xl mb-2 text-black dark:text-white">Filters</h2>
         <div className="flex justify-center flex-wrap space-x-4">
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Pickup Point:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Pickup Point:</span>
             <input
               type="text"
               name="pickup"
@@ -173,7 +153,7 @@ var filteredRequests = requests.filter(request =>
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark: dark:text-gray-300">Dropoff Point:</span>
+            <span className="mt-4 mb-2 font-medium dark: dark:text-gray-300">Dropoff Point:</span>
             <input
               type="text"
               name="dropoff"
@@ -184,7 +164,7 @@ var filteredRequests = requests.filter(request =>
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium  dark:text-gray-300">Person's Name:</span>
+            <span className="mt-4 mb-2 font-medium  dark:text-gray-300">Person's Name:</span>
             <input
               type="text"
               name="name"
@@ -195,7 +175,7 @@ var filteredRequests = requests.filter(request =>
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Number of Riders:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Number of Riders:</span>
             <input
               type="text"
               name="riders"
@@ -206,7 +186,7 @@ var filteredRequests = requests.filter(request =>
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Date:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Date:</span>
             <input
               type="text"
               name="date"
@@ -217,7 +197,7 @@ var filteredRequests = requests.filter(request =>
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Pickup Time:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Pickup Time:</span>
             <div className="flex space-x-2">
               <input
                 type="text"
@@ -239,7 +219,7 @@ var filteredRequests = requests.filter(request =>
             </div>
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Payment:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Payment:</span>
             <input
               type="text"
               name="payment"
@@ -250,7 +230,7 @@ var filteredRequests = requests.filter(request =>
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Preference:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Preference:</span>
             <input
               type="text"
               name="preference"
@@ -260,19 +240,29 @@ var filteredRequests = requests.filter(request =>
               className="p-2 border border-gray-300 rounded text-black"
             />
           </label>
+          <label className="flex flex-col">
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Show Friends Only:</span>
+            <select
+              name="showFriendsOnly"
+              value={filters.showFriendsOnly}
+              onChange={handleFilterChange}
+              className="p-2 border border-gray-300 rounded text-black"
+            >
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </label>
         </div>
       </div>
       <div className="grid grid-cols-1 gap-4">
-        {/* {filteredRequests.map((request, index) => ( */}
         {filteredArray.map((request, index) => (
           <CardView
             key={index}
             header={
               request.initiator_name +
-              `${
-                joinedRides && joinedRides.includes(request._id)
-                  ? " [JOINED]"
-                  : (joinReqs && joinReqs.includes(request._id)
+              `${joinedRides && joinedRides.includes(request._id)
+                ? " [JOINED]"
+                : (joinReqs && joinReqs.includes(request._id)
                   ? " [REQUESTED]"
                   : "")
               }`
@@ -283,13 +273,13 @@ var filteredRequests = requests.filter(request =>
             shortDescr4={`Time: ${toTwelveHour(request.pickup_time)}`}
             shortDescr5={`Payment: ${request.payment_method}`}
             shortDescr6={`Preference: ${request.uber_or_lyft}`}
-            longDescr={`Number of people: ${request.num_riders_needed}`}
-            imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
+            longDescr={`People Needed: ${request.num_riders_needed}`}
+            imgsrc={airplane}
             imgalt="Cute airplane clipart"
             highlight={joinReqs && joinReqs.includes(request._id)}
             emphasize={joinedRides && joinedRides.includes(request._id)}>
-               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={createJoinRideHandler(request._id)}>
-                  Join
+               <button className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={createJoinRideHandler(request._id)}>
+                  Request to Join
               </button>
               <CommentSection comments={request.comments ? request.comments : []} rideId={request._id} reloadData={fetchRequests} name={userInfo.fullname ? userInfo.fullname : "Anonymous"} />
 
