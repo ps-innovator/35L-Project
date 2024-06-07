@@ -99,14 +99,23 @@ const Buddies = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-white p-4">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold mb-4">Send Friend Request</h1>
-        <div className="flex justify-center items-center">
+      <h1 className="text-2xl text-black dark:text-white"
+            style={{
+              marginTop: "5%",
+              marginBottom: "3%",
+              fontWeight: "500",
+              fontSize: 45,
+            }}
+            >
+            Send Friend Request
+            </h1>
+        <div className="mt-10 flex justify-center items-center">
           <input
             type="text"
             placeholder="Enter username to add"
             value={newFriendUsername}
             onChange={(e) => setNewFriendUsername(e.target.value)}
-            className="p-2 rounded-l-lg text-black"
+            className="h-12 p-2 rounded-l-lg text-black"
           />
           <button
             onClick={handleAddFriend}
