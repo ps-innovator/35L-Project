@@ -5,16 +5,16 @@ const DeleteCardView = ({ header, requestId, shortDescr1, shortDescr2, shortDesc
 
   const handleDeleteRequest = async (requestId) => {
     try {
-      console.log(requestId);
+      console.log("Trying to delete ", requestId);
       await fetch("http://localhost:3000/auth/deleteRideRequest", {
         method: "DELETE",
         credentials: "include",
         headers: {'content-type': 'application/json'},
         body: JSON.stringify({requestId})
       })
-      console.log("Deleted request (CardView call)");
+      console.log("CardView called delete.)");
     } catch (error) {
-      console.error("Error deleting ride request:", error);
+        console.error("Error deleting ride request:", error);
     }
   };
 

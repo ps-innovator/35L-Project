@@ -27,15 +27,19 @@ const createRideRequest = async (ride_request) => {
 
 const deleteRideRequest = async (requestId) => {
     try {
+        if (!ObjectId.isValid(requestId)) {
+            throw new Error("Invalid ObjectId");
+          }
+        
         await client.connect();
         const db = client.db("uclax");
         const riderequest_collection = db.collection("rideshare_requests");
-        const result = await riderequest_collection.deleteOne({ _id: ObjectId(requestId) });
+        const result = await riderequest_collection.deleteOne({ _id: new ObjectId(requestId) });
         await client.close();
         console.log("Success!");
         return result;
-    } catch {
-        console.log("Error deleting the ride request.");
+    } catch(error) {
+        console.log("Error deleting the ride request: ", error);
     }
 };
 
