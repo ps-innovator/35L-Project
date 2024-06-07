@@ -19,9 +19,9 @@ const createAccount = async (username, fullname, contactinfo, password) => {
         const hashedPassword = await bcrypt.hash(password, salt);
         account = {
             username: username,
-            password: hashedPassword,
             fullname: fullname,
             contactinfo: contactinfo,
+            password: hashedPassword,
             preferences: {
                 ride_pref: "Lyft",
                 payment_form: ""
