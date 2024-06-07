@@ -3,6 +3,7 @@ import { AuthContext } from "../App.jsx";
 
 const AccountInfo = () => {
   const { auth, setAuth } = useContext(AuthContext);
+  const [ username, setUsername ] = useState("");
   const [ displayName, setDisplayName ] = useState("");
   const [ contactInfo, setContactInfo ] = useState("");
   const [isEditing, setIsEditing] = useState(false);
@@ -51,7 +52,7 @@ const AccountInfo = () => {
         headers: {'content-type': 'application/json'},
         body: JSON.stringify({ token })
     }).then((data) => data.json())
-    .then((userInf) => { setCarrierPref(userInf.acc.preferences.ride_pref); setPaymentForm(userInf.acc.preferences.payment_form); console.log(userInf) });
+    .then((userInf) => { setUsername(userInf.acc.username); setDisplayName(userInf.acc.fullname); setContactInfo(userInf.acc.contactinfo); console.log(userInf) });
   };
 
   useEffect(() => {
@@ -72,9 +73,9 @@ const AccountInfo = () => {
         />
       </div>
         <div className = "flex flex-col">
-          <h2 className="text-2xl font-bold">Username: JohnDoe</h2>
-          <p>Contact Info: john.doe@example.com</p>
-          <p>Display Name: John</p>
+          <h2 className="text-2xl font-bold">Username: {username} </h2>
+          <p>Contact Info: {contactInfo}</p>
+          <p>Display Name: {displayName} </p>
           </div>
         </div>
       </div>
