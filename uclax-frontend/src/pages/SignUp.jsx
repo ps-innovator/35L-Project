@@ -22,9 +22,9 @@ const SignUp = () => {
             credentials: 'include',
             headers: {'content-type': 'application/json'},
             body: JSON.stringify({
+              username: uname,
               fullname: fullname,
               contactinfo: contactinfo,
-              username: uname,
               password: pwd
             })
         });

@@ -126,6 +126,8 @@ router.post("/riderequests", async (req, res) => {
     pickup_date,
     pickup_time,
     num_riders_needed,
+    uber_or_lyft,
+    payment_method,
     token,
   } = req.body;
   const acc_info = await account.userDetails(token);
@@ -140,6 +142,8 @@ router.post("/riderequests", async (req, res) => {
     pickup_date,
     pickup_time,
     num_riders_needed,
+    uber_or_lyft,
+    payment_method,
     initiator_id,
     members,
     memberRequests,
@@ -156,6 +160,8 @@ router.post("/riderequests", async (req, res) => {
         pickup_date,
         pickup_time,
         num_riders_needed,
+        uber_or_lyft,
+        payment_method,
       });
   } catch (error) {
     res.status(400).json({ errorMessage: error.message });

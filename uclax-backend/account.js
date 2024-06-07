@@ -22,9 +22,9 @@ const createAccount = async (username, fullname, contactinfo, password) => {
             password: hashedPassword,
             fullname: fullname,
             contactinfo: contactinfo,
-	        friends: [],
-	        friendRequests: [],
-	        rides: []
+	          friends: [],
+	          friendRequests: [],
+	          rides: []
         };
         await mongo_client.createAccount(account);
     }

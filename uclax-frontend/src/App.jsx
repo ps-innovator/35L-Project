@@ -8,6 +8,8 @@ import Login from "./pages/Login.jsx";
 import AccountInfo from "./pages/AccountInfo.jsx";
 import Split from "./pages/Split.jsx";
 import RideRequests from "./pages/RideRequests.jsx";
+import Buddies from "./pages/Buddies.jsx";
+
 
 export const AuthContext = createContext(null);
 export const TabContext = createContext(0);
@@ -76,6 +78,8 @@ function TabManager() {
         return <RideRequests />;
       case 3:
         return <AccountInfo />;
+      case 4:
+        return <Buddies />;
       default:
         return <HomePage />;
     }
