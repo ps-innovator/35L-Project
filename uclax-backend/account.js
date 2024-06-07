@@ -47,6 +47,10 @@ const acceptFriendRequest = async (curFriendId, requesterFriendId) => {
 
 };
 
+const removeFriendRequest = async (curFriendId, requesterFriendId) => {
+    mongo_client.removeFriendRequest(curFriendId, requesterFriendId);
+}
+
 const userDetails = async (token) => {
     try {
         const decoded = jwt.verify(token, process.env.SECRET);
@@ -79,4 +83,5 @@ exports.authToken = authToken;
 exports.userDetails = userDetails;
 exports.updateProfile = updateProfile;
 exports.sendFriendRequest = sendFriendRequest;
+exports.removeFriendRequest = removeFriendRequest;
 exports.addFriend = acceptFriendRequest;

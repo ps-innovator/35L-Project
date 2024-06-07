@@ -119,6 +119,12 @@ const sendFriendRequest = async (requestedFriendId, requesterId) => {
 	updateProfile(filterObj, updateObj);
 };
 
+const removeFriendRequest = async (requestedFriendId, requesterId) => {
+    const updateObj = { '$pull': { friendRequests: requesterId } };
+    const filterObj = { '_id': new ObjectId(requestedFriendId) };
+    updateProfile(filterObj, updateObj);
+};
+
 const addFriend = async (curFriendId, friendToAddId) => {
 	//add friend_to_add to current friend's list
 	const filterObj1 = { '_id': curFriendId } ;
@@ -168,6 +174,7 @@ exports.getAccountData = getAccountData;
 exports.createAccount = createAccount;
 exports.updateProfile = updateProfile;
 exports.sendFriendRequest = sendFriendRequest;
+exports.removeFriendRequest = removeFriendRequest;
 exports.addFriend = addFriend;
 exports.requestJoinRide = requestJoinRide;
 exports.acceptRideRequest = acceptRideRequest;
