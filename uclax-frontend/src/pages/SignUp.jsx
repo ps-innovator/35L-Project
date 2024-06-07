@@ -13,8 +13,10 @@ const SignUp = () => {
     const [ fullnameFocused, setFullnameFocused ] = useState(false);
     const [ contactFocused, setContactFocused ] = useState(false);
     const [ passFocused, setPassFocused ] = useState(false);
-
+    console.log("TEST PAGE")
     const attemptSignUp = async () => {
+      console.log("TEST SIGN UP")
+      console.log(uname, pwd, fullname, contactinfo)
         const res = await fetch('http://localhost:3000/auth/createaccount', {
             method: 'POST',
             credentials: 'include',
@@ -62,7 +64,7 @@ const SignUp = () => {
               ${contactFocused ? "opacity-100 border-blue-500" : "opacity-50 border-gray-800 dark:border-gray-600"}`}>
                   <AiOutlineUser className="text-gray-800 dark:text-gray-400" />
                   <input 
-                      name="contactinnfo"
+                      name="contactinfo"
                       placeholder="Contact Info" 
                       value={contactinfo}
                       onChange={(e) => setContactinfo(e.target.value)}   

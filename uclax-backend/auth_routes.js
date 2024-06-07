@@ -51,9 +51,14 @@ router.post("/logout", async (req, res) => {
 });
 
 router.post("/username", authTokenVerify, async (req, res) => {
-  const token = req.cookies.token;
-  const acc = await account.userDetails(token);
-  res.status(200).json({ username: acc.username, token });
+  try {
+    const token = req.cookies.token;
+    const acc = await account.userDetails(token);
+    console.log(acc)
+    res.status(200).json({ username: acc.username, token });
+  } catch (error) {
+    res.status(401).json({msg: "Invalid token"})
+  }
 });
 
 router.put("/edit_user", authTokenVerify, async (req, res) => {
