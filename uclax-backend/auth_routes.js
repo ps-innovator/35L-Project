@@ -70,8 +70,15 @@ router.put("/edit_user", authTokenVerify, async (req, res) => {
 });
 
 router.put("/send_friend_request", authTokenVerify, async (req, res) => {
+  console.log(req.body);
   const token = req.body.token;
-  const requestedFriend = req.body.friendId;
+  // const requestedFriend = req.body.friendId;
+  const requestedFriendUsername = req.body.requestedFriendUsername;
+  // console.log("requestedFriendUsername: ", requestedFriendUsername);
+  const friend = await mongo_client.getAccountData(requestedFriendUsername);
+  const requestedFriend = friend._id;
+  // console.log("requestedFriend: ", friend);
+  // console.log("requestedFriendId:", requestedFriend);
   const acc_info = await account.userDetails(token);
   const curFriendId = { _id: acc_info._id };
   await account.sendFriendRequest(curFriendId, requestedFriend);
@@ -80,7 +87,10 @@ router.put("/send_friend_request", authTokenVerify, async (req, res) => {
 
 router.put("/accept_friend_request", authTokenVerify, async (req, res) => {
   const token = req.body.token;
-  const acceptedFriend = req.body.friendId;
+  const acceptedFriendUsername = req.body.acceptedFriendUsername;
+  const friend = await mongo_client.getAccountData(acceptedFriendUsername);
+  const acceptedFriend = friend._id;
+  // const acceptedFriend = req.body.friendId;
   const acc_info = await account.userDetails(token);
   const curFriendId = acc_info._id;
   await account.addFriend(curFriendId, acceptedFriend);

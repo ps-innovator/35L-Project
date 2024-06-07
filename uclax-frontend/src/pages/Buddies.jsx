@@ -1,10 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../App.jsx";
 import CardView from "../components/CardView.jsx";
 
 const Buddies = () => {
   const [currentFriends, setCurrentFriends] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([]);
   const [newFriendUsername, setNewFriendUsername] = useState('');
+  const { auth, setAuth } = useContext(AuthContext);
+
+  useEffect(() => {
+    // handleAddFriend();
+    handleFriendRequests();
+  }, []);
 
   // Example data fetching, details don't have to be specified
   useEffect(() => {
@@ -19,9 +26,49 @@ const Buddies = () => {
   }, []);
 
   //attached to search button
-  const handleAddFriend = () => {
+  const handleAddFriend = async () => {
+    const res = await fetch('http://localhost:3000/auth/send_friend_request', {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify({ token: auth.token, requestedFriendUsername: newFriendUsername })
+    });
+    if(res.ok) {
+      const json = await res.json();
+      console.log(json);
+    }
     console.log(`Sending friend request to ${newFriendUsername}`);
   };
+
+  const handleFriendRequests = async () => {
+    try {
+      const userInfo = await fetch("http://localhost:3000/auth/user", {
+        method: "POST",
+        credentials: "include",
+        header: { "content-type": "application/json" },
+        body: JSON.stringify({ token: auth.token }),
+      })
+        .then((data) => data.json())
+        .then((data) => {
+          const friendRequests = data.acc.friendRequests;
+          console.log(friendRequests);
+          const formattedRequests = friendRequests.map((request) => ({
+            name: request,
+            details: ""
+          }));
+          console.log(formattedRequests);
+          setPendingRequests(formattedRequests);
+          console.log(pendingRequests);
+        })
+      // console.log(userInfo.acc);
+      // const friendRequests = userInfo.acc.friendRequests;
+      // console.log(friendRequests);
+      // setPendingRequests()
+      // setRequests(data);
+    } catch (error) {
+      console.error("Error fetching ride requests:", error);
+    }
+  }
 
 return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-white p-4">
