@@ -34,9 +34,9 @@ router.post("/login", async (req, res) => {
 
 router.post("/createaccount", async (req, res) => {
   console.log(req.body);
-  const { username, password } = req.body;
+  const { username, fullname, contactinfo, password} = req.body;
   try {
-    await account.createAccount(username, password);
+    await account.createAccount(username, fullname, contactinfo, password);
     const token = account.authToken(username);
     res.cookie("token", token);
     res.status(200).json({ username, token });

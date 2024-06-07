@@ -8,7 +8,7 @@ const authToken = (username) => {
     return token;
 }
 
-const createAccount = async (username, password) => {
+const createAccount = async (username, fullname, contactinfo, password) => {
     console.log(username + " " + password);
     const existing_account = await mongo_client.getAccountData(username);
     if(existing_account) {
@@ -20,6 +20,8 @@ const createAccount = async (username, password) => {
         account = {
             username: username,
             password: hashedPassword,
+            fullname: fullname,
+            contactinfo: contactinfo,
             preferences: {
                 ride_pref: "Lyft",
                 payment_form: ""
