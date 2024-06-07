@@ -23,15 +23,11 @@ const AccountInfo = () => {
   };
 
   const handleChangeContactInfo = (newInfo) => {
-    if (newInfo.target.value !== "") {
-      setNewContactInfo(newInfo.target.value);
-    }
+    setNewContactInfo(newInfo.target.value);
   };
 
   const handleChangeDisplayName = (newName) => {
-    if (newName.target.value !== "") {
-      setNewDisplayName(newName.target.value);
-    }
+    setNewDisplayName(newName.target.value);
   };
 
   const changeContactInfo = async (cinfo) => {
