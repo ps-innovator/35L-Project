@@ -217,4 +217,16 @@ router.post('/addcomment', authTokenVerify, async (req, res) => {
   }
 });
 
+router.post('/getInfoForIds', authTokenVerify, async (req, res) => {
+  try {
+    const uinfos = await mongo_client.getMemberInfoforIds(req.body.userIds);
+    //console.log(req.body.userIds)
+    console.log("RES:::")
+    console.log(uinfos);
+    res.status(200).json({membersInfo: uinfos})
+  } catch (error) {
+    res.status(400).json({errorMessage: error.message})
+  }
+});
+
 module.exports = router;

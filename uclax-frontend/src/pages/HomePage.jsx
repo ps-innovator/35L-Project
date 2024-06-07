@@ -19,9 +19,12 @@ const HomePage = () => {
   const [myRides, setMyRides] = useState([]);
   const [rideRequesters, setRideRequesters] = useState([]);
   const [rideRequestsByMe, setRideRequestsByMe] = useState([]);
+  const [ridesToMembers, setRidesToMembers] = useState({});
 
   const fetchUserInfo = async () => {
     if (!auth || !auth.token) return;
+    console.log(auth)
+    let ridesFetch = [];
     const fetchedUserInfoRaw = await fetch("http://localhost:3000/auth/user", {
       method: "POST",
       credentials: "include",
@@ -36,7 +39,7 @@ const HomePage = () => {
       }`
     )
       .then((data) => data.json())
-      .then(data => { setMyRides(data); });
+      .then(data => { setMyRides(data); ridesFetch = data; });
       console.log(auth.token)
      
     await fetch("http://localhost:3000/auth/getjoinrequests", {
@@ -45,7 +48,21 @@ const HomePage = () => {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ token: auth.token }),
       }).then(data => data.json()).then(data => setRideRequesters(data)); // console.log(data))
-    
+      console.log("p1 getting member info.")
+
+      console.log(myRides)
+
+      ridesFetch.forEach(async (ride) => {
+        console.log("getting member info.")
+        await fetch('http://localhost:3000/auth/getInfoForIds', {
+          method: "POST",
+          credentials: "include",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ token: auth.token, userIds: ride.members })
+        }).then(data => data.json())
+        .then(data => { console.log("HELLO"); console.log(ridesToMembers); setRidesToMembers(prevState => ({...prevState, [ride._id]: data.membersInfo})); console.log(data) })
+        .catch(err => console.error(err))
+      });
     
 
     //await fetch(`http://localhost:3000/auth/getUsers`)
@@ -147,6 +164,7 @@ const HomePage = () => {
   } else { //Once user is logged in
     const myInitiatedRides = myRides.filter(ride => ride.initiator_id == userInfo._id);
     const ridesIJoined = myRides.filter(ride => ride.initiator_id != userInfo._id);
+    console.log(ridesToMembers)
     return (
       <>
         <div>
@@ -165,7 +183,8 @@ const HomePage = () => {
           <div>
           <h1 className="text-center text-4xl font-bold mt-8 mb-4">My Initiated Rides</h1>
           <div className="grid grid-cols-1 gap-4">
-            {myInitiatedRides.map((ride, index) => (
+            {myInitiatedRides.map((ride, index) => {
+              return (
                 <CardView
                 key={index}
                 header={
@@ -178,10 +197,18 @@ const HomePage = () => {
                 longDescr={`People Needed: ${ride.num_riders_needed}`}
                 imgsrc={airplane}
                 imgalt="Cute airplane clipart">
+                  <br />
+                  <span className="font-bold">Other riders:</span> <br />
+                   {
+                    ridesToMembers[ride._id] ? ridesToMembers[ride._id].map((member) => (<><span>{member.fullname} - Contact: {member.contactinfo}</span><br /></>)) : <span>Loading...</span>
+                  }
+
+<br />
+                  <span className="font-bold">Comments:</span> <br />
                   <TrashButton deleteConfirmation="Are you sure you want to delete this ride request?" requestId={ride._id} onDelete={fetchUserInfo} />
                   <CommentSection comments={ride.comments ? ride.comments : []} rideId={ride._id} reloadData={fetchUserInfo} name={userInfo.fullname ? userInfo.fullname : "Anonymous"} />
                 </CardView>
-              ))}
+              ) })}
           </div>
           </div>
           <div>
@@ -201,6 +228,13 @@ const HomePage = () => {
                 longDescr={`People Needed: ${ride.num_riders_needed}`}
                 imgsrc={airplane}
                 imgalt="Cute airplane clipart">
+                  <br />
+                  <span className="font-bold">Other riders:</span> <br />
+                   {
+                    ridesToMembers[ride._id] ? ridesToMembers[ride._id].map((member) => (<><span>{member.fullname} - Contact: {member.contactinfo}</span><br /></>)) : <span>Loading...</span>
+                  }
+                  <br />
+                  <span className="font-bold">Comments:</span> <br />
               <CommentSection comments={ride.comments ? ride.comments : []} rideId={ride._id} reloadData={fetchUserInfo} name={userInfo.fullname ? userInfo.fullname : "Anonymous"} />
 
                 </CardView>
