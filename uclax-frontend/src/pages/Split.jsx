@@ -241,7 +241,7 @@ const Split = () => {
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Show Friends Only:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Show Friends Only:</span>
             <select
               name="showFriendsOnly"
               value={filters.showFriendsOnly}
@@ -279,7 +279,7 @@ const Split = () => {
             highlight={joinReqs && joinReqs.includes(request._id)}
             emphasize={joinedRides && joinedRides.includes(request._id)}>
                <button className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={createJoinRideHandler(request._id)}>
-                  Join
+                  Request to Join
               </button>
               <CommentSection comments={request.comments ? request.comments : []} rideId={request._id} reloadData={fetchRequests} name={userInfo.fullname ? userInfo.fullname : "Anonymous"} />
 

@@ -161,9 +161,9 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-        <div className="min-h-screen bg-white dark:bg-gray-900 text-white grid grid-cols-2">
+        <div className="mt-8 rounded-xl min-h-screen bg-white dark:bg-gray-900 text-white grid grid-cols-2">
           <div>
-          <h1 className="text-center text-4xl font-bold my-8">My Initiated Rides</h1>
+          <h1 className="text-center text-4xl font-bold mt-8 mb-4">My Initiated Rides</h1>
           <div className="grid grid-cols-1 gap-4">
             {myInitiatedRides.map((ride, index) => (
                 <CardView
@@ -185,7 +185,7 @@ const HomePage = () => {
           </div>
           </div>
           <div>
-          <h1 className="text-center text-4xl font-bold my-8">Rides I Joined</h1>
+          <h1 className="text-center text-4xl font-bold mt-8 mb-4">Rides I Joined</h1>
           {ridesIJoined ? (
             <div className="grid grid-cols-1 gap-4">
               {ridesIJoined.map((ride, index) => (
@@ -198,7 +198,7 @@ const HomePage = () => {
                 shortDescr2={`Dropoff: ${ride.dropoff_point}`}
                 shortDescr3={`Date: ${ride.pickup_date}`}
                 shortDescr4={`Time: ${ride.pickup_time}`}
-                longDescr={`People: ${ride.num_riders_needed}`}
+                longDescr={`People Needed: ${ride.num_riders_needed}`}
                 imgsrc={airplane}
                 imgalt="Cute airplane clipart">
               <CommentSection comments={ride.comments ? ride.comments : []} rideId={ride._id} reloadData={fetchUserInfo} name={userInfo.fullname ? userInfo.fullname : "Anonymous"} />
