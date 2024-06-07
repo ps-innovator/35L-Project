@@ -17,7 +17,8 @@ const Split = () => {
     period: "AM",
     payment: "",
     preference: "",
-    date: ""  // Ensure date is part of the filters state
+    date: "",
+    showFriendsOnly: false, // Add showFriendsOnly to the filters state
   });
   const { auth, setAuth } = useContext(AuthContext);
 
@@ -49,9 +50,10 @@ const Split = () => {
   }, []);
 
   const handleFilterChange = (event) => {
+    const { name, value, type, checked } = event.target;
     setFilters({
       ...filters,
-      [event.target.name]: event.target.value,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
@@ -112,11 +114,12 @@ const Split = () => {
       (filters.riders === "" ||
         request.num_riders_needed.toString() === filters.riders) &&
       (filters.time === "" ||
-        toMinutes(request.pickup_time) - 30 < toMinutes(filters.time) <
-        toMinutes(request.pickup_time) + 30) &&
+        (toMinutes(request.pickup_time) - 30 < toMinutes(filters.time) &&
+         toMinutes(filters.time) < toMinutes(request.pickup_time) + 30)) &&
       (filters.payment === "" || request.payment_method.toLowerCase().includes(filters.payment.toLowerCase())) &&
       (filters.preference === "" || request.uber_or_lyft.toLowerCase().includes(filters.preference.toLowerCase())) &&
-      (filters.date === "" || request.pickup_date.includes(filters.date))  // Fixed date filtering
+      (filters.date === "" || request.pickup_date.includes(filters.date)) &&
+      (!filters.showFriendsOnly || (userInfo.friends && userInfo.friends.includes(request.initiator_id))) // Filter by friends
   );
 
   const filteredRequestsTimes = requests.filter(request => {
@@ -233,6 +236,16 @@ const Split = () => {
               value={filters.preference}
               onChange={handleFilterChange}
               placeholder="Ex: Uber"
+              className="p-2 border border-gray-300 rounded text-black"
+            />
+          </label>
+          <label className="flex flex-col">
+            <span className="mb-2 font-medium dark:text-gray-300">Show Friends' Posts Only:</span>
+            <input
+              type="checkbox"
+              name="showFriendsOnly"
+              checked={filters.showFriendsOnly}
+              onChange={handleFilterChange}
               className="p-2 border border-gray-300 rounded text-black"
             />
           </label>
