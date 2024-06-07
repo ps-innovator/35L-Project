@@ -18,7 +18,8 @@ const Split = () => {
     period: "AM",
     payment: "",
     preference: "",
-    date: ""  // Ensure date is part of the filters state
+    date: "",
+    showFriendsOnly: "No", // Change to "Yes" or "No" dropdown
   });
   const { auth, setAuth } = useContext(AuthContext);
 
@@ -50,9 +51,10 @@ const Split = () => {
   }, []);
 
   const handleFilterChange = (event) => {
+    const { name, value } = event.target;
     setFilters({
       ...filters,
-      [event.target.name]: event.target.value,
+      [name]: value,
     });
   };
 
@@ -113,11 +115,12 @@ const Split = () => {
       (filters.riders === "" ||
         request.num_riders_needed.toString() === filters.riders) &&
       (filters.time === "" ||
-        toMinutes(request.pickup_time) - 30 < toMinutes(filters.time) <
-        toMinutes(request.pickup_time) + 30) &&
+        (toMinutes(request.pickup_time) - 30 < toMinutes(filters.time) &&
+         toMinutes(filters.time) < toMinutes(request.pickup_time) + 30)) &&
       (filters.payment === "" || request.payment_method.toLowerCase().includes(filters.payment.toLowerCase())) &&
       (filters.preference === "" || request.uber_or_lyft.toLowerCase().includes(filters.preference.toLowerCase())) &&
-      (filters.date === "" || request.pickup_date.includes(filters.date))  // Fixed date filtering
+      (filters.date === "" || request.pickup_date.includes(filters.date)) &&
+      (filters.showFriendsOnly === "No" || (userInfo.friends && userInfo.friends.includes(request.initiator_id))) // Filter by friends
   );
 
   const filteredRequestsTimes = requests.filter(request => {
@@ -236,6 +239,18 @@ const Split = () => {
               placeholder="Ex: Uber"
               className="p-2 border border-gray-300 rounded text-black"
             />
+          </label>
+          <label className="flex flex-col">
+            <span className="mb-2 font-medium dark:text-gray-300">Show Friends Only:</span>
+            <select
+              name="showFriendsOnly"
+              value={filters.showFriendsOnly}
+              onChange={handleFilterChange}
+              className="p-2 border border-gray-300 rounded text-black"
+            >
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
           </label>
         </div>
       </div>
