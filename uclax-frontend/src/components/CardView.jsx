@@ -1,4 +1,4 @@
-const CardView = ({ header, onClick, shortDescr1, shortDescr2, shortDescr3, shortDescr4, longDescr, imgsrc, imgalt, highlight, emphasize }) => {
+const CardView = ({ header, onClick, shortDescr1, shortDescr2, shortDescr3, shortDescr4, longDescr, imgsrc, imgalt, highlight, emphasize, children }) => {
   const hoverColor = `${onClick ? 'hover:bg-slate-300 active:bg-slate-500' : '' }`;
   const highlightColor = highlight ? 'bg-slate-200 dark:bg-slate-600' : 'bg-white dark:bg-slate-800';
   const emphasizeColor = emphasize ? 'bg-slate-300 dark:bg-slate-500' : 'bg-white dark:bg-slate-800';
@@ -29,6 +29,7 @@ const CardView = ({ header, onClick, shortDescr1, shortDescr2, shortDescr3, shor
         <p className="mt-2 text-slate-500">
           {longDescr}
         </p>
+        {children}
       </div>
     </div>
   </div>);

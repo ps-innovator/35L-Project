@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { AuthContext, TabContext } from "../App.jsx";
 import uclaxLogo from "/uclaxLogo.png";
 import CardView from "../components/CardView.jsx";
+import CommentSection from '../components/CommentSection.jsx';
 
 const HomePage = () => {
   const { auth, setAuth } = useContext(AuthContext);
@@ -53,6 +54,15 @@ const HomePage = () => {
       });
       await fetchUserInfo();
     };
+  };
+
+  const postComment = async (text) => {
+    await fetch("http://localhost:3000/auth/addcomment", {
+        method: "POST",
+        credentials: "include",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ token: auth.token, rideId: requesterObj.rideId, newRiderId: requesterObj.id})
+      });
   };
 
   useEffect(() => {
@@ -142,8 +152,9 @@ const HomePage = () => {
                 shortDescr4={`Time: ${ride.pickup_time}`}
                 longDescr={`People: ${ride.num_riders_needed}`}
                 imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
-                imgalt="Cute airplane clipart"
-              />
+                imgalt="Cute airplane clipart">
+                  <CommentSection comments={ride.comments ? ride.comments : []} rideId={ride._id} reloadData={fetchUserInfo} name={ride.fullname ? ride.fullname : "Anonymous"} />
+                </CardView>
               ))}
           </div>
           </div>
