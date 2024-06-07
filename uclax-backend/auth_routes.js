@@ -198,22 +198,22 @@ router.post('/pendingrequests', authTokenVerify, async (req, res) => {
         const token = req.body.token;
         const acc_info = await account.userDetails(token);
         const cur_id = acc_info._id;
-        const filter = { memberRequests: { $elemMatch: { cur_id }} };
+        const filter = { memberRequests : cur_id };
         const rides = await mongo_client.getRideRequests(filter);
         console.log("rides i've requested");
         console.log(rides);
-        // const join_reqs = [];
-        // const acc_infos = [];
-        // rides.forEach(ride => {
-        //   ride.memberRequests.forEach(member =>  {
-        //       acc_infos.push(mongo_client.getAccountById(member));
-        //       join_reqs.push({id: member, rideId: ride._id, descr: ride.pickup_point + " to " + ride.dropoff_point + " on " + ride.pickup_date + " at " + ride.pickup_time + " (" + 0 + " riders left)", name: "Test"});
-        //   });
-        // });
+        const pending_reqs = [];
+        const acc_infos = [];
+        rides.forEach(ride => {
+          ride.memberRequests.forEach(member =>  {
+              acc_infos.push(mongo_client.getAccountById(member));
+              join_reqs.push({id: member, rideId: ride._id, descr: ride.pickup_point + " to " + ride.dropoff_point + " on " + ride.pickup_date + " at " + ride.pickup_time + " (" + 0 + " riders left)", name: "Test"});
+          });
+        });
       
-        // await Promise.all(acc_infos);
+        await Promise.all(acc_infos);
       
-        // res.json(join_reqs.map(ride => { return { ...ride, name: "test" } } ));
+        res.json(pending_reqs.map(ride => { return { ...ride, name: "test" } } ));
           } catch (error) {
               res.status(400).json({ errorMessage: error.message });
           }
