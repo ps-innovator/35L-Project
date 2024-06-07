@@ -18,7 +18,7 @@ const createRideRequest = async (ride_request) => {
         const db = client.db("uclax");
         const riderequest_collection = db.collection("rideshare_requests");
         await riderequest_collection.insertOne(ride_request);
-        await client.close();
+       //s await client.close();
         console.log("Success!");
     } catch {
         console.log("Error connecting to mongodb.");
@@ -35,7 +35,7 @@ const deleteRideRequest = async (requestId) => {
         const db = client.db("uclax");
         const riderequest_collection = db.collection("rideshare_requests");
         const result = await riderequest_collection.deleteOne({ _id: new ObjectId(requestId) });
-        await client.close();
+        //await client.close();
         console.log("Success!");
         return result;
     } catch(error) {
@@ -48,7 +48,10 @@ const getRideRequests = async (query) => {
         await client.connect();
         const db = client.db("uclax");
         const rr_collection = db.collection("rideshare_requests");
-        const rr_response = await rr_collection.find(query).toArray();
+        const cursor = rr_collection.find(query);
+        const rr_response = await cursor.toArray();
+        cursor.close();
+     //   await client.close();
         return rr_response;
     } catch (error) {
         console.log("Error: ", error);
@@ -160,6 +163,27 @@ const addComment = async (rideId, comment) => {
     updateRideRequest(filterObj, updateObj);
 };
 
+const getMemberInfoforIds = async (listofstrids) => {
+    try {
+        console.log("CLIENT CHECK")
+        console.log(listofstrids)
+
+        const listOfIds = listofstrids.map((id) => new ObjectId(id));
+        console.log(listOfIds)
+        await client.connect();
+        const db = client.db("uclax");
+        const riderequest_collection = db.collection("login");
+        const cursor =  riderequest_collection.find({'_id': { $in: listOfIds }});
+        const userInfos = await cursor.toArray();
+        cursor.close()
+       // await client.close();
+        return userInfos.map(userInfo => ({ fullname: userInfo.fullname, contactinfo: userInfo.contactinfo, id: userInfo._id }));
+    } catch (error) {
+        console.error("Error fetching by id")
+    }
+};
+
+exports.getMemberInfoforIds = getMemberInfoforIds;
 exports.createRideRequest = createRideRequest;
 exports.getRideRequests = getRideRequests;
 exports.deleteRideRequest = deleteRideRequest;
