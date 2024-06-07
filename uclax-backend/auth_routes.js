@@ -182,4 +182,13 @@ router.post('/getjoinrequests', authTokenVerify, async (req, res) => {
     }
 });
 
+router.post('/addcomment', authTokenVerify, async (req, res) => {
+  try {
+    await mongo_client.addComment(req.body.rideId, req.body.comment);
+    res.status(200).json({"msg": "Successful!"});
+  } catch (error) {
+    res.status(400).json({errorMessage: error.message})
+  }
+});
+
 module.exports = router;
