@@ -20,9 +20,9 @@ const SignUp = () => {
             credentials: 'include',
             headers: {'content-type': 'application/json'},
             body: JSON.stringify({
+              username: uname,
               fullname: fullname,
               contactinfo: contactinfo,
-              username: uname,
               password: pwd
             })
         });
@@ -62,7 +62,7 @@ const SignUp = () => {
               ${contactFocused ? "opacity-100 border-blue-500" : "opacity-50 border-gray-800 dark:border-gray-600"}`}>
                   <AiOutlineUser className="text-gray-800 dark:text-gray-400" />
                   <input 
-                      name="contactinnfo"
+                      name="contactinfo"
                       placeholder="Contact Info" 
                       value={contactinfo}
                       onChange={(e) => setContactinfo(e.target.value)}   
