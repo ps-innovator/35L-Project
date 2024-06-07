@@ -158,11 +158,11 @@ var filteredRequests = requests.filter(request =>
     <div className="min-h-screen bg-white dark:bg-gray-900 text-white">
       <h1 className="text-center text-4xl font-bold my-8 text-black dark:text-white">Ride Share Posts</h1>
       {/* Filter options */}
-      <div className="text-center mb-4">
-        <h2 className="text-2xl mb-4 text-black dark:text-white">Filters</h2>
+      <div className="text-center mt-2 mb-4">
+        <h2 className="text-2xl mb-2 text-black dark:text-white">Filters</h2>
         <div className="flex justify-center flex-wrap space-x-4">
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Pickup Point:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Pickup Point:</span>
             <input
               type="text"
               name="pickup"
@@ -173,7 +173,7 @@ var filteredRequests = requests.filter(request =>
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark: dark:text-gray-300">Dropoff Point:</span>
+            <span className="mt-4 mb-2 font-medium dark: dark:text-gray-300">Dropoff Point:</span>
             <input
               type="text"
               name="dropoff"
@@ -184,7 +184,7 @@ var filteredRequests = requests.filter(request =>
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium  dark:text-gray-300">Person's Name:</span>
+            <span className="mt-4 mb-2 font-medium  dark:text-gray-300">Person's Name:</span>
             <input
               type="text"
               name="name"
@@ -195,7 +195,7 @@ var filteredRequests = requests.filter(request =>
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Number of Riders:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Number of Riders:</span>
             <input
               type="text"
               name="riders"
@@ -206,7 +206,7 @@ var filteredRequests = requests.filter(request =>
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Date:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Date:</span>
             <input
               type="text"
               name="date"
@@ -217,7 +217,7 @@ var filteredRequests = requests.filter(request =>
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Pickup Time:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Pickup Time:</span>
             <div className="flex space-x-2">
               <input
                 type="text"
@@ -239,7 +239,7 @@ var filteredRequests = requests.filter(request =>
             </div>
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Payment:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Payment:</span>
             <input
               type="text"
               name="payment"
@@ -250,7 +250,7 @@ var filteredRequests = requests.filter(request =>
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Preference:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Preference:</span>
             <input
               type="text"
               name="preference"

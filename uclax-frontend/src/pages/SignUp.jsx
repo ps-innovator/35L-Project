@@ -13,6 +13,8 @@ const SignUp = () => {
     const [ fullnameFocused, setFullnameFocused ] = useState(false);
     const [ contactFocused, setContactFocused ] = useState(false);
     const [ passFocused, setPassFocused ] = useState(false);
+    const [error, setError] = useState('')
+
     console.log("TEST PAGE")
     const attemptSignUp = async () => {
       console.log("TEST SIGN UP")
@@ -35,6 +37,7 @@ const SignUp = () => {
             console.log("works");
         } else {
             console.log("signup failed");
+            setError("Username taken. Please choose a different username.")
         }
     };
     return (
@@ -109,6 +112,14 @@ const SignUp = () => {
           <div className="flex mb-6 items-center justify-center">
             <button onClick={attemptSignUp} className=" text-white p-4 h-12 flex items-center justify-center rounded-lg bg-indigo-500 dark:bg-slate-500 hover:bg-indigo-600 dark:hover:bg-slate-600 transition-colors duration-150 active:bg-indigo-900 dark:active:bg-slate-900 text-xl font-extralight">Sign Up</button>
           </div>
+
+          {error && (
+            <div className="flex items-center justify-center mt-4">
+              <div className="max-w-s p-2 bg-red-200 text-red-700 border border-red-400 rounded">
+                {error}
+              </div>
+            </div> )}
+
         </div>
     )
 };
