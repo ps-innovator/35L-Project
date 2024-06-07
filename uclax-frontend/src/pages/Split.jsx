@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import CardView from "../components/CardView.jsx";
 import { AuthContext } from "../App.jsx";
+import CommentSection from '../components/CommentSection.jsx';
 
 const Split = () => {
   const [userInfo, setUserInfo] = useState({});
@@ -100,13 +101,36 @@ const Split = () => {
   };
 
   // Filter requests based on selected criteria
-
-  var filteredRequests = requests.filter(request => 
+/*
+var filteredRequests = requests.filter(request => 
     (filters.pickup === '' || request.pickup_point.toLowerCase().includes(filters.pickup.toLowerCase())) &&
     (filters.dropoff === '' || request.dropoff_point.toLowerCase().includes(filters.dropoff.toLowerCase())) &&
     (filters.name === '' || request.initiator_name.toLowerCase().includes(filters.name.toLowerCase())) &&
     (filters.riders === '' || request.num_riders_needed.toString() === filters.riders) &&
     (filters.date === '' || (request.pickup_date && request.pickup_date.includes(filters.date)))
+  );
+*/
+  const filteredRequests = requests.filter(
+    (request) =>
+      (filters.pickup === "" ||
+        request.pickup_point
+          .toLowerCase()
+          .includes(filters.pickup.toLowerCase())) &&
+      (filters.dropoff === "" ||
+        request.dropoff_point
+          .toLowerCase()
+          .includes(filters.dropoff.toLowerCase())) &&
+      (filters.name === "" ||
+        request.initiator_name
+          .toLowerCase()
+          .includes(filters.name.toLowerCase())) &&
+      (filters.riders === "" ||
+        request.num_riders_needed.toString() === filters.riders) &&
+      // (filters.time === '' || request.pickup_time.toLowerCase().includes((filters.time + ' ' + filters.period).toLowerCase()))
+      (filters.time == "" ||
+        toMinutes(request.pickup_time) - 30 <
+          toMinutes(filters.time) <
+          toMinutes(request.pickup_time) + 30)
   );
   console.log(filteredRequests);
 
@@ -241,10 +265,14 @@ const Split = () => {
             longDescr={`Number of people: ${request.num_riders_needed}`}
             imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
             imgalt="Cute airplane clipart"
-            onClick={createJoinRideHandler(request._id)}
             highlight={joinReqs && joinReqs.includes(request._id)}
-            emphasize={joinedRides && joinedRides.includes(request._id)}
-          />
+            emphasize={joinedRides && joinedRides.includes(request._id)}>
+               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={createJoinRideHandler(request._id)}>
+                  Join
+              </button>
+              <CommentSection comments={request.comments ? request.comments : []} rideId={request._id} reloadData={fetchRequests} name={userInfo.fullname ? userInfo.fullname : "Anonymous"} />
+
+            </CardView>
         ))}
       </div>
     </div>

@@ -153,6 +153,13 @@ const acceptRideRequest = async (rideId, acceptedRiderId) => {
 	updateProfile(filterMemberObj, memberUpdateObj);
 };
 
+const addComment = async (rideId, comment) => {
+
+    const updateObj = { '$push': { comments: {'$each': [comment]}}};
+    const filterObj = { '_id': new ObjectId(rideId) };
+    updateRideRequest(filterObj, updateObj);
+};
+
 exports.createRideRequest = createRideRequest;
 exports.getRideRequests = getRideRequests;
 exports.deleteRideRequest = deleteRideRequest;
@@ -165,4 +172,5 @@ exports.addFriend = addFriend;
 exports.requestJoinRide = requestJoinRide;
 exports.acceptRideRequest = acceptRideRequest;
 exports.getAccountById = getAccountById;
+exports.addComment = addComment;
 client.close();

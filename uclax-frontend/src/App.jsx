@@ -54,8 +54,7 @@ function App() {
 function TabManager() {
   const { tab, setTab } = useContext(TabContext);
   const { auth, setAuth } = useContext(AuthContext);
-  console.log(tab);
-  console.log(auth);
+
   if (!auth) {
     switch (tab) {
       case 0:
@@ -78,7 +77,7 @@ function TabManager() {
       case 3:
         return <AccountInfo />;
       default:
-        return <Split />;
+        return <HomePage />;
     }
   }
 }
