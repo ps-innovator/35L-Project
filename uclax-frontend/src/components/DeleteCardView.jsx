@@ -32,7 +32,7 @@ const DeleteCardView = ({ header, requestId, shortDescr1, shortDescr2, shortDesc
         <div className="shrink md:shrink-0" onClick={handleImageClick}>
           <img
             className="h-48 w-full object-cover md:h-full md:w-48 cursor-pointer"
-            src={imgsrc}
+            src={imgsrc} //try to change image on hover? or highlight in red or something
             alt={imgalt}
           />
         </div>
