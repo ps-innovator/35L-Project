@@ -10,7 +10,7 @@ const RideRequests = () => {
     const [pickupTime, setTime] = useState('');
     const [pickupDate, setDate] = useState('');
     const [numRiders, setRiders] = useState('');
-    const [uberlyft, setUberOrLyft] = useState('Select a Ride-Hailing Company');
+    const [uberlyft, setUberOrLyft] = useState('Select a Preference');
     const [payment, setPayment] = useState("Select a Payment Method"); //think about making this multiselect
     const { auth, setAuth } = useContext(AuthContext);
 
@@ -55,7 +55,7 @@ const RideRequests = () => {
     const attemptRideRequest = async () => {
         console.log({initiator_name: initiatorName, pickup_point: pickup, dropoff_point: dropoff, pickup_time: pickupTime, num_riders_needed: numRiders, uber_or_lyft: uberlyft,
             payment_method: payment})
-        if (!initiatorName || pickup === 'Select a Pickup Point' || dropoff === 'Select a Terminal' || !pickupTime || !numRiders || uberlyft === "Select a Ride-Hailing Company" || payment === "Select a Payment Method") return;
+        if (!initiatorName || pickup === 'Select a Pickup Point' || dropoff === 'Select a Terminal' || !pickupTime || !numRiders || uberlyft === "Select a Preference" || payment === "Select a Payment Method") return;
         const res = await fetch('http://localhost:3000/auth/riderequests', {
             method: 'POST',
             credentials: 'include',
@@ -141,7 +141,7 @@ const RideRequests = () => {
             </div>
             <div className="flex mb-6 items-center justify-center">
             <select value={uberlyft} onChange={handleRide} className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option disabled value="">Select a Ride-Hailing Company</option>
+                <option disabled value="Select a Preference">Select a Preference</option>
                 <option value="Uber">Uber</option>
                 <option value="Lyft">Lyft</option>
             </select>
