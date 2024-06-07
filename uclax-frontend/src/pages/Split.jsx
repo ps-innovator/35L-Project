@@ -18,7 +18,7 @@ const Split = () => {
     payment: "",
     preference: "",
     date: "",
-    showFriendsOnly: false, // Add showFriendsOnly to the filters state
+    showFriendsOnly: "No", // Change to "Yes" or "No" dropdown
   });
   const { auth, setAuth } = useContext(AuthContext);
 
@@ -50,10 +50,10 @@ const Split = () => {
   }, []);
 
   const handleFilterChange = (event) => {
-    const { name, value, type, checked } = event.target;
+    const { name, value } = event.target;
     setFilters({
       ...filters,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     });
   };
 
@@ -119,7 +119,7 @@ const Split = () => {
       (filters.payment === "" || request.payment_method.toLowerCase().includes(filters.payment.toLowerCase())) &&
       (filters.preference === "" || request.uber_or_lyft.toLowerCase().includes(filters.preference.toLowerCase())) &&
       (filters.date === "" || request.pickup_date.includes(filters.date)) &&
-      (!filters.showFriendsOnly || (userInfo.friends && userInfo.friends.includes(request.initiator_id))) // Filter by friends
+      (filters.showFriendsOnly === "No" || (userInfo.friends && userInfo.friends.includes(request.initiator_id))) // Filter by friends
   );
 
   const filteredRequestsTimes = requests.filter(request => {
@@ -240,14 +240,16 @@ const Split = () => {
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Show Friends' Posts Only:</span>
-            <input
-              type="checkbox"
+            <span className="mb-2 font-medium dark:text-gray-300">Show Friends Only:</span>
+            <select
               name="showFriendsOnly"
-              checked={filters.showFriendsOnly}
+              value={filters.showFriendsOnly}
               onChange={handleFilterChange}
               className="p-2 border border-gray-300 rounded text-black"
-            />
+            >
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
           </label>
         </div>
       </div>
