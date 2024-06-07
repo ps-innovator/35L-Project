@@ -11,6 +11,7 @@ const CommentSection = ( { comments, rideId, reloadData, name } ) => {
             headers: {'content-type': 'application/json'},
             body: JSON.stringify({ token: auth.token, rideId: rideId, comment: name + ": " + newComment })
         });
+        setNewComment("");
         if (reloadData) reloadData();
     };
     return (<div>

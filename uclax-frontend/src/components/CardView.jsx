@@ -5,7 +5,7 @@ const CardView = ({ header, onClick, shortDescr1, shortDescr2, shortDescr3, shor
   const finalBg = emphasize ? emphasizeColor : highlightColor;
   
   return (
-    <div className={`max-w-md mx-auto ${finalBg} rounded-xl shadow-md overflow-hidden md:max-w-2xl m-8 ${hoverColor}`} onClick={onClick} style={{ width: '80%' }}>
+    <div className={`relative max-w-md mx-auto ${finalBg} rounded-xl shadow-md overflow-hidden md:max-w-2xl m-8 ${hoverColor}`} onClick={onClick} style={{ width: '80%' }}>
       <div className="md:flex">
         {/* Left Container for Image */}
         <div className="relative w-48">

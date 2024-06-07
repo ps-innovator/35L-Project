@@ -26,7 +26,7 @@ const TrashButton = ({ deleteConfirmation, requestId, onDelete }) => {
       {/* Trash button taken from Tailwind CSS */}
       <button
         onClick={handleTrashClick}
-        className="bg-slate-200 rounded-full p-2 transition-all duration-300 hover:bg-red-700 focus:outline-none"
+        className="bg-slate-300 rounded-full p-2 transition-all duration-300 hover:bg-red-700 focus:outline-none"
       >
         <svg 
             xmlns="http://www.w3.org/2000/svg" 
