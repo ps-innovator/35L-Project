@@ -15,6 +15,8 @@ const Split = () => {
     riders: "",
     time: "",
     period: "AM",
+    payment: "",
+    preference: ""
   });
   const { auth, setAuth } = useContext(AuthContext);
   const fetchRequests = async () => {
@@ -80,7 +82,6 @@ const Split = () => {
       period = "PM"
     }
     const min = parseInt(time.substring(i+1)); 
-    console.log(`${hour}:${min} ${period}`);
     return `${hour}:${min} ${period}`;
   }
 
@@ -126,20 +127,22 @@ var filteredRequests = requests.filter(request =>
           .includes(filters.name.toLowerCase())) &&
       (filters.riders === "" ||
         request.num_riders_needed.toString() === filters.riders) &&
-      // (filters.time === '' || request.pickup_time.toLowerCase().includes((filters.time + ' ' + filters.period).toLowerCase()))
       (filters.time == "" ||
         toMinutes(request.pickup_time) - 30 <
           toMinutes(filters.time) <
-          toMinutes(request.pickup_time) + 30)
+          toMinutes(request.pickup_time) + 30) &&
+      (filters.payment === "" || request.payment_method
+        .toLowerCase()
+        .includes(filters.payment.toLowerCase())) &&
+      (filters.preference === "" || request.uber_or_lyft
+        .toLowerCase()
+        .includes(filters.preference.toLowerCase()))
   );
   console.log(filteredRequests);
 
   const filteredRequestsTimes = requests.filter(request => {
     if (filters.time === '') return true;
-    console.log(filters.time);
     const filtTime = toMinutes(toTwentyFourHour(filters.time));
-    console.log(filtTime);
-    console.log(toMinutes(request.pickup_time));
     if (filtTime >= toMinutes(request.pickup_time) - 30 && 
     filtTime <= toMinutes(request.pickup_time) + 30) 
       return true;
@@ -147,14 +150,9 @@ var filteredRequests = requests.filter(request =>
   console.log("JOINED:")
   console.log(joinedRides);
   console.log(joinReqs);
-  // console.log("addition testing");
-  // console.log(toMinutes(filters.time));
 
-  console.log(filteredRequestsTimes);
 
   const filteredArray = filteredRequests.filter(value => filteredRequestsTimes.includes(value) && value.initiator_id != userInfo._id);
-  console.log("filtered array");
-  console.log(filteredArray);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-white">
@@ -240,9 +238,30 @@ var filteredRequests = requests.filter(request =>
               </select>
             </div>
           </label>
+          <label className="flex flex-col">
+            <span className="mb-2 font-medium dark:text-gray-300">Payment:</span>
+            <input
+              type="text"
+              name="payment"
+              value={filters.payment}
+              onChange={handleFilterChange}
+              placeholder="Ex: Zelle"
+              className="p-2 border border-gray-300 rounded text-black"
+            />
+          </label>
+          <label className="flex flex-col">
+            <span className="mb-2 font-medium dark:text-gray-300">Preference:</span>
+            <input
+              type="text"
+              name="preference"
+              value={filters.preference}
+              onChange={handleFilterChange}
+              placeholder="Ex: Uber"
+              className="p-2 border border-gray-300 rounded text-black"
+            />
+          </label>
         </div>
       </div>
-
       <div className="grid grid-cols-1 gap-4">
         {/* {filteredRequests.map((request, index) => ( */}
         {filteredArray.map((request, index) => (
@@ -262,6 +281,8 @@ var filteredRequests = requests.filter(request =>
             shortDescr2={`Dropoff: ${request.dropoff_point}`}
             shortDescr3={`Date: ${request.pickup_date}`}
             shortDescr4={`Time: ${toTwelveHour(request.pickup_time)}`}
+            shortDescr5={`Payment: ${request.payment_method}`}
+            shortDescr6={`Preference: ${request.uber_or_lyft}`}
             longDescr={`Number of people: ${request.num_riders_needed}`}
             imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
             imgalt="Cute airplane clipart"
