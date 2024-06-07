@@ -25,6 +25,23 @@ const createRideRequest = async (ride_request) => {
     }
 };
 
+const deleteRideRequest = async (requestId) => {
+    try {
+        if (!ObjectId.isValid(requestId)) {
+            throw new Error("Invalid ObjectId");
+          }
+        
+        await client.connect();
+        const db = client.db("uclax");
+        const riderequest_collection = db.collection("rideshare_requests");
+        const result = await riderequest_collection.deleteOne({ _id: new ObjectId(requestId) });
+        await client.close();
+        console.log("Success!");
+        return result;
+    } catch(error) {
+        console.log("Error deleting the ride request: ", error);
+    }
+};
 
 const getRideRequests = async (query) => {
     try {
@@ -136,8 +153,16 @@ const acceptRideRequest = async (rideId, acceptedRiderId) => {
 	updateProfile(filterMemberObj, memberUpdateObj);
 };
 
+const addComment = async (rideId, comment) => {
+
+    const updateObj = { '$push': { comments: {'$each': [comment]}}};
+    const filterObj = { '_id': new ObjectId(rideId) };
+    updateRideRequest(filterObj, updateObj);
+};
+
 exports.createRideRequest = createRideRequest;
 exports.getRideRequests = getRideRequests;
+exports.deleteRideRequest = deleteRideRequest;
 exports.testMongoClientFetch = testMongoClientFetch;
 exports.getAccountData = getAccountData;
 exports.createAccount = createAccount;
@@ -147,4 +172,5 @@ exports.addFriend = addFriend;
 exports.requestJoinRide = requestJoinRide;
 exports.acceptRideRequest = acceptRideRequest;
 exports.getAccountById = getAccountById;
+exports.addComment = addComment;
 client.close();

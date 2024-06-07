@@ -10,6 +10,7 @@ const Login = () => {
     const [pwd, setPwd] = useState('');
     const [ loginFocused, setLoginFocused ] = useState(false);
     const [ passFocused, setPassFocused ] = useState(false);
+    const [error, setError] = useState('')
     const attemptLogin = async () => {
         const res = await fetch('http://localhost:3000/auth/login', {
             method: 'POST',
@@ -25,11 +26,12 @@ const Login = () => {
             console.log("works");
         } else {
             console.log("login failed");
+            setError("Username or password is incorrect.")
         }
     };
 
     return (
-        <div>
+        <div className='justify-center'>
           <h1 className="text-5xl text-black dark:text-white my-[5%] font-medium">
             Login
           </h1>
@@ -67,6 +69,12 @@ const Login = () => {
           <div className="flex mb-6 items-center justify-center">
             <button onClick={attemptLogin} className=" text-white p-4 h-12 flex items-center justify-center rounded-lg bg-indigo-500 dark:bg-slate-500 hover:bg-indigo-600 dark:hover:bg-slate-600 transition-colors duration-150 active:bg-indigo-900 dark:active:bg-slate-900 text-xl font-extralight">Log in</button>
           </div>
+          {error && (
+            <div className="flex items-center justify-center mt-4">
+              <div className="max-w-s p-2 bg-red-200 text-red-700 border border-red-400 rounded">
+                {error}
+              </div>
+            </div> )}
         </div>
     )
 };

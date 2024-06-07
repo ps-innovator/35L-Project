@@ -34,9 +34,9 @@ router.post("/login", async (req, res) => {
 
 router.post("/createaccount", async (req, res) => {
   console.log(req.body);
-  const { username, password } = req.body;
+  const { username, fullname, contactinfo, password} = req.body;
   try {
-    await account.createAccount(username, password);
+    await account.createAccount(username, fullname, contactinfo, password);
     const token = account.authToken(username);
     res.cookie("token", token);
     res.status(200).json({ username, token });
@@ -51,9 +51,14 @@ router.post("/logout", async (req, res) => {
 });
 
 router.post("/username", authTokenVerify, async (req, res) => {
-  const token = req.cookies.token;
-  const acc = await account.userDetails(token);
-  res.status(200).json({ username: acc.username, token });
+  try {
+    const token = req.cookies.token;
+    const acc = await account.userDetails(token);
+    console.log(acc)
+    res.status(200).json({ username: acc.username, token });
+  } catch (error) {
+    res.status(401).json({msg: "Invalid token"})
+  }
 });
 
 router.put("/edit_user", authTokenVerify, async (req, res) => {
@@ -186,6 +191,27 @@ router.post('/getjoinrequests', authTokenVerify, async (req, res) => {
     } catch (error) {
         res.status(400).json({ errorMessage: error.message });
     }
+});
+
+router.delete("/deleteRideRequest", authTokenVerify, async (req, res) => {
+  try {
+    const requestId = req.body;
+    await mongo_client.deleteRideRequest(requestId);
+    console.log("Successfully called deleteRideRequest for ride ID ", requestId)
+  } 
+  catch (error) {
+    console.error("Error deleting ride request:", error);
+    res.status(400).json({ errorMessage: error.message });
+  }
+});
+
+router.post('/addcomment', authTokenVerify, async (req, res) => {
+  try {
+    await mongo_client.addComment(req.body.rideId, req.body.comment);
+    res.status(200).json({"msg": "Successful!"});
+  } catch (error) {
+    res.status(400).json({errorMessage: error.message})
+  }
 });
 
 module.exports = router;

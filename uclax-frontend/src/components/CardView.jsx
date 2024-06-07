@@ -31,6 +31,7 @@ const CardView = ({ header, onClick, shortDescr1, shortDescr2, shortDescr3, shor
         <p className="mt-2 text-slate-500">
           {longDescr}
         </p>
+        {children}
       </div>
     </div>
   </div>);
