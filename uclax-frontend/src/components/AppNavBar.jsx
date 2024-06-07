@@ -49,7 +49,7 @@ const AppNavBar = () => {
   let navbartitles = ["Login", "Sign Up"];
 
   if (auth) {
-    navbartitles = ["Find a ride", "Post a ride", "Account info", "Buddies", "Logout"];
+    navbartitles = ["Find a Ride", "Post a Ride", "Account Info", "Buddies", "Logout"];
   }
 
   return (
