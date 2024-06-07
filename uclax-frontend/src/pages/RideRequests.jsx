@@ -10,6 +10,8 @@ const RideRequests = () => {
     const [pickupTime, setTime] = useState('');
     const [pickupDate, setDate] = useState('');
     const [numRiders, setRiders] = useState('');
+    const [uberlyft, setUberOrLyft] = useState('Select a Ride-Hailing Company');
+    const [payment, setPayment] = useState("Select a Payment Method"); //think about making this multiselect
     const { auth, setAuth } = useContext(AuthContext);
 
 
@@ -21,14 +23,25 @@ const RideRequests = () => {
         setDropoff(event.target.value);
     };
 
+    const handlePayment = (event) => {
+        setPayment(event.target.value);
+    }
+
+    const handleRide = (event) => {
+        setUberOrLyft(event.target.value);
+    }
+
     const attemptRideRequest = async () => {
-        console.log({initiator_name: initiatorName, pickup_point: pickup, dropoff_point: dropoff, pickup_time: pickupTime, num_riders_needed: numRiders})
-        if (!initiatorName || pickup === 'Select a Pickup Point' || dropoff === 'Select a Terminal' || !pickupTime || !numRiders) return;
+        console.log("here");
+        console.log({initiator_name: initiatorName, pickup_point: pickup, dropoff_point: dropoff, pickup_time: pickupTime, num_riders_needed: numRiders, uber_or_lyft: uberlyft,
+            payment_method: payment})
+        if (!initiatorName || pickup === 'Select a Pickup Point' || dropoff === 'Select a Terminal' || !pickupTime || !numRiders || uberlyft === "Select a Ride-Hailing Company" || payment === "Select a Payment Method") return;
         const res = await fetch('http://localhost:3000/auth/riderequests', {
             method: 'POST',
             credentials: 'include',
             headers: {'content-type': 'application/json'},
-            body: JSON.stringify({initiator_name: initiatorName, pickup_point: pickup, dropoff_point: dropoff, pickup_date: pickupDate, pickup_time: pickupTime, num_riders_needed: numRiders, token: auth.token})
+            body: JSON.stringify({initiator_name: initiatorName, pickup_point: pickup, dropoff_point: dropoff, pickup_date: pickupDate, pickup_time: pickupTime, num_riders_needed: numRiders, uber_or_lyft: uberlyft,
+                payment_method: payment, token: auth.token})
         });
         if(res.ok) {
             const json = await res.json();
@@ -98,6 +111,20 @@ const RideRequests = () => {
                 onChange={(e) => setRiders(e.target.value)}  
                 className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
             />
+            </div>
+            <div className="flex mb-6 items-center justify-center">
+            <select value={payment} onChange={handlePayment} className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option disabled value="Select a Payment Method">Select a Payment Method</option>
+                <option value="Venmo">Venmo</option>
+                <option value="Zelle">Zelle</option>
+            </select>
+            </div>
+            <div className="flex mb-6 items-center justify-center">
+            <select value={uberlyft} onChange={handleRide} className="block w-1/2 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option disabled value="">Select a Ride-Hailing Company</option>
+                <option value="Uber">Uber</option>
+                <option value="Lyft">Lyft</option>
+            </select>
             </div>
             <div className="flex mb-6 items-center justify-center">
             <button onClick={attemptRideRequest} className="block text-white p-4 rounded-lg bg-indigo-500 dark:bg-slate-500 hover:bg-indigo-600 dark:hover:bg-slate-600 active:bg-indigo-900 dark:active:bg-slate-900" style={{fontSize: 25, fontWeight: 200}}>Post</button>
