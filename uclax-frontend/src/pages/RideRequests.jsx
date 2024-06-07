@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../App.jsx';
 
 //need to check if user is logged in
@@ -13,7 +13,6 @@ const RideRequests = () => {
     const [uberlyft, setUberOrLyft] = useState('Select a Ride-Hailing Company');
     const [payment, setPayment] = useState("Select a Payment Method"); //think about making this multiselect
     const { auth, setAuth } = useContext(AuthContext);
-
 
     const handlePickup = (event) => {
         setPickup(event.target.value);
@@ -31,8 +30,29 @@ const RideRequests = () => {
         setUberOrLyft(event.target.value);
     }
 
+    const getUserInfo = async() => {
+
+    try {
+        const userInfo = await fetch("http://localhost:3000/auth/user", {
+        method: "POST",
+        credentials: "include",
+        header: { "content-type": "application/json" },
+        body: JSON.stringify({ token: auth.token }),
+      })
+        .then((data) => data.json())
+        .then((data) => {
+          setName(data.acc.fullname)
+        });
+        } catch (error) {
+            console.error("Error fetching ride requests:", error);
+        }
+    }
+
+    useEffect(() => {
+        getUserInfo();
+      }, []);
+
     const attemptRideRequest = async () => {
-        console.log("here");
         console.log({initiator_name: initiatorName, pickup_point: pickup, dropoff_point: dropoff, pickup_time: pickupTime, num_riders_needed: numRiders, uber_or_lyft: uberlyft,
             payment_method: payment})
         if (!initiatorName || pickup === 'Select a Pickup Point' || dropoff === 'Select a Terminal' || !pickupTime || !numRiders || uberlyft === "Select a Ride-Hailing Company" || payment === "Select a Payment Method") return;

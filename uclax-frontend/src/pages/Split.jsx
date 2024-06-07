@@ -261,8 +261,6 @@ var filteredRequests = requests.filter(request =>
           </label>
         </div>
       </div>
-console.log("here");
-console.log(request.uber_or_lyft);
       <div className="grid grid-cols-1 gap-4">
         {/* {filteredRequests.map((request, index) => ( */}
         {filteredArray.map((request, index) => (
