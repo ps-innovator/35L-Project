@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import CardView from "../components/CardView.jsx";
 import { AuthContext } from "../App.jsx";
 import CommentSection from '../components/CommentSection.jsx';
+import airplane from "/airplane.png"
 
 const Split = () => {
   const [userInfo, setUserInfo] = useState({});
@@ -284,7 +285,7 @@ var filteredRequests = requests.filter(request =>
             shortDescr5={`Payment: ${request.payment_method}`}
             shortDescr6={`Preference: ${request.uber_or_lyft}`}
             longDescr={`People Needed: ${request.num_riders_needed}`}
-            imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
+            imgsrc={airplane}
             imgalt="Cute airplane clipart"
             highlight={joinReqs && joinReqs.includes(request._id)}
             emphasize={joinedRides && joinedRides.includes(request._id)}>
