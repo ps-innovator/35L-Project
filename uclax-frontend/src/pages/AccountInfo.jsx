@@ -1,12 +1,16 @@
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../App.jsx";
-import viteLogo from "/vite.svg";
 
 const AccountInfo = () => {
   const { auth, setAuth } = useContext(AuthContext);
-  const [ carrierPref, setCarrierPref ] = useState("Loading...");
-  const [ paymentForm, setPaymentForm ] = useState("");
-  
+  const [ displayName, setDisplayName ] = useState("");
+  const [ contactInfo, setContactInfo ] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+  };
+
   const updateUserInfo = async (put_body) => {
     const token = auth.token;
     return await fetch('http://localhost:3000/auth/edit_user', {
@@ -17,37 +21,27 @@ const AccountInfo = () => {
     }).then((data) => data.json());
   };
 
-  const changeCarrierPref = async () => {
-    let newCarrierPref;
-    if (carrierPref == "Loading...") return;
-    if (carrierPref == "Uber") {
-        newCarrierPref = "Lyft";
-    } else {
-        newCarrierPref = "Uber";
-    }
-
+  const changeDisplayName = async (newName) => {
+    const name = newName.target.value;
+    setPaymentForm(cinfo);
     const put_body = {
         $set: {
-            'preferences.ride_pref': newCarrierPref
-        }
-    };
-
-    setCarrierPref(newCarrierPref);
-    await updateUserInfo(put_body);
-  };
-
-  const changePaymentPref = async (e) => {
-    const ppref = e.target.value;
-    setPaymentForm(ppref);
-    const put_body = {
-        $set: {
-            'preferences.payment_form': ppref
+            'preferences.contact_info': name
         }
     };
     await updateUserInfo(put_body);
   };
 
-  
+  const changeContactInfo = async (phoneNumber) => {
+    const cinfo = phoneNumber.target.value;
+    setPaymentForm(cinfo);
+    const put_body = {
+        $set: {
+            'preferences.contact_info': cinfo
+        }
+    };
+    await updateUserInfo(put_body);
+  };
 
   const getUserInfo = async () => {
     const token = auth.token;
@@ -63,6 +57,43 @@ const AccountInfo = () => {
   useEffect(() => {
     getUserInfo();
   }, []);
+
+  return (
+    <div className="mt-10 max-w-xl mx-auto bg-white dark:bg-slate-800 rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+      <div>
+        <div className="md:shrink-0">
+          <div className="w-24 h-24 rounded-full overflow-hidden mr-6">
+            <img className="object-cover w-full h-full" src="/uclaBruins.webp" alt="Placeholder Profile Picture" />
+          </div>
+          <div className="shrink md:shrink-0">
+        <img
+          className="h-48 w-full object-cover md:h-full md:w-48"
+          src="/uclaBruins.webp" alt="Placeholder Profile Picture"
+        />
+      </div>
+        <div className = "flex flex-col">
+          <h2 className="text-2xl font-bold">Username: JohnDoe</h2>
+          <p>Contact Info: john.doe@example.com</p>
+          <p>Display Name: John</p>
+          </div>
+        </div>
+      </div>
+      <div className="mt-6 mb-6">
+        {isEditing ? (
+          <>
+            <input type="text" className="border border-gray-300 rounded-md p-2 mb-4 w-full" placeholder="New Contact Info" />
+            <input type="text" className="border border-gray-300 rounded-md p-2 mb-4 w-full" placeholder="New Display Name" />
+          </>
+        ) : null}
+        <button onClick={toggleEdit} className="bg-blue-500 text-white px-4 py-2 rounded-md">
+          {isEditing ? 'Save Changes' : 'Update Profile Info'}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+/*
   return (
     <div>
       <h1
@@ -119,5 +150,6 @@ const AccountInfo = () => {
     </div>
   );
 };
+*/
 
 export default AccountInfo;
