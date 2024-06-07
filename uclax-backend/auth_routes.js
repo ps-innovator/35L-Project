@@ -69,9 +69,64 @@ router.put("/edit_user", authTokenVerify, async (req, res) => {
   res.status(200).json({ msg: "Successfully updated." });
 });
 
+router.get("/get_friend_requests", authTokenVerify, async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    const acc = await account.userDetails(token);
+    const friendRequests = acc.friendRequests;
+
+    // Convert string IDs to ObjectId
+    const objectIds = friendRequests.map(id => new ObjectId(id));
+
+    // Fetch usernames for each ID in friendRequests
+    const usernamesPromises = objectIds.map(async id => {
+        const acc = await mongo_client.getAccountById(id);
+        return acc.username; // Only return the username
+    });
+
+    // Resolve all promises to get the usernames
+    const usernames = await Promise.all(usernamesPromises);
+
+    // Send the usernames as a response
+    return res.json({ friendRequests: usernames });
+  } catch (error) {
+    console.error("Error fetching friend requests:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/get_friends", authTokenVerify, async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    const acc = await account.userDetails(token);
+    const friends = acc.friends;
+
+    // Convert string IDs to ObjectId
+    const objectIds = friends.map(id => new ObjectId(id));
+
+    // Fetch usernames for each ID in friendRequests
+    const usernamesPromises = objectIds.map(async id => {
+        const acc = await mongo_client.getAccountById(id);
+        return acc.username; // Only return the username
+    });
+
+    // Resolve all promises to get the usernames
+    const usernames = await Promise.all(usernamesPromises);
+
+    // Send the usernames as a response
+    return res.json({ friends: usernames });
+  } catch (error) {
+    console.error("Error fetching friends:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 router.put("/send_friend_request", authTokenVerify, async (req, res) => {
+  console.log(req.body);
   const token = req.body.token;
-  const requestedFriend = req.body.friendId;
+  const requestedFriendUsername = req.body.requestedFriendUsername;
+  const friend = await mongo_client.getAccountData(requestedFriendUsername);
+  const requestedFriend = friend._id;
   const acc_info = await account.userDetails(token);
   const curFriendId = { _id: acc_info._id };
   await account.sendFriendRequest(curFriendId, requestedFriend);
@@ -80,10 +135,13 @@ router.put("/send_friend_request", authTokenVerify, async (req, res) => {
 
 router.put("/accept_friend_request", authTokenVerify, async (req, res) => {
   const token = req.body.token;
-  const acceptedFriend = req.body.friendId;
+  const acceptedFriendUsername = req.body.acceptedFriendUsername;
+  const friend = await mongo_client.getAccountData(acceptedFriendUsername);
+  const acceptedFriend = friend._id;
   const acc_info = await account.userDetails(token);
   const curFriendId = acc_info._id;
   await account.addFriend(curFriendId, acceptedFriend);
+  await account.removeFriendRequest(curFriendId, acceptedFriend);
   res.status(200).json({ msg: "Successfully updated." });
 });
 
