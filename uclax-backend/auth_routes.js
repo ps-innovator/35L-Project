@@ -187,6 +187,18 @@ router.post('/getjoinrequests', authTokenVerify, async (req, res) => {
     }
 });
 
+router.delete("/deleteRideRequest", authTokenVerify, async (req, res) => {
+  try {
+    const requestId = req.body;
+    await mongo_client.deleteRideRequest(requestId);
+    console.log("Successfully called deleteRideRequest for ride ID ", requestId)
+  } 
+  catch (error) {
+    console.error("Error deleting ride request:", error);
+    res.status(400).json({ errorMessage: error.message });
+  }
+});
+
 router.post('/addcomment', authTokenVerify, async (req, res) => {
   try {
     await mongo_client.addComment(req.body.rideId, req.body.comment);

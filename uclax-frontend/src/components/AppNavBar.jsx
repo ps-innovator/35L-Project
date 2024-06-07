@@ -46,10 +46,10 @@ const AppNavBar = () => {
     };
   };
 
-  let navbartitles = ["Login", "Sign up", "About us"];
+  let navbartitles = ["Login", "Sign Up"];
 
   if (auth) {
-    navbartitles = ["Find a ride", "Post a ride", "Account info", "Logout"];
+    navbartitles = ["Find a Ride", "Post a Ride", "Account Info", "Logout"];
   }
 
   return (
@@ -58,6 +58,7 @@ const AppNavBar = () => {
         className="flex items-center space-x-3 rtl:space-x-reverse md:bg-transparent"
         onClick={handleTabSwitch(0, "UCLAX")}
       >
+        <img src="/uclaxLogo.png" alt="UCLAX Logo" className="h-10 w-10" />
         <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
           UCLAX
         </span>
