@@ -200,8 +200,6 @@ router.post('/pendingrequests', authTokenVerify, async (req, res) => {
         const cur_id = acc_info._id;
         const filter = { memberRequests : cur_id };
         const rides = await mongo_client.getRideRequests(filter);
-        console.log("rides i've requested");
-        console.log(rides);
         const join_reqs = [];
         const acc_infos = [];
         rides.forEach(ride => {
