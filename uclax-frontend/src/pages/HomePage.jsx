@@ -64,6 +64,14 @@ const HomePage = () => {
         .catch(err => console.error(err))
       });
     
+    
+    await fetch("http://localhost:3000/auth/pendingrequests", {
+      method: "POST",
+      credentials: "include",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ token: auth.token }),
+    }).then(data => data.json()).then(data => setRideRequestsByMe(data)); // console.log(data))
+
 
     //await fetch(`http://localhost:3000/auth/getUsers`)
   };
@@ -179,7 +187,20 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-        <div className="mt-8 rounded-xl min-h-screen bg-white dark:bg-gray-900 text-white grid grid-cols-2">
+        {/* <div className="mt-8 rounded-xl min-h-screen bg-white dark:bg-gray-900 text-white grid grid-cols-2">*/}
+        <div>
+          <h1 className="text-center text-2xl font-medium my-8 text-white">Outgoing Ride Split Requests</h1>
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 gap-4">
+              {rideRequestsByMe.map((request) => (
+                <div className="bg-gray-600 text-white rounded-xl px-10 py-2">
+                  {request.rideName}Your Request: {request.descr}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="min-h-screen bg-white dark:bg-gray-900 text-white grid grid-cols-2">
           <div>
           <h1 className="text-center text-4xl font-bold mt-8 mb-4">My Initiated Rides</h1>
           <div className="grid grid-cols-1 gap-4">
@@ -197,14 +218,12 @@ const HomePage = () => {
                 longDescr={`People Needed: ${ride.num_riders_needed}`}
                 imgsrc={airplane}
                 imgalt="Cute airplane clipart">
-                  <br />
-                  <span className="font-bold">Other riders:</span> <br />
-                   {
-                    ridesToMembers[ride._id] ? ridesToMembers[ride._id].map((member) => (<><span>{member.fullname} - Contact: {member.contactinfo}</span><br /></>)) : <span>Loading...</span>
+                  <div className="mt-0 font-bold">All Riders:</div>
+                  {
+                    ridesToMembers[ride._id] ? ridesToMembers[ride._id].map((member) => (<div>{member.fullname} - Contact: {member.contactinfo}</div>)) : <span>Loading...</span>
                   }
+                  <div className="mt-4 font-bold">Comments:</div>
 
-<br />
-                  <span className="font-bold">Comments:</span> <br />
                   <TrashButton deleteConfirmation="Are you sure you want to delete this ride request?" requestId={ride._id} onDelete={fetchUserInfo} />
                   <CommentSection comments={ride.comments ? ride.comments : []} rideId={ride._id} reloadData={fetchUserInfo} name={userInfo.fullname ? userInfo.fullname : "Anonymous"} />
                 </CardView>
@@ -228,13 +247,11 @@ const HomePage = () => {
                 longDescr={`People Needed: ${ride.num_riders_needed}`}
                 imgsrc={airplane}
                 imgalt="Cute airplane clipart">
-                  <br />
-                  <span className="font-bold">Other riders:</span> <br />
-                   {
-                    ridesToMembers[ride._id] ? ridesToMembers[ride._id].map((member) => (<><span>{member.fullname} - Contact: {member.contactinfo}</span><br /></>)) : <span>Loading...</span>
+                  <div className="mt-0 font-bold">All Riders:</div>
+                  {
+                    ridesToMembers[ride._id] ? ridesToMembers[ride._id].map((member) => (<div>{member.fullname} - Contact: {member.contactinfo}</div>)) : <span>Loading...</span>
                   }
-                  <br />
-                  <span className="font-bold">Comments:</span> <br />
+                  <div className="mt-4 font-bold">Comments:</div>
               <CommentSection comments={ride.comments ? ride.comments : []} rideId={ride._id} reloadData={fetchUserInfo} name={userInfo.fullname ? userInfo.fullname : "Anonymous"} />
 
                 </CardView>
