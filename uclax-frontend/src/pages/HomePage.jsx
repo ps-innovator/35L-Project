@@ -45,8 +45,7 @@ const HomePage = () => {
         body: JSON.stringify({ token: auth.token }),
       }).then(data => data.json()).then(data => setRideRequesters(data)); // console.log(data))
     
-    
-
+      // UNCOMMENT ONCE ENDPOINT EXISTShandleOutgoingRequest();
     //await fetch(`http://localhost:3000/auth/getUsers`)
   };
 
@@ -61,6 +60,19 @@ const HomePage = () => {
       await fetchUserInfo();
     };
   };
+
+  /*const handleOutgoingRequest = async () => {
+    if (!auth || !auth.token) return;
+    await fetch("http://localhost:3000/auth/pendingrequests", {
+      method: "POST",
+      credentials: "include",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ token: auth.token }),
+    })
+      .then((data) => data.json())
+      .then((data) => setRideRequestsByMe(data));
+  };*/
+
 
   const postComment = async (text) => {
     await fetch("http://localhost:3000/auth/addcomment", {
@@ -149,13 +161,25 @@ const HomePage = () => {
     return (
       <>
         <div>
-          <h1 className="text-center text-2xl font-medium my-8 text-white">Ride Split Requests</h1>
+          <h1 className="text-center text-2xl font-medium my-8 text-white">Incoming Ride Split Requests</h1>
           <div className="flex justify-center">
             <div className="grid grid-cols-1 gap-4">
               {rideRequesters.map(requester => (
             <div className="bg-gray-600 text-white rounded-xl px-10 py-2" onClick={handleJoinRequest(requester)}>
               {requester.name}: Request to join TRIP: {requester.descr}
             </div>))}
+            </div>
+          </div>
+        </div>
+        <div>
+          <h1 className="text-center text-2xl font-medium my-8 text-white">Outgoing Ride Split Requests</h1>
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 gap-4">
+              {rideRequestsByMe.map((request) => (
+                <div className="bg-gray-600 text-white rounded-xl px-10 py-2">
+                  {request.rideName}: Requests I sent out: {request.descr}
+                </div>
+              ))}
             </div>
           </div>
         </div>
