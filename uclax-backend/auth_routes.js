@@ -202,7 +202,7 @@ router.post('/pendingrequests', authTokenVerify, async (req, res) => {
         const rides = await mongo_client.getRideRequests(filter);
         console.log("rides i've requested");
         console.log(rides);
-        const pending_reqs = [];
+        const join_reqs = [];
         const acc_infos = [];
         rides.forEach(ride => {
           ride.memberRequests.forEach(member =>  {
@@ -213,8 +213,9 @@ router.post('/pendingrequests', authTokenVerify, async (req, res) => {
       
         await Promise.all(acc_infos);
       
-        res.json(pending_reqs.map(ride => { return { ...ride, name: "test" } } ));
+        res.json(join_reqs.map(ride => { return { ...ride, name: "test" } } ));
           } catch (error) {
+            console.log(error.message);
               res.status(400).json({ errorMessage: error.message });
           }
 });
