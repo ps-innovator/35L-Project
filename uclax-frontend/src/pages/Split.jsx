@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import CardView from "../components/CardView.jsx";
 import { AuthContext } from "../App.jsx";
 import CommentSection from '../components/CommentSection.jsx';
+import airplane from "/airplane.png"
 
 const Split = () => {
   const [userInfo, setUserInfo] = useState({});
@@ -134,11 +135,11 @@ const Split = () => {
     <div className="min-h-screen bg-white dark:bg-gray-900 text-white">
       <h1 className="text-center text-4xl font-bold my-8 text-black dark:text-white">Ride Share Posts</h1>
       {/* Filter options */}
-      <div className="text-center mb-4">
-        <h2 className="text-2xl mb-4 text-black dark:text-white">Filters</h2>
+      <div className="text-center mt-2 mb-4">
+        <h2 className="text-2xl mb-2 text-black dark:text-white">Filters</h2>
         <div className="flex justify-center flex-wrap space-x-4">
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Pickup Point:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Pickup Point:</span>
             <input
               type="text"
               name="pickup"
@@ -149,7 +150,7 @@ const Split = () => {
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Dropoff Point:</span>
+            <span className="mt-4 mb-2 font-medium dark: dark:text-gray-300">Dropoff Point:</span>
             <input
               type="text"
               name="dropoff"
@@ -160,7 +161,7 @@ const Split = () => {
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Person's Name:</span>
+            <span className="mt-4 mb-2 font-medium  dark:text-gray-300">Person's Name:</span>
             <input
               type="text"
               name="name"
@@ -171,7 +172,7 @@ const Split = () => {
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Number of Riders:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Number of Riders:</span>
             <input
               type="text"
               name="riders"
@@ -182,7 +183,7 @@ const Split = () => {
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Date:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Date:</span>
             <input
               type="text"
               name="date"
@@ -193,7 +194,7 @@ const Split = () => {
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Pickup Time:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Pickup Time:</span>
             <div className="flex space-x-2">
               <input
                 type="text"
@@ -215,7 +216,7 @@ const Split = () => {
             </div>
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Payment:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Payment:</span>
             <input
               type="text"
               name="payment"
@@ -226,7 +227,7 @@ const Split = () => {
             />
           </label>
           <label className="flex flex-col">
-            <span className="mb-2 font-medium dark:text-gray-300">Preference:</span>
+            <span className="mt-4 mb-2 font-medium dark:text-gray-300">Preference:</span>
             <input
               type="text"
               name="preference"
@@ -257,16 +258,17 @@ const Split = () => {
             shortDescr4={`Time: ${toTwelveHour(request.pickup_time)}`}
             shortDescr5={`Payment: ${request.payment_method}`}
             shortDescr6={`Preference: ${request.uber_or_lyft}`}
-            longDescr={`Number of people: ${request.num_riders_needed}`}
-            imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
+            longDescr={`People Needed: ${request.num_riders_needed}`}
+            imgsrc={airplane}
             imgalt="Cute airplane clipart"
             highlight={joinReqs && joinReqs.includes(request._id)}
             emphasize={joinedRides && joinedRides.includes(request._id)}>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={createJoinRideHandler(request._id)}>
-              Join
-            </button>
-            <CommentSection comments={request.comments ? request.comments : []} rideId={request._id} reloadData={fetchRequests} name={userInfo.fullname ? userInfo.fullname : "Anonymous"} />
-          </CardView>
+               <button className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={createJoinRideHandler(request._id)}>
+                  Join
+              </button>
+              <CommentSection comments={request.comments ? request.comments : []} rideId={request._id} reloadData={fetchRequests} name={userInfo.fullname ? userInfo.fullname : "Anonymous"} />
+
+            </CardView>
         ))}
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../App.jsx';
+import { AuthContext, TabContext } from '../App.jsx';
 
 //need to check if user is logged in
 
@@ -11,8 +11,11 @@ const RideRequests = () => {
     const [pickupDate, setDate] = useState('');
     const [numRiders, setRiders] = useState('');
     const [uberlyft, setUberOrLyft] = useState('Select a Preference');
-    const [payment, setPayment] = useState("Select a Payment Method"); //think about making this multiselect
+    const [payment, setPayment] = useState("Select a Payment Method");
+    const [statusMessage, setstatusMessage] = useState('')
+    const [success, setSuccess] = useState(false);
     const { auth, setAuth } = useContext(AuthContext);
+    const { tab, setTab } = useContext(TabContext);
 
     const handlePickup = (event) => {
         setPickup(event.target.value);
@@ -55,7 +58,16 @@ const RideRequests = () => {
     const attemptRideRequest = async () => {
         console.log({initiator_name: initiatorName, pickup_point: pickup, dropoff_point: dropoff, pickup_time: pickupTime, num_riders_needed: numRiders, uber_or_lyft: uberlyft,
             payment_method: payment})
-        if (!initiatorName || pickup === 'Select a Pickup Point' || dropoff === 'Select a Terminal' || !pickupTime || !numRiders || uberlyft === "Select a Preference" || payment === "Select a Payment Method") return;
+        if (!initiatorName || 
+            pickup === 'Select a Pickup Point' || 
+            dropoff === 'Select a Terminal' || 
+            !pickupTime || 
+            !numRiders || 
+            uberlyft === "Select a Preference" || 
+            payment === "Select a Payment Method") {
+                setstatusMessage("Please fill out all fields.");
+                return;
+            }
         const res = await fetch('http://localhost:3000/auth/riderequests', {
             method: 'POST',
             credentials: 'include',
@@ -67,9 +79,11 @@ const RideRequests = () => {
             const json = await res.json();
             console.log(json);
             console.log("success ride request");
+            setSuccess(true);
         } else {
             const json = await res.json();
             console.log("request failed");
+            setstatusMessage("Failed to create post.")
         }
     };
 
@@ -83,7 +97,7 @@ const RideRequests = () => {
               fontSize: 45,
             }}
             >
-            Ride Requests
+            Create a Ride Request
             </h1>
             <div className="flex mb-6 items-center justify-center">
             <input
@@ -137,6 +151,8 @@ const RideRequests = () => {
                 <option disabled value="Select a Payment Method">Select a Payment Method</option>
                 <option value="Venmo">Venmo</option>
                 <option value="Zelle">Zelle</option>
+                <option value="PayPal">PayPal</option>
+                <option value="No Preference">No Preference</option>
             </select>
             </div>
             <div className="flex mb-6 items-center justify-center">
@@ -144,11 +160,33 @@ const RideRequests = () => {
                 <option disabled value="Select a Preference">Select a Preference</option>
                 <option value="Uber">Uber</option>
                 <option value="Lyft">Lyft</option>
+                <option value="No Preference">No Preference</option>
             </select>
             </div>
             <div className="flex mb-6 items-center justify-center">
             <button onClick={attemptRideRequest} className="block text-white p-4 rounded-lg bg-indigo-500 dark:bg-slate-500 hover:bg-indigo-600 dark:hover:bg-slate-600 active:bg-indigo-900 dark:active:bg-slate-900" style={{fontSize: 25, fontWeight: 200}}>Post</button>
           </div>
+          {statusMessage && (
+            <div className="flex items-center justify-center mt-4">
+              <div className="max-w-s p-2 bg-red-200 text-red-700 border border-red-400 rounded">
+                {statusMessage}
+              </div>
+            </div> )}
+
+            {success && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
+                    <div className="relative bg-white p-10 rounded-lg shadow-lg text-center">
+                        <p className="text-lg font-semibold">Post successfully created!</p>
+                        <button
+                            onClick={() => setTab(0)}
+                            className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>)}
         </div>
     )
 };

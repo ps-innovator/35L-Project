@@ -193,15 +193,18 @@ router.post('/getjoinrequests', authTokenVerify, async (req, res) => {
     }
 });
 
-router.delete("/deleteRideRequest", authTokenVerify, async (req, res) => {
+router.delete("/riderequests/:requestId", async (req, res) => {
   try {
-    const requestId = req.body;
-    await mongo_client.deleteRideRequest(requestId);
-    console.log("Successfully called deleteRideRequest for ride ID ", requestId)
+    const requestId = req.params.requestId;
+    const result = await mongo_client.deleteRideRequest(requestId);
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ errorMessage: 'Ride request not found' });
+    }
+    res.status(200).json({ message: 'Ride request deleted successfully' });
   } 
   catch (error) {
     console.error("Error deleting ride request:", error);
-    res.status(400).json({ errorMessage: error.message });
+    res.status(500).json({ errorMessage: error.message });
   }
 });
 
