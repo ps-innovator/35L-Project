@@ -19,12 +19,16 @@ const createAccount = async (username, fullname, contactinfo, password) => {
         const hashedPassword = await bcrypt.hash(password, salt);
         account = {
             username: username,
-            password: hashedPassword,
             fullname: fullname,
             contactinfo: contactinfo,
-	          friends: [],
-	          friendRequests: [],
-	          rides: []
+            password: hashedPassword,
+            preferences: {
+                ride_pref: "Lyft",
+                payment_form: ""
+            },
+	    friends: [],
+	    friendRequests: [],
+	    rides: []
         };
         await mongo_client.createAccount(account);
     }
