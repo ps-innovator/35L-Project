@@ -3,7 +3,8 @@ const CardView = ({ header, onClick, shortDescr1, shortDescr2, shortDescr3, shor
   const highlightColor = highlight ? 'bg-slate-200 dark:bg-slate-600' : 'bg-white dark:bg-slate-800';
   const emphasizeColor = emphasize ? 'bg-slate-300 dark:bg-slate-500' : 'bg-white dark:bg-slate-800';
   const finalBg = emphasize ? emphasizeColor : highlightColor;
-  return (<div className={`max-w-md mx-auto ${finalBg} rounded-xl shadow-md overflow-hidden md:max-w-2xl m-8 ${hoverColor}`} onClick={onClick}>
+  return (
+  <div className={`relative max-w-md mx-auto ${finalBg} rounded-xl shadow-md overflow-hidden md:max-w-2xl m-8 ${hoverColor}`} onClick={onClick}>
     <div className="md:flex">
       <div className="shrink md:shrink-0">
         <img
@@ -13,7 +14,7 @@ const CardView = ({ header, onClick, shortDescr1, shortDescr2, shortDescr3, shor
         />
       </div>
       <div className="p-8">
-        <div className="uppercase tracking-wide text-sm text-indigo-500 dark:text-white font-semibold">
+        <div className="uppercase tracking-wide text-xl text-indigo-500 dark:text-white font-semibold">
           {header}
         </div>
         {
@@ -28,7 +29,7 @@ const CardView = ({ header, onClick, shortDescr1, shortDescr2, shortDescr3, shor
           </>
         </p>
         }
-        <p className="mt-2 text-slate-500">
+        <p className="mt-2 mb-4 text-slate-500">
           {longDescr}
         </p>
         {children}

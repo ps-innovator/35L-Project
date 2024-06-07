@@ -283,12 +283,12 @@ var filteredRequests = requests.filter(request =>
             shortDescr4={`Time: ${toTwelveHour(request.pickup_time)}`}
             shortDescr5={`Payment: ${request.payment_method}`}
             shortDescr6={`Preference: ${request.uber_or_lyft}`}
-            longDescr={`Number of people: ${request.num_riders_needed}`}
+            longDescr={`People Needed: ${request.num_riders_needed}`}
             imgsrc="https://th.bing.com/th/id/OIP.XVeIdoKEIK7SXK6yN3hEOQHaGs?w=185&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
             imgalt="Cute airplane clipart"
             highlight={joinReqs && joinReqs.includes(request._id)}
             emphasize={joinedRides && joinedRides.includes(request._id)}>
-               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={createJoinRideHandler(request._id)}>
+               <button className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={createJoinRideHandler(request._id)}>
                   Join
               </button>
               <CommentSection comments={request.comments ? request.comments : []} rideId={request._id} reloadData={fetchRequests} name={userInfo.fullname ? userInfo.fullname : "Anonymous"} />
