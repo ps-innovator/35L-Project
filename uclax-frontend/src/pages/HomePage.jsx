@@ -197,14 +197,12 @@ const HomePage = () => {
                 longDescr={`People Needed: ${ride.num_riders_needed}`}
                 imgsrc={airplane}
                 imgalt="Cute airplane clipart">
-                  <br />
-                  <span className="font-bold">Other riders:</span> <br />
-                   {
-                    ridesToMembers[ride._id] ? ridesToMembers[ride._id].map((member) => (<><span>{member.fullname} - Contact: {member.contactinfo}</span><br /></>)) : <span>Loading...</span>
+                  <div className="mt-0 font-bold">All Riders:</div>
+                  {
+                    ridesToMembers[ride._id] ? ridesToMembers[ride._id].map((member) => (<div>{member.fullname} - Contact: {member.contactinfo}</div>)) : <span>Loading...</span>
                   }
+                  <div className="mt-4 font-bold">Comments:</div>
 
-<br />
-                  <span className="font-bold">Comments:</span> <br />
                   <TrashButton deleteConfirmation="Are you sure you want to delete this ride request?" requestId={ride._id} onDelete={fetchUserInfo} />
                   <CommentSection comments={ride.comments ? ride.comments : []} rideId={ride._id} reloadData={fetchUserInfo} name={userInfo.fullname ? userInfo.fullname : "Anonymous"} />
                 </CardView>
@@ -228,13 +226,11 @@ const HomePage = () => {
                 longDescr={`People Needed: ${ride.num_riders_needed}`}
                 imgsrc={airplane}
                 imgalt="Cute airplane clipart">
-                  <br />
-                  <span className="font-bold">Other riders:</span> <br />
-                   {
-                    ridesToMembers[ride._id] ? ridesToMembers[ride._id].map((member) => (<><span>{member.fullname} - Contact: {member.contactinfo}</span><br /></>)) : <span>Loading...</span>
+                  <div className="mt-0 font-bold">All Riders:</div>
+                  {
+                    ridesToMembers[ride._id] ? ridesToMembers[ride._id].map((member) => (<div>{member.fullname} - Contact: {member.contactinfo}</div>)) : <span>Loading...</span>
                   }
-                  <br />
-                  <span className="font-bold">Comments:</span> <br />
+                  <div className="mt-4 font-bold">Comments:</div>
               <CommentSection comments={ride.comments ? ride.comments : []} rideId={ride._id} reloadData={fetchUserInfo} name={userInfo.fullname ? userInfo.fullname : "Anonymous"} />
 
                 </CardView>
