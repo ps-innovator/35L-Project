@@ -25,7 +25,7 @@ const createAccount = async (username, fullname, contactinfo, password) => {
 	          friends: [],
 	          friendRequests: [],
 	          rides: [],
-              requestedrides: []
+              requestedRides: []
         };
         await mongo_client.createAccount(account);
     }

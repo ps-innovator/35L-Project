@@ -282,7 +282,7 @@ const Split = () => {
             shortDescr4={`Time: ${toTwelveHour(request.pickup_time)}`}
             shortDescr5={`Payment: ${request.payment_method}`}
             shortDescr6={`Preference: ${request.uber_or_lyft}`}
-            longDescr={`People Needed: ${request.num_riders_needed}`}
+            longDescr={`Total People Needed: ${request.num_riders_needed}`}
             imgsrc={airplane}
             imgalt="Cute airplane clipart"
             highlight={joinReqs && joinReqs.includes(request._id)}

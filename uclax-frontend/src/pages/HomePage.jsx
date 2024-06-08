@@ -35,8 +35,10 @@ const HomePage = () => {
 
     const userInfoFetchJson = await fetchedUserInfoRaw.json();
     setUserInfo(userInfoFetchJson.acc);
-    setRideRequestsByMe(userInfoFetchJson.acc.requestedRides);
-
+    if (userInfoFetchJson.acc.requestedRides.length !== 0) {
+      setRideRequestsByMe(userInfoFetchJson.acc.requestedRides);
+    }
+    
     await fetch(
       `http://localhost:3000/auth/riderequests?userId=${
         userInfoFetchJson.acc._id ? userInfoFetchJson.acc._id : ""
@@ -214,37 +216,64 @@ const HomePage = () => {
     return (
       <>
         <div>
-          <h1 className="text-center text-2xl font-medium mt-8 text-white">Ride Split Requests</h1>
-          <h2 className="text-center text-md mt-2 mb-8 text-white">Accept other users into your ride pool.</h2>
-          <div className="flex justify-center">
-            <div className="grid grid-cols-1 gap-4">
-              {rideRequesters.map(requester => (
-            <div className="bg-gray-600 text-white rounded-xl px-10 py-2" onClick={handleJoinRequest(requester)}>
-              Request to join TRIP(click to accept): {requester.descr}
-            </div>))}
-            </div>
+          <h1 className="text-center text-2xl font-medium mt-10 text-white">Ride Split Requests</h1>
+          <h2 className="text-center text-md mt-2 mb-4 text-white">Accept other users into your ride pool.</h2>
+          <div className="flex justify-center items-center">
+          <div className="grid grid-cols-1 gap-4">
+      {rideRequestsByMe.length === 0 ? (
+        <div className="text-gray-400 italic">No pending requests. Find A Ride and Request to Join.</div>
+      ) : (
+        rideRequestsByMe.map((request, index) => (
+          <div key={index} className="bg-gray-600 text-white rounded-xl px-10 py-2">
+            {rideDetails[index] ? (
+              <div>
+                <div className="mt-4">You have received a request to join your ride pool:</div>
+                <div>{rideDetails[index].descr}</div>
+                <div className="flex justify-center mt-4">
+                  <button
+                    className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => handleJoinRequest(rideDetails[index])}
+                  >
+                    Accept Request
+                  </button>
+                </div>
+              </div>
+            ) : (
+              "Fetching details..."
+            )}
+          </div>
+        ))
+      )}
+    </div>
           </div>
         </div>
         <div>
-          <h1 className="text-center text-2xl font-medium mt-8 text-white">Outgoing Ride Split Requests</h1>
-          <h2 className="text-center text-md mt-2 mb-8 text-white">Your pending ride requests.</h2>
+          <h1 className="text-center text-2xl font-medium mt-10 text-white">Outgoing Ride Split Requests</h1>
+          <h2 className="text-center text-md mt-2 text-white">Your pending ride requests.</h2>
+          <h2 className="text-center text-md mt-1 mb-4 text-white">When the user accepts your request, you'll see the ride pool under "Rides I Joined"</h2>
           <div className="flex justify-center">
-            <div className="grid grid-cols-1 gap-4">
-            {rideRequestsByMe.map((request, index) => (
+          <div className="grid grid-cols-1 gap-4">
+          {rideRequestsByMe.length === 0 ? (
+            <div className="text-gray-400 italic">No pending requests. Find A Ride and Request to Join. </div>
+          ) : (
+            rideRequestsByMe.map((request, index) => (
               <div key={index} className="bg-gray-600 text-white rounded-xl px-10 py-2">
                 {rideDetails[index] ? (
                   <div>
-                    You requested to join {rideDetails[index].initiator_name}'s ride pool from {rideDetails[index].pickup_point} to {rideDetails[index].dropoff_point} on {rideDetails[index].pickup_date} at {rideDetails[index].pickup_time}.
+                    <div>
+                      You requested to join {rideDetails[index].initiator_name}'s ride pool from {rideDetails[index].pickup_point} to {rideDetails[index].dropoff_point} on {rideDetails[index].pickup_date} at {rideDetails[index].pickup_time}.
+                    </div>
                   </div>
                 ) : (
                   "Fetching details..."
                 )}
-        </div>
-      ))}
-            </div>
+              </div>
+            ))
+          )}
+    </div>
           </div>
         </div>
-        <div className="min-h-screen bg-white dark:bg-gray-900 text-white grid grid-cols-2">
+        <div className="mt-10 min-h-screen bg-white dark:bg-gray-900 text-white grid grid-cols-2">
           <div>
           <h1 className="text-center text-4xl font-bold mt-8 mb-4">My Initiated Rides</h1>
           <div className="grid grid-cols-1 gap-4">
@@ -259,7 +288,7 @@ const HomePage = () => {
                 shortDescr2={`Dropoff: ${ride.dropoff_point}`}
                 shortDescr3={`Date: ${ride.pickup_date}`}
                 shortDescr4={`Time: ${ride.pickup_time}`}
-                longDescr={`People Needed: ${ride.num_riders_needed}`}
+                longDescr={`Total People Needed: ${ride.num_riders_needed}`}
                 imgsrc={airplane}
                 imgalt="Cute airplane clipart">
                   <div className="mt-0 font-bold">All Riders:</div>
@@ -288,7 +317,7 @@ const HomePage = () => {
                 shortDescr2={`Dropoff: ${ride.dropoff_point}`}
                 shortDescr3={`Date: ${ride.pickup_date}`}
                 shortDescr4={`Time: ${ride.pickup_time}`}
-                longDescr={`People Needed: ${ride.num_riders_needed}`}
+                longDescr={`Total People Needed: ${ride.num_riders_needed}`}
                 imgsrc={airplane}
                 imgalt="Cute airplane clipart">
                   <div className="mt-0 font-bold">All Riders:</div>

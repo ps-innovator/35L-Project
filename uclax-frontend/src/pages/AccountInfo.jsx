@@ -113,10 +113,10 @@ const AccountInfo = () => {
       {/* Profile info section */}
       <div className={`flex-1 flex flex-col ${isEditing ? 'p-6' : 'items-center justify-center'}`}>
         <h2 className={`font-bold text-black dark:text-white mb-2 ${isEditing ? "mt-4 text-2xl" : "text-4xl"}`}>{username} </h2>
-        <p className={`text-black dark:text-slate ${isEditing ? "text-base" : "text-xl mt-2 mb-1"}`}>
+        <p className={`text-gray dark:text-gray-400 ${isEditing ? "text-base" : "text-xl mt-2 mb-1"}`}>
           <span className="font-semibold"> Contact Info: </span> {contactInfo}
         </p>
-        <p className={`text-black dark:text-slate ${isEditing ? "text-base" : "text-xl"}`}>
+        <p className={`text-gray dark:text-gray-400 ${isEditing ? "text-base" : "text-xl"}`}>
           <span className="font-semibold"> Display Name: </span> {displayName}
         </p>
         

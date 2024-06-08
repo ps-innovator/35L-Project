@@ -277,7 +277,7 @@ try {
     ride.memberRequests.forEach(member =>  {
         acc_infos.push(mongo_client.getAccountById(member));
         //TODO: update # spots left
-        join_reqs.push({id: member, rideId: ride._id, descr: ride.pickup_point + " to " + ride.dropoff_point + " on " + ride.pickup_date + " at " + ride.pickup_time + " (" + 0 + " riders left)", name: "Test"});
+        join_reqs.push({id: member, rideId: ride._id, descr: ride.pickup_point + " to " + ride.dropoff_point + " on " + ride.pickup_date + " at " + ride.pickup_time + "."});
     });
   });
 
