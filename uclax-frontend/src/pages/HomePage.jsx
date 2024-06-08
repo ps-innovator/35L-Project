@@ -34,7 +34,7 @@ const HomePage = () => {
 
     const userInfoFetchJson = await fetchedUserInfoRaw.json();
     setUserInfo(userInfoFetchJson.acc);
-    setRideRequestsByMe(userInfoFetchJson.acc.requestedrides);
+    setRideRequestsByMe(userInfoFetchJson.acc.requestedRides);
 
     await fetch(
       `http://localhost:3000/auth/riderequests?userId=${
