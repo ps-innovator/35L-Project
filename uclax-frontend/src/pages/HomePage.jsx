@@ -221,7 +221,7 @@ const HomePage = () => {
           <div className="flex justify-center items-center">
           <div className="grid grid-cols-1 gap-4">
               {rideRequesters.length === 0 ? (
-                <div className="text-gray-400 italic">No pending requests. Find A Ride and Request to Join. </div>
+                <div className="text-gray-400 italic">No users have requested to join your ride pool at this time. </div>
               ) : (
               rideRequesters.map(requester => (
                 <div className="bg-gray-600 text-white rounded-xl px-10 py-2">
