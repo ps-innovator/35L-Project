@@ -20,6 +20,7 @@ const HomePage = () => {
   const [rideRequesters, setRideRequesters] = useState([]);
   const [rideRequestsByMe, setRideRequestsByMe] = useState([]);
   const [ridesToMembers, setRidesToMembers] = useState({});
+  const [rideDetails, setRideDetails] = useState([]);
 
   const fetchUserInfo = async () => {
     if (!auth || !auth.token) return;
@@ -53,8 +54,6 @@ const HomePage = () => {
       }).then(data => data.json()).then(data => setRideRequesters(data)); // console.log(data))
       console.log("p1 getting member info.")
 
-      /*console.log(myRides)
-
       ridesFetch.forEach(async (ride) => {
         console.log("getting member info.")
         await fetch('http://localhost:3000/auth/getInfoForIds', {
@@ -63,11 +62,11 @@ const HomePage = () => {
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ token: auth.token, userIds: ride.members })
         }).then(data => data.json())
-        .then(data => { console.log("HELLO"); console.log(ridesToMembers); setRidesToMembers(prevState => ({...prevState, [ride._id]: data.membersInfo})); console.log(data) })
+        .then(data => { setRidesToMembers(prevState => ({...prevState, [ride._id]: data.membersInfo})); console.log(data) })
         .catch(err => console.error(err))
       });
     
-    
+    /*console.log(myRides)
     await fetch("http://localhost:3000/auth/pendingrequests", {
       method: "POST",
       credentials: "include",
@@ -100,6 +99,40 @@ const HomePage = () => {
         body: JSON.stringify({ token: auth.token, rideId: requesterObj.rideId, newRiderId: requesterObj.id})
       });
   };
+
+  const fetchRideRequestDetails = async (rideRequestId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/auth/getRideFromId/${rideRequestId}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching ride request details:', error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const fetchRideDetails = async () => {
+      try {
+        const detailedData = await Promise.all(
+          rideRequestsByMe.map(async (request) => {
+            const details = await fetchRideRequestDetails(request);
+            return details;
+          })
+        );
+        setRideDetails(detailedData);
+      } catch (error) {
+        console.error('Error fetching ride request details:', error);
+      }
+    };
+
+    if (rideRequestsByMe.length > 0) {
+      fetchRideDetails();
+    }
+  }, [rideRequestsByMe]);
 
   useEffect(() => {
     fetchUserInfo();
@@ -176,6 +209,7 @@ const HomePage = () => {
   } else { //Once user is logged in
     const myInitiatedRides = myRides.filter(ride => ride.initiator_id == userInfo._id);
     const ridesIJoined = myRides.filter(ride => ride.initiator_id != userInfo._id);
+
     console.log(ridesToMembers)
     return (
       <>
@@ -196,11 +230,17 @@ const HomePage = () => {
           <h2 className="text-center text-md mt-2 mb-8 text-white">Your pending ride requests.</h2>
           <div className="flex justify-center">
             <div className="grid grid-cols-1 gap-4">
-              {rideRequestsByMe.map((request) => (
-                <div className="bg-gray-600 text-white rounded-xl px-10 py-2">
-                  {request.rideName}Your Request: {request.descr}
-                </div>
-              ))}
+            {rideRequestsByMe.map((request, index) => (
+              <div key={index} className="bg-gray-600 text-white rounded-xl px-10 py-2">
+                {rideDetails[index] ? (
+                  <div>
+                    You requested to join {rideDetails[index].initiator_name}'s ride pool from {rideDetails[index].pickup_point} to {rideDetails[index].dropoff_point} on {rideDetails[index].pickup_date} at {rideDetails[index].pickup_time}.
+                  </div>
+                ) : (
+                  "Fetching details..."
+                )}
+        </div>
+      ))}
             </div>
           </div>
         </div>

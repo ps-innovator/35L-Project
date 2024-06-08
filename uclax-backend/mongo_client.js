@@ -58,6 +58,21 @@ const getRideRequests = async (query) => {
     }
 };
 
+const getRideById = async (rideId) => {
+    try {
+      console.log("WE ENTER MONGO")
+      await client.connect();
+      const db = client.db("uclax");
+      const rideshareRequests = db.collection("rideshare_requests");
+      const actualRide = await rideshareRequests.findOne({ _id: rideId });
+      console.log("Actual ride: ", actualRide);
+      return actualRide; // Return the ride data
+      
+    } catch (error) {
+      console.error("Error in getRideById:", error);
+    }
+  };
+
 const getAccountById = async (userId) => {
     try {
         await client.connect();
@@ -203,5 +218,6 @@ exports.addFriend = addFriend;
 exports.requestJoinRide = requestJoinRide;
 exports.acceptRideRequest = acceptRideRequest;
 exports.getAccountById = getAccountById;
+exports.getRideById = getRideById;
 exports.addComment = addComment;
 client.close();

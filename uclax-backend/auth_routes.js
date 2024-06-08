@@ -176,6 +176,44 @@ router.get("/riderequests", async (req, res) => {
   }
 });
 
+/*router.get("/riderequests/:id", async (req, res) => {
+  try {
+    const rideRequestId = req.params.id;
+    if (!ObjectId.isValid(rideRequestId)) {
+      return res.status(400).send("Invalid ride request ID");
+    }
+    const objectId = new ObjectId(rideRequestId);
+    const filter = { _id: objectId };
+    const rideRequest = await mongo_client.getRideRequests(filter);
+    if (!rideRequest) {
+      return res.status(404).send("Ride request not found");
+    }
+    res.json(rideRequest);
+  } catch (error) {
+    console.error("Error fetching ride request:", error);
+    res.status(500).send("Error fetching ride request");
+  }
+});*/
+
+router.get("/getRideFromId/:id", async (req, res) => {
+  try {
+    console.log("We get here!")
+    const rideRequestId = req.params.id;
+    if (!ObjectId.isValid(rideRequestId)) {
+      return res.status(400).json({ error: "Invalid ride request ID" });
+    }
+    const objectId = new ObjectId(rideRequestId);
+    const ride = await mongo_client.getRideById(objectId);
+    if (!ride) {
+      return res.status(404).json({ error: "Ride request not found" });
+    }
+    res.json(ride);
+  } catch (error) {
+    console.error("Error fetching ride request:", error);
+    res.status(500).json({ error: "Error fetching ride request" });
+  }
+});
+
 router.post("/riderequests", async (req, res) => {
   const {
     initiator_name,
