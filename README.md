@@ -21,4 +21,10 @@ PASSWD=...
 
 SECRET=...
 
-
+GitHub Username Reference:
+4RohanSinha -> Rohan Sinha
+JohnConnellCS -> John Connell
+asolivar -> Alexandra Sophia Olivar
+linqin0906 -> Lindsay Qin
+pboreddy -> Pranay Boreddy
+ps-innovator -> Pranav Subbaraman
