@@ -216,7 +216,7 @@ const HomePage = () => {
     return (
       <>
         <div>
-          <h1 className="text-center text-2xl font-medium mt-10 text-white">Ride Split Requests</h1>
+          <h1 className="text-center text-2xl font-medium mt-10 text-white">Incoming Ride Split Requests</h1>
           <h2 className="text-center text-md mt-2 mb-4 text-white">Accept other users into your ride pool.</h2>
           <div className="flex justify-center items-center">
           <div className="grid grid-cols-1 gap-4">
