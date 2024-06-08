@@ -220,31 +220,24 @@ const HomePage = () => {
           <h2 className="text-center text-md mt-2 mb-4 text-white">Accept other users into your ride pool.</h2>
           <div className="flex justify-center items-center">
           <div className="grid grid-cols-1 gap-4">
-      {rideRequestsByMe.length === 0 ? (
-        <div className="text-gray-400 italic">No pending requests. Find A Ride and Request to Join.</div>
-      ) : (
-        rideRequestsByMe.map((request, index) => (
-          <div key={index} className="bg-gray-600 text-white rounded-xl px-10 py-2">
-            {rideDetails[index] ? (
-              <div>
+              {rideRequesters.length === 0 ? (
+                <div className="text-gray-400 italic">No pending requests. Find A Ride and Request to Join. </div>
+              ) : (
+              rideRequesters.map(requester => (
+                <div className="bg-gray-600 text-white rounded-xl px-10 py-2">
                 <div className="mt-4">You have received a request to join your ride pool:</div>
-                <div>{rideDetails[index].descr}</div>
+                <div>{requester.descr}</div>
                 <div className="flex justify-center mt-4">
                   <button
                     className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => handleJoinRequest(rideDetails[index])}
+                    onClick={handleJoinRequest(requester)}
                   >
                     Accept Request
                   </button>
                 </div>
-              </div>
-            ) : (
-              "Fetching details..."
-            )}
+              </div>))
+              )}
           </div>
-        ))
-      )}
-    </div>
           </div>
         </div>
         <div>
