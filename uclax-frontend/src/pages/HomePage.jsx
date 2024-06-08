@@ -31,8 +31,11 @@ const HomePage = () => {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ token: auth.token }),
     });
+
     const userInfoFetchJson = await fetchedUserInfoRaw.json();
     setUserInfo(userInfoFetchJson.acc);
+    setRideRequestsByMe(userInfoFetchJson.acc.requestedRides);
+
     await fetch(
       `http://localhost:3000/auth/riderequests?userId=${
         userInfoFetchJson.acc._id ? userInfoFetchJson.acc._id : ""
@@ -50,7 +53,7 @@ const HomePage = () => {
       }).then(data => data.json()).then(data => setRideRequesters(data)); // console.log(data))
       console.log("p1 getting member info.")
 
-      console.log(myRides)
+      /*console.log(myRides)
 
       ridesFetch.forEach(async (ride) => {
         console.log("getting member info.")
@@ -74,6 +77,7 @@ const HomePage = () => {
 
 
     //await fetch(`http://localhost:3000/auth/getUsers`)
+  };*/
   };
 
   const handleJoinRequest = (requesterObj) => {

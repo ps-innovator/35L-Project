@@ -136,7 +136,16 @@ const Split = () => {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-white">
-      <h1 className="text-center text-4xl font-bold my-8 text-black dark:text-white">Ride Share Posts</h1>
+      <h1 className="text-2xl text-black dark:text-white"
+            style={{
+              marginTop: "5%",
+              marginBottom: "5%",
+              fontWeight: "500",
+              fontSize: 45,
+            }}
+            >
+            Ride Share Posts
+            </h1>
       {/* Filter options */}
       <div className="text-center mt-2 mb-4">
         <h2 className="text-2xl mb-2 text-black dark:text-white">Filters</h2>
@@ -278,7 +287,7 @@ const Split = () => {
             imgalt="Cute airplane clipart"
             highlight={joinReqs && joinReqs.includes(request._id)}
             emphasize={joinedRides && joinedRides.includes(request._id)}>
-               <button className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={createJoinRideHandler(request._id)}>
+               <button className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => createJoinRideHandler(request._id)}>
                   Request to Join
               </button>
               <div className="mt-4 font-bold">Comments:</div>

@@ -251,7 +251,7 @@ try {
     }
 });
 
-router.post('/pendingrequests', authTokenVerify, async (req, res) => {
+/*router.post('/pendingrequests', authTokenVerify, async (req, res) => {
     try {
         const token = req.body.token;
         const acc_info = await account.userDetails(token);
@@ -274,7 +274,8 @@ router.post('/pendingrequests', authTokenVerify, async (req, res) => {
             console.log(error.message);
               res.status(400).json({ errorMessage: error.message });
           }
-});
+});*/
+
 router.delete("/riderequests/:requestId", async (req, res) => {
   try {
     const requestId = req.params.requestId;

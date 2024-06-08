@@ -79,7 +79,19 @@ const AccountInfo = () => {
   }, []);
 
   return (
-    <div className="mt-20 max-w-xl mx-auto bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+    <div>
+    <h1 className="text-2xl text-black dark:text-white"
+            style={{
+              marginTop: "5%",
+              marginBottom: "5%",
+              fontWeight: "500",
+              fontSize: 45,
+            }}
+            >
+            My Profile
+            </h1>
+
+    <div className="mt-10 max-w-xl mx-auto bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden md:max-w-2xl">
     <div className="flex">
       {/* Profile picture section */}
       <div className="bg-gray-100 dark:bg-slate-800 flex flex-col items-center p-6">
@@ -128,6 +140,7 @@ const AccountInfo = () => {
         )}
       </div>
     </div>
+  </div>
   </div>
   );
 };
