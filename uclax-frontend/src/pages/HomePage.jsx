@@ -219,15 +219,15 @@ const HomePage = () => {
           <div className="flex justify-center">
             <div className="grid grid-cols-1 gap-4">
               {rideRequesters.map(requester => (
-                <div className="bg-gray-600 text-white rounded-xl px-10 py-2" onClick={handleJoinRequest(requester)}>
-                  {requester.name}: Request to join TRIP: {requester.descr}
-                </div>))}
+            <div className="bg-gray-600 text-white rounded-xl px-10 py-2" onClick={handleJoinRequest(requester)}>
+              Request to join TRIP(click to accept): {requester.descr}
+            </div>))}
             </div>
           </div>
         </div>
-        {/* <div className="mt-8 rounded-xl min-h-screen bg-white dark:bg-gray-900 text-white grid grid-cols-2">*/}
         <div>
-          <h1 className="text-center text-2xl font-medium my-8 text-white">Outgoing Ride Split Requests</h1>
+          <h1 className="text-center text-2xl font-medium mt-8 text-white">Outgoing Ride Split Requests</h1>
+          <h2 className="text-center text-md mt-2 mb-8 text-white">Your pending ride requests.</h2>
           <div className="flex justify-center">
             <div className="grid grid-cols-1 gap-4">
             {rideRequestsByMe.map((request, index) => (
