@@ -132,7 +132,7 @@ const Buddies = () => {
             {currentFriends.map((friend, index) => (
               <FriendCardView
                 key={index}
-                header={friend.name}
+                shortDescr3={friend.name}
                 shortDescr1={friend.details}
                 imgsrc="https://static.vecteezy.com/system/resources/thumbnails/007/166/503/small/best-friend-hands-up-icon-in-trendy-style-vector.jpg"
                 imgalt="Friend avatar"

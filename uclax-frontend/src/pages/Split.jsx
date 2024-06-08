@@ -85,7 +85,7 @@ const Split = () => {
       hour -= 12;
       period = "PM";
     }
-    const min = parseInt(time.substring(i + 1));
+    let min = time.substring(i + 1);
     return `${hour}:${min} ${period}`;
   };
 
