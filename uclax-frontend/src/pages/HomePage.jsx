@@ -67,6 +67,14 @@ const HomePage = () => {
         .catch(err => console.error(err))
       });
     
+    
+    await fetch("http://localhost:3000/auth/pendingrequests", {
+      method: "POST",
+      credentials: "include",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ token: auth.token }),
+    }).then(data => data.json()).then(data => setRideRequestsByMe(data)); // console.log(data))
+
 
     //await fetch(`http://localhost:3000/auth/getUsers`)
   };*/
@@ -183,7 +191,20 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-        <div className="mt-8 rounded-xl min-h-screen bg-white dark:bg-gray-900 text-white grid grid-cols-2">
+        {/* <div className="mt-8 rounded-xl min-h-screen bg-white dark:bg-gray-900 text-white grid grid-cols-2">*/}
+        <div>
+          <h1 className="text-center text-2xl font-medium my-8 text-white">Outgoing Ride Split Requests</h1>
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 gap-4">
+              {rideRequestsByMe.map((request) => (
+                <div className="bg-gray-600 text-white rounded-xl px-10 py-2">
+                  {request.rideName}Your Request: {request.descr}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="min-h-screen bg-white dark:bg-gray-900 text-white grid grid-cols-2">
           <div>
           <h1 className="text-center text-4xl font-bold mt-8 mb-4">My Initiated Rides</h1>
           <div className="grid grid-cols-1 gap-4">
