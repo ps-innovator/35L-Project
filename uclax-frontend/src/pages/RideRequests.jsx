@@ -61,19 +61,22 @@ const RideRequests = () => {
         if (!initiatorName || 
             pickup === 'Select a Pickup Point' || 
             dropoff === 'Select a Terminal' || 
-            !pickupTime || 
+            !pickupTime || !pickupDate ||
             !numRiders || 
             uberlyft === "Select a Preference" || 
             payment === "Select a Payment Method") {
                 setstatusMessage("Please fill out all fields.");
                 return;
             }
+        
+        const realDate = pickupDate + "T" + pickupTime + "-07:00";
+        
         const res = await fetch('http://localhost:3000/auth/riderequests', {
             method: 'POST',
             credentials: 'include',
             headers: {'content-type': 'application/json'},
             body: JSON.stringify({initiator_name: initiatorName, pickup_point: pickup, dropoff_point: dropoff, pickup_date: pickupDate, pickup_time: pickupTime, num_riders_needed: numRiders, uber_or_lyft: uberlyft,
-                payment_method: payment, token: auth.token})
+                payment_method: payment, real_date: realDate, token: auth.token})
         });
         if(res.ok) {
             const json = await res.json();

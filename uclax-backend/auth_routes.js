@@ -215,7 +215,7 @@ router.get("/getRideFromId/:id", async (req, res) => {
 });
 
 router.post("/riderequests", async (req, res) => {
-  const {
+  let {
     initiator_name,
     pickup_point,
     dropoff_point,
@@ -224,12 +224,15 @@ router.post("/riderequests", async (req, res) => {
     num_riders_needed,
     uber_or_lyft,
     payment_method,
+    real_date,
     token,
   } = req.body;
   const acc_info = await account.userDetails(token);
   const initiator_id = acc_info._id;
   const members = [initiator_id];
   const memberRequests = [];
+
+  real_real_date = new Date(real_date); //makes sure date is formated as Date object and not string
 
   rideRequest = {
     initiator_name,
@@ -240,6 +243,7 @@ router.post("/riderequests", async (req, res) => {
     num_riders_needed,
     uber_or_lyft,
     payment_method,
+    real_real_date,
     initiator_id,
     members,
     memberRequests,
